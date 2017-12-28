@@ -1,0 +1,116 @@
+package com.transactrules.accounts.runtime.accounts;
+
+import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.runtime.DateValue;
+import com.transactrules.accounts.runtime.AmountValue;
+import com.transactrules.accounts.runtime.OptionValue;
+import com.transactrules.accounts.runtime.Position;
+import com.transactrules.accounts.runtime.Transaction;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public class {{name}}Valuation extends AccountValuation {
+
+{{#positionTypes}}
+    private Position _{{name}};
+{{/positionTypes}}
+
+{{#dateTypes}}
+    private DateValue _{{name}};
+{{/dateTypes}}
+
+{{#amountTypes}}
+    private AmountValue _{{name}};
+{{/amountTypes}}
+
+{{#optionTypes}}
+    private OptionValue _{{name}};
+{{/optionTypes}}
+
+{{#positionTypes}}
+    public BigDecimal {{name}}() {
+        return _{{name}}.getAmount();
+    }
+{{/positionTypes}}
+
+{{#dateTypes}}
+    public LocalDate {{name}}(){
+        return _{{name}}.getDate();
+    }
+{{/dateTypes}}
+
+{{#amountTypes}}
+    public BigDecimal {{name}}(){
+        return _{{name}}.getAmount();
+    }
+{{/amountTypes}}
+
+{{#optionTypes}}
+    public String {{name}}(){
+        return _{{name}}.getValue();
+    }
+{{/optionTypes}}
+
+    @Override
+    public void initialize(Account account, AccountType accountType) {
+
+        super.initialize(account, accountType);
+
+        //initialize dates
+
+    {{#dateTypes}}
+        _{{name}}= account.getDates().get("{{id}}");
+    {{/dateTypes}}
+
+        //initialize positions
+
+    {{#positionTypes}}
+        _{{name}}= account.getPositions().get("{{id}}");
+    {{/positionTypes}}
+
+        //initialize amounts
+
+    {{#amountTypes}}
+        _{{name}}= account.getAmounts().get("{{id}}");
+    {{/amountTypes}}
+
+        //initialize options
+
+    {{#optionTypes}}
+        _{{name}}= account.getOptions().get("{{id}}");
+        _{{name}}.setValues({{optionListExpression}});
+    {{/optionTypes}}
+
+    {{#scheduleTypes}}
+        Schedule local{{name}};
+
+
+    {{/scheduleTypes}}
+    }
+
+    @Override
+    public void processTransaction(Transaction transaction) {
+
+    }
+
+    @Override
+    public void startOfDay() {
+
+    }
+
+    @Override
+    public void endOfOfDay() {
+
+    }
+
+    @Override
+    public void onDataChanged() {
+
+    }
+
+    @Override
+    public void calculateInstaments() {
+
+    }
+}
