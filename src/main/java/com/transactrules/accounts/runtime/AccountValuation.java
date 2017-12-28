@@ -1,17 +1,14 @@
-package com.transactrules.accounts.runtime.accounts;
+package com.transactrules.accounts.runtime;
 
 
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.configuration.DateType;
 import com.transactrules.accounts.configuration.TransactionType;
-import com.transactrules.accounts.runtime.Position;
-import com.transactrules.accounts.runtime.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class AccountValuation
 {

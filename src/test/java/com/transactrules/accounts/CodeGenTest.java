@@ -9,30 +9,19 @@ import com.github.mustachejava.MustacheFactory;
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.runtime.BusinessDayCalculator;
 import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.DateValue;
-import com.transactrules.accounts.runtime.accounts.Account;
-import com.transactrules.accounts.runtime.accounts.AccountValuation;
+import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.AccountValuation;
 import net.openhft.compiler.CachedCompiler;
 import net.openhft.compiler.CompilerUtils;
 import org.junit.Test;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.isEmptyString;
 
 /**
  * Created by 313798977 on 2017/08/11.
@@ -77,7 +66,7 @@ public class CodeGenTest {
         }
 
 
-        String className = "com.transactrules.accounts.runtime.accounts." + loanGivenAcccountType.getName() + "Valuation";
+        String className = "com.transactrules.accounts.runtime." + loanGivenAcccountType.getName() + "Valuation";
 
         Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, writer.toString());
         AccountValuation loanGivenValuation = (AccountValuation) aClass.newInstance();

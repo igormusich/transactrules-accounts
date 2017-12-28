@@ -5,7 +5,7 @@ import com.transactrules.accounts.configuration.BusinessDayCalculation;
 import com.transactrules.accounts.configuration.ScheduleEndType;
 import com.transactrules.accounts.configuration.ScheduleFrequency;
 import com.transactrules.accounts.runtime.*;
-import com.transactrules.accounts.runtime.accounts.Account;
+import com.transactrules.accounts.runtime.Account;
 import org.junit.Test;
 
 import java.time.LocalDate;

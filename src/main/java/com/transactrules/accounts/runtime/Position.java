@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.configuration.PositionType;
 import com.transactrules.accounts.configuration.TransactionOperation;
-import com.transactrules.accounts.runtime.accounts.Account;
+
 import java.math.BigDecimal;
 
 @DynamoDBDocument

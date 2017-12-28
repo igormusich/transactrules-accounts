@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.accounts.Account;
+import com.transactrules.accounts.runtime.Account;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

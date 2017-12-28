@@ -4,7 +4,7 @@ import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.configuration.AccountTypeRepository;
 import com.transactrules.accounts.configuration.PositionType;
 import com.transactrules.accounts.configuration.TransactionType;
-import com.transactrules.accounts.runtime.accounts.Account;
+import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.AccountValuationService;
 import com.transactrules.accounts.runtime.Position;
 import org.junit.Before;
