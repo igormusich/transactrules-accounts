@@ -15,4 +15,4 @@ amazon:
   aws:
     accesskey: ${ACCESS_KEY}
     secretkey: ${SECRET_KEY}
-reset-tables: true
+reset-tables: ${DROP_DB}
