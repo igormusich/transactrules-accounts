@@ -113,4 +113,9 @@ public class {{name}}Valuation extends AccountValuation {
     public void calculateInstaments() {
 
     }
+
+    @Override
+    public String generatedAt(){
+        return "{{#currentTimestamp}}generate{{/currentTimestamp}}";
+    }
 }

@@ -4,11 +4,13 @@ package com.transactrules.accounts.configuration;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.transactrules.accounts.NamedAbstractEntity;
+import org.joda.time.LocalDateTime;
 
-import javax.persistence.*;
-import javax.swing.text.html.Option;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Aggregate root for account configuration
@@ -231,6 +233,11 @@ public class AccountType {
 
         return  scheduledTransaction;
     }
+
+    public Function<String,String> currentTimestamp() {
+        return (v)-> LocalDateTime.now().toString();
+    }
+
 
 
 }

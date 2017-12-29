@@ -1,38 +1,40 @@
 package com.transactrules.accounts;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.runtime.BusinessDayCalculator;
-import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountValuation;
-import net.openhft.compiler.CachedCompiler;
+import com.transactrules.accounts.runtime.*;
 import net.openhft.compiler.CompilerUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.is;
-
 /**
  * Created by 313798977 on 2017/08/11.
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CodeGenTest {
 
-    private static final String parent = "~/code/accounts/";
+    //private static final String parent = "~/code/accounts/";
 
-    private static final CachedCompiler JCC = CompilerUtils.DEBUGGING ?
-            new CachedCompiler(new File(parent, "src/test/java"), new File(parent, "target/compiled")) :
-            CompilerUtils.CACHED_COMPILER;
+    //private static final CachedCompiler JCC = CompilerUtils.DEBUGGING ?
+            //new CachedCompiler(new File(parent, "src/test/java"), new File(parent, "target/compiled")) :
+            //CompilerUtils.CACHED_COMPILER;
+
+    @Autowired
+    public CodeGenService codeGenService;
 
     @Test
     public void TestCodeGenerationTemplate() {
@@ -48,6 +50,43 @@ public class CodeGenTest {
         String code = writer.toString();
 
         assertThat(false, is(code.isEmpty()));
+
+    }
+
+    @Test
+    public void CodeGenService_test() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+        AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
+
+        Class aClass = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+
+        AccountValuation valuation1 = (AccountValuation) aClass.newInstance();
+
+        String timestamp1 = valuation1.generatedAt();
+
+        LocalDate startDate = LocalDate.of(2013, 3, 8);
+        LocalDate endDate = startDate.plusYears (25);
+        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
+
+        Account account = CreateLoanGivenAccount(loanGivenAcccountType,startDate, endDate,calendar);
+
+        valuation1.initialize(account, loanGivenAcccountType);
+
+        //this shold get the value from cache
+        Class class2 = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+        AccountValuation valuation2 = (AccountValuation) class2.newInstance();
+        String timestamp2 = valuation2.generatedAt();
+
+        assertThat(timestamp1, equalToIgnoringCase(timestamp2));
+
+        //this should regenerate the code
+        //codeGenService.evictAccountType(loanGivenAcccountType);
+        /*codeGenService.evictAllAccountTypes();
+        Class class3 = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+        AccountValuation valuation3 = (AccountValuation) class3.newInstance();
+        String timestamp3 = valuation3.generatedAt();
+
+        assertThat(timestamp2, not(equalToIgnoringCase(timestamp3)));*/
 
     }
 
@@ -79,11 +118,6 @@ public class CodeGenTest {
 
         loanGivenValuation.initialize(account, loanGivenAcccountType);
 
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-
-        String yaml = null;
-
-        yaml= mapper.writeValueAsString(account).trim();
 
     }
 

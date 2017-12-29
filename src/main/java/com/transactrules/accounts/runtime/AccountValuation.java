@@ -42,6 +42,8 @@ public abstract class AccountValuation
     public abstract void startOfDay();
     public abstract void endOfOfDay();
 
+    public abstract String generatedAt();
+
     public abstract void onDataChanged();
 
     public abstract void calculateInstaments();
