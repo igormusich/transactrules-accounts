@@ -18,6 +18,14 @@ docker run --name trules-accounts \
 
 where your_key and your_secret refer to AWS account credentials with DynamoDB permissions to create and delete tables, and CRUD on table rows.
 
+To push ACS to repository:
+
+```bash
+docker tag transactrules/accounts:latest 460415261843.dkr.ecr.ca-central-1.amazonaws.com/transactrules:latest
+
+docker push 460415261843.dkr.ecr.ca-central-1.amazonaws.com/transactrules:latest
+```
+
 To view APIs:
 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
