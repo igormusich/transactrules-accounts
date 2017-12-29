@@ -5,7 +5,7 @@
 
 	<groupId>com.transactrules</groupId>
 	<artifactId>accounts</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>accounts</name>
@@ -22,7 +22,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+        <docker.image.prefix>transactrules</docker.image.prefix>
 	</properties>
+
 
 	<dependencyManagement>
 		<dependencies>
@@ -100,7 +102,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.3.6</version>
+				<configuration>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

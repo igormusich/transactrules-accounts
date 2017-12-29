@@ -59,7 +59,7 @@ public class AccountTypeDTO {
                     throw new IllegalArgumentException(String.format("Debit position type with name %s is not defined", debitPositionTypeName));
                 }
 
-                newTransactionType.addRule(debitPositionType.get(), TransactionOperation.Add);
+                newTransactionType.addRule(debitPositionType.get(), TransactionOperation.Subtract);
             }
         }
 

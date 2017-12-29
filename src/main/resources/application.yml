@@ -1,0 +1,18 @@
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000/
+  aws:
+    accesskey: test1
+    secretkey: test2
+reset-tables: true
+
+---
+spring:
+  profiles: container
+amazon:
+  dynamodb:
+    endpoint: https://dynamodb.ca-central-1.amazonaws.com
+  aws:
+    accesskey: ${ACCESS_KEY}
+    secretkey: ${SECRET_KEY}
+reset-tables: true
