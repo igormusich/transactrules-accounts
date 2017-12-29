@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/accountTypes")
@@ -41,6 +43,14 @@ public class AccountTypeController {
                 .buildAndExpand(savedItem.getId()).toUri());
 
         return new ResponseEntity<>(savedItem, httpHeaders, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method= RequestMethod.GET)
+    @ApiOperation(value = "Get all AccountTypes", response = AccountType.class, responseContainer="List")
+    public ResponseEntity<?> findAll(){
+        List<AccountType> accountTypes = service.findAll();
+
+        return new ResponseEntity<>(accountTypes, HttpStatus.OK);
     }
 
 

@@ -8,9 +8,10 @@ import com.transactrules.accounts.NamedAbstractEntity;
 public class DateType extends NamedAbstractEntity {
 
 
-    DateType(){}
+    public DateType(){}
 
     DateType(String name) {
+
         super(name);
     }
 

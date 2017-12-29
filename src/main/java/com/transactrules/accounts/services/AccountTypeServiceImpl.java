@@ -5,6 +5,10 @@ import com.transactrules.accounts.configuration.AccountTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 @Service
 public class AccountTypeServiceImpl implements AccountTypeService {
 
@@ -20,5 +24,17 @@ public class AccountTypeServiceImpl implements AccountTypeService {
         AccountType result = accountTypeRepository.save(accountType);
 
         return result;
+    }
+
+    @Override
+    public List<AccountType> findAll() {
+        Iterable<AccountType> items = accountTypeRepository.findAll();
+
+        Iterator<AccountType> iterator = items.iterator();
+
+        List<AccountType> list = new ArrayList<>();
+        iterator.forEachRemaining(list::add);
+
+        return list;
     }
 }
