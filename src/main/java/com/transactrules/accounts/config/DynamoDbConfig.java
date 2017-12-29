@@ -1,4 +1,4 @@
-package com.transactrules.accounts;
+package com.transactrules.accounts.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 @EnableDynamoDBRepositories
         (basePackages = "com.transactrules.accounts")
-public class DynamoDBConfiguration {
+public class DynamoDbConfig {
 
     @Value("${amazon.dynamodb.endpoint}")
     private String amazonDynamoDBEndpoint;
