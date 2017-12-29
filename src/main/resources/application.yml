@@ -5,6 +5,30 @@ amazon:
     accesskey: test1
     secretkey: test2
 reset-tables: true
+endpoints:
+  beans:
+    enabled: true
+  autoconfig:
+    enabled: false
+  configprops:
+    enabled: false
+  dump:
+    enabled: false
+  env:
+    enabled: false
+  health:
+    enabled: true
+    path: /
+  info:
+    enabled: false
+  metrics:
+    enabled: false
+  mappings:
+    enabled: false
+  shutdown:
+    enabled: false
+  trace:
+    enabled: false
 
 ---
 spring:
