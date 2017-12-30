@@ -3,19 +3,17 @@ package com.transactrules.accounts;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.runtime.Calendar;
 import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.Calendar;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -88,7 +86,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
     }
 
     protected void waitForTableToBecomeAvailable(String tableName, AmazonDynamoDB amazonDynamoDB) throws InterruptedException {
-        System.out.println("Waiting for " + tableName + " to become ACTIVE...");
+        logger.info("Waiting for " + tableName + " to become ACTIVE...");
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (60 * 1000);
@@ -101,7 +99,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
                 if ( table == null ) continue;
 
                 String tableStatus = table.getTableStatus();
-                System.out.println("  - current state: " + tableStatus);
+                logger.info("  - current state: " + tableStatus);
                 if ( tableStatus.equals(TableStatus.ACTIVE.toString()) )
                     return;
             } catch ( AmazonServiceException ase ) {
@@ -115,7 +113,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
     }
 
     protected void waitForTableToBeDeleted(String tableName, AmazonDynamoDB amazonDynamoDB) throws InterruptedException {
-        System.out.println("Waiting for " + tableName + " to be deleted...");
+        logger.info("Waiting for " + tableName + " to be deleted...");
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (60 * 1000);
@@ -129,7 +127,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
                     return;
 
                 String tableStatus = table.getTableStatus();
-                System.out.println("  - current state: " + tableStatus);
+                logger.info("  - current state: " + tableStatus);
             } catch ( AmazonServiceException ase ) {
                 if (!ase.getErrorCode().equalsIgnoreCase("ResourceNotFoundException")) {
                     throw ase;

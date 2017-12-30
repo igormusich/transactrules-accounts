@@ -1,0 +1,53 @@
+{
+  "name": "SimpleLoan",
+  "amountTypes": [
+    {
+      "isValueDated": false,
+      "name": "LoanAmount"
+    }
+  ],
+  "dateTypes": [
+    {
+      "name": "StartDate"
+    },
+    {
+      "name": "EndDate"
+    }
+  ],
+
+  "positionTypes": [
+    {
+      "name": "Current"
+    },
+    {
+      "name": "InterestAccrued"
+    }
+  ],
+
+  "transactionTypes": [
+    {
+      "name": "Deposit",
+      "creditPositionNames": [
+        "Current"
+      ],
+      "maximumPrecision": false
+    },
+    {
+      "name": "Withdrawal",
+      "debitPositionNames": [
+        "Current"
+      ],
+      "maximumPrecision": false
+    },
+    {
+      "name": "InterestCapitalized",
+      "creditPositionNames": [
+        "Current"
+      ],
+      "debitPositionNames": [
+        "InterestAccrued"
+      ],
+      "maximumPrecision": false
+    }
+  ]
+}

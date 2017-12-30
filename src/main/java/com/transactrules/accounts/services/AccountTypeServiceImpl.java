@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AccountTypeServiceImpl implements AccountTypeService {
@@ -21,6 +22,11 @@ public class AccountTypeServiceImpl implements AccountTypeService {
 
     @Override
     public AccountType create(AccountType accountType) {
+
+        if(accountType.getId()==null || accountType.getId().isEmpty()){
+            accountType.setId(UUID.randomUUID().toString());
+        }
+
         AccountType result = accountTypeRepository.save(accountType);
 
         return result;

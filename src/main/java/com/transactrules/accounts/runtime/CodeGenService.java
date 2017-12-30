@@ -3,8 +3,11 @@ package com.transactrules.accounts.runtime;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.transactrules.accounts.StartupApplicationRunner;
 import com.transactrules.accounts.configuration.AccountType;
 import net.openhft.compiler.CompilerUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,8 @@ import java.io.StringWriter;
 
 @Component
 public class CodeGenService {
+
+    private Logger logger = LoggerFactory.getLogger(StartupApplicationRunner.class);
 
     @Cacheable(value = "accountValuationClasses", key = "#accountType.name")
     public Class getAccountValuationClass(AccountType accountType) throws ClassNotFoundException, IOException {
@@ -25,7 +30,12 @@ public class CodeGenService {
 
         String className = "com.transactrules.accounts.runtime." + accountType.getName() + "Valuation";
 
-        Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, writer.toString());
+        String sourceCode = writer.toString();
+
+        logger.info("Generated code:");
+        logger.info(sourceCode);
+
+        Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, sourceCode);
 
         return aClass;
     }

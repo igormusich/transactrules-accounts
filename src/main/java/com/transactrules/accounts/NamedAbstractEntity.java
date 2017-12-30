@@ -3,6 +3,7 @@ package com.transactrules.accounts;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @DynamoDBDocument
 public abstract class NamedAbstractEntity {
 
+    @NotEmpty
     protected String name;
     protected String id;
 

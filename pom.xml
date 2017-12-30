@@ -23,6 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
         <docker.image.prefix>transactrules</docker.image.prefix>
+		<aws.s3.region>us-west-2</aws.s3.region>
 	</properties>
 
 
@@ -94,6 +95,14 @@
 			<artifactId>jackson-dataformat-yaml</artifactId>
 			<version>2.9.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -118,6 +127,126 @@
 					</buildArgs>
 				</configuration>
 			</plugin>
+			<!--
+			  Step 1: Downlaod the DynamoDB Local artifact.
+				This will download to a Maven cache on disk and is kept until
+				the cache is cleared.  The artifact is unpacked to the target
+				directory of the build.
+			  -->
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>install-dynamodb_local</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+      Step 2: Reserve a local port for Dynamo to start on.
+        DynamoDB_Local normally runs on port 8000.  Rather than hoping
+        that port is open, have this plugin reserve an available port
+        and set it as a property in the Maven build.
+      -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>reserve-network-port</goal>
+						</goals>
+						<phase>initialize</phase>
+						<configuration>
+							<portNames>
+								<portName>dynamodblocal.port</portName>
+							</portNames>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--
+            Step 3: Start DynamoDB_Local just before integration tests are run.
+              This plugin will also cleanup the process during the
+              post-integration-test phase.
+            -->
+			<plugin>
+				<groupId>com.bazaarvoice.maven.plugins</groupId>
+				<artifactId>process-exec-maven-plugin</artifactId>
+				<version>0.7</version>
+				<executions>
+					<execution>
+						<id>dynamodb_local</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<name>dynamodb_local</name>
+							<!--
+                            We need to let DynamoDB finish starting, but don't have
+                            a good semamore.  It's pretty quick to start, so 1 second
+                            should suffice.
+                            -->
+							<waitAfterLaunch>1</waitAfterLaunch>
+							<arguments>
+								<argument>java</argument>
+								<argument>-Djava.library.path=dynamodb/DynamoDBLocal_lib</argument>
+								<argument>-jar</argument>
+								<argument>dynamodb/DynamoDBLocal.jar</argument>
+								<!--
+                                Use the port that was reserved in step 2
+                                -->
+								<argument>-port</argument>
+                                <argument>8000</argument>
+                                <!--<argument>${dynamodblocal.port}</argument>-->
+
+								<!--
+                                You run your tests in parallel, right?
+                                -->
+								<argument>-sharedDb</argument>
+								<!--
+                                Remove this to keep data between restarts of the process.
+                                -->
+								<argument>-inMemory</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--
+            Step 4: Use the failsafe plugin to run integration tests.
+              https://maven.apache.org/surefire/maven-failsafe-plugin/
+            -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.19</version>
+				<configuration>
+					<systemPropertyVariables>
+						<!--
+                        Set a system property for the test clients to use when connecting.
+                        Something like Apache's commons-configuration can pick this up
+                        transparently.
+                        -->
+						<amazon.dynamo.endpoint>http://localhost:${dynamodblocal.port}</amazon.dynamo.endpoint>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

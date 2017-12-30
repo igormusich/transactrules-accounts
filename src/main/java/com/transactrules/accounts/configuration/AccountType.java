@@ -4,6 +4,7 @@ package com.transactrules.accounts.configuration;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ import java.util.function.Function;
 public class AccountType {
     
     private String id;
-    
+
+    @NotEmpty
     private String name;
     
     private List<PositionType> positionTypes = new ArrayList<>();

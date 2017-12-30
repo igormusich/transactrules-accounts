@@ -1,12 +1,10 @@
 package com.transactrules.accounts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.runtime.*;
-import net.openhft.compiler.CompilerUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,23 +89,13 @@ public class CodeGenTest {
     }
 
     @Test
-    public void EvaluateGenerated() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, JsonProcessingException {
+    public void EvaluateGenerated() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, IOException {
 
-        StringWriter writer = new StringWriter();
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile("templates//accountValuation.mustache");
         AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
+        loanGivenAcccountType.setName("localLoanGiven");
 
-        try {
-            mustache.execute(writer,loanGivenAcccountType).flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Class aClass = codeGenService.getAccountValuationClass(loanGivenAcccountType);
 
-
-        String className = "com.transactrules.accounts.runtime." + loanGivenAcccountType.getName() + "Valuation";
-
-        Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, writer.toString());
         AccountValuation loanGivenValuation = (AccountValuation) aClass.newInstance();
 
         LocalDate startDate = LocalDate.of(2013, 3, 8);
@@ -117,8 +105,6 @@ public class CodeGenTest {
         Account account = CreateLoanGivenAccount(loanGivenAcccountType,startDate, endDate,calendar);
 
         loanGivenValuation.initialize(account, loanGivenAcccountType);
-
-
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
