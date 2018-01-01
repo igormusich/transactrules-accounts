@@ -2,18 +2,17 @@ package com.transactrules.accounts.web;
 
 import com.transactrules.accounts.configuration.*;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AccountTypeDTO {
+public class AccountTypeDto {
     public String name;
-    public List<PositionTypeDTO> positionTypes = new ArrayList<>();
-    public List<DateTypeDTO> dateTypes = new ArrayList<>();
-    public List<AmountTypeDTO> amountTypes = new ArrayList<>();
+    public List<PositionTypeDto> positionTypes = new ArrayList<>();
+    public List<DateTypeDto> dateTypes = new ArrayList<>();
+    public List<AmountTypeDto> amountTypes = new ArrayList<>();
     public List<ScheduledTransaction> scheduledTransactions = new ArrayList<>();
-    public List<TransactionTypeDTO> transactionTypes = new ArrayList<>();
+    public List<TransactionTypeDto> transactionTypes = new ArrayList<>();
     public List<ScheduleType> scheduleTypes = new ArrayList<>();
 
 
@@ -25,19 +24,19 @@ public class AccountTypeDTO {
 
         AccountType accountType = new AccountType( this.name);
 
-        for (PositionTypeDTO postionType: this.positionTypes) {
+        for (PositionTypeDto postionType: this.positionTypes) {
             PositionType newPositionType = accountType.addPositionType(postionType.name);
         }
 
-        for (DateTypeDTO dateType: this.dateTypes) {
+        for (DateTypeDto dateType: this.dateTypes) {
             accountType.addDateType(dateType.name);
         }
 
-        for (AmountTypeDTO amountType: this.amountTypes) {
+        for (AmountTypeDto amountType: this.amountTypes) {
             accountType.addAmountType(amountType.name, amountType.isValueDated);
         }
 
-        for(TransactionTypeDTO transactionType :this.transactionTypes ){
+        for(TransactionTypeDto transactionType :this.transactionTypes ){
             TransactionType newTransactionType= accountType.addTransactionType(transactionType.name, transactionType.maximumPrecision);
 
             for (String creditPositionTypeName: transactionType.creditPositionNames){

@@ -4,7 +4,6 @@ package com.transactrules.accounts.configuration;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class AccountType {
     
     private String id;
 
-    @NotEmpty
     private String name;
     
     private List<PositionType> positionTypes = new ArrayList<>();
@@ -59,7 +57,8 @@ public class AccountType {
         this.id = id;
     }
 
-    @DynamoDBAttribute
+    //@DynamoDBIndexHashKey(globalSecondaryIndexName = "idx_global_accountType_name")
+    @DynamoDBAttribute(attributeName = "Name")
     public String getName(){
         return this.name;
     }
@@ -68,7 +67,7 @@ public class AccountType {
         this.name = name;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "PositionTypes")
     public List<PositionType> getPositionTypes() {
         return positionTypes;
     }
@@ -77,7 +76,7 @@ public class AccountType {
         this.positionTypes = positionTypes;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "TransactionTypes")
     public List<TransactionType> getTransactionTypes() {
 
         return transactionTypes;
@@ -87,7 +86,7 @@ public class AccountType {
         this.transactionTypes = transactionTypes;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "DateTypes")
     public List<DateType> getDateTypes(){
         return dateTypes;
     }
@@ -96,7 +95,7 @@ public class AccountType {
         this.dateTypes = dateTypes;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "AmountTypes")
     public List<AmountType> getAmountTypes(){
         return amountTypes;
     }
@@ -105,7 +104,7 @@ public class AccountType {
         this.amountTypes = amountTypes;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBAttribute(attributeName = "OptionTypes")
     public List<OptionType> getOptionTypes(){
         return optionTypes;
     }
@@ -239,7 +238,5 @@ public class AccountType {
     public Function<String,String> currentTimestamp() {
         return (v)-> LocalDateTime.now().toString();
     }
-
-
 
 }

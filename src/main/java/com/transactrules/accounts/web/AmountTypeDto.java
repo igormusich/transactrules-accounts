@@ -1,6 +1,7 @@
 package com.transactrules.accounts.web;
 
-public class DateTypeDTO {
+public class AmountTypeDto {
     public String id;
     public String name;
+    public Boolean isValueDated;
 }

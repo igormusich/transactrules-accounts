@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 @EnableScan
 public interface AccountRepository extends CrudRepository<Account,String> {
+
 }

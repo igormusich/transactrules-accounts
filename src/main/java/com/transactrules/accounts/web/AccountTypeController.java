@@ -28,7 +28,7 @@ public class AccountTypeController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Add a new AccountType")
-    public ResponseEntity<?> create(@RequestBody AccountTypeDTO item ){
+    public ResponseEntity<?> create(@RequestBody AccountTypeDto item ){
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (item == null)
