@@ -1,6 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.utilities.Utilities;
 import org.junit.Test;
 
 import java.io.IOException;

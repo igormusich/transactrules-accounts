@@ -6,6 +6,7 @@ import com.transactrules.accounts.configuration.BusinessDayCalculation;
 import com.transactrules.accounts.configuration.ScheduleEndType;
 import com.transactrules.accounts.configuration.ScheduleFrequency;
 import com.transactrules.accounts.configuration.ScheduleType;
+import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -52,6 +53,7 @@ public class Schedule  {
     }
 
     @DynamoDBAttribute
+    @LocalDateFormat
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -79,6 +81,7 @@ public class Schedule  {
     }
 
     @DynamoDBAttribute
+    @LocalDateFormat
     public LocalDate getEndDate() {
         return endDate;
     }

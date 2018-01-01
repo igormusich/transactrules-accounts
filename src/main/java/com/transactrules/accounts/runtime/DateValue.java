@@ -1,8 +1,8 @@
 package com.transactrules.accounts.runtime;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.time.LocalDate;
 
@@ -18,7 +18,7 @@ public class DateValue{
         this.date = date;
     }
 
-    @DynamoDBAttribute
+    @LocalDateFormat
     public LocalDate getDate(){
         return date;
     }

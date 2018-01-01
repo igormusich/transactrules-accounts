@@ -4,10 +4,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.transactrules.accounts.configuration.*;
-import com.transactrules.accounts.runtime.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @DynamoDBTable(tableName = "Account")
 public class Account {
@@ -129,11 +132,11 @@ public class Account {
             }
         }
 
-        for (DateType dateType: accountType.getDateTypes()) {
+        /*for (DateType dateType: accountType.getDateTypes()) {
             if(!dates.containsKey(dateType.getId())){
-                dates.put(dateType.getId(), new DateValue( LocalDate.MIN));
+                dates.put(dateType.getId(), new DateValue( LocalDate.now()));
             }
-        }
+        }*/
 
         for (AmountType amountType: accountType.getAmountTypes()) {
             if(!amounts.containsKey(amountType.getId())){

@@ -2,6 +2,8 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.transactrules.accounts.utilities.LocalDateFormat;
+
 import java.time.LocalDate;
 
 @DynamoDBDocument
@@ -16,6 +18,7 @@ public class ScheduleDate
     }
 
     @DynamoDBAttribute
+    @LocalDateFormat
     public LocalDate getValue() {
         return value;
     }

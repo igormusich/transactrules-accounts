@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,9 +22,12 @@ public class AccountController {
     @Autowired
     AccountService service;
 
+    @Autowired
+    private AccountDtoValidator accountDtoValidator;
+
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Create new Account")
-    public ResponseEntity<?> create(@RequestBody AccountCreateRequest item ) {
+    public ResponseEntity<?> create(@Valid @RequestBody AccountDto item ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (item == null)
@@ -30,7 +35,9 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        Account savedItem = service.create(item.accountTypeName,item.accountNumber);
+        Account savedItem = service.create(item.getAccountTypeName(),item.getAccountNumber());
+
+        AccountDto response = AccountDto.fromAccount(savedItem);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -53,5 +60,10 @@ public class AccountController {
         Account account = service.findByAccountNumber(accountNumber);
 
         return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
+    @InitBinder("accountCreateRequest")
+    public void setupBinder(WebDataBinder binder) {
+        binder.addValidators(accountDtoValidator);
     }
 }

@@ -22,31 +22,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account create(String accountTypeName, String accountNumber)  {
-        //List<ApiSubError> errors = new ArrayList<>();
-
-        if(accountTypeName==null || accountTypeName.isEmpty()){
-            //errors.add(new ApiValidationError(null,"accountTypeName",null, "accountTypeName must not be null or empty"));
-        }
-
-        if(accountNumber==null || accountNumber.isEmpty()){
-            //errors.add(new ApiValidationError(null,"accountNumber",null, "accountNumber must not be null or empty"));
-        }
-
-        //ApiValidationException.throwIfHasErrors(errors);
-
-        Account existingAccount = accountRepository.findOne(accountNumber);
-
-        if(existingAccount != null){
-            //errors.add(new ApiValidationError(null, String.format("accountNumber %s already exists", accountNumber)));
-        }
 
         AccountType accountType = accountTypeRepository.findByName(accountTypeName);
-
-        if(accountNumber == null){
-            //errors.add(new ApiValidationError(null, String.format("accountType %s does not exist", accountTypeName)));
-        }
-
-        //ApiValidationException.throwIfHasErrors(errors);
 
         Account account = new Account(accountType, accountNumber);
 
