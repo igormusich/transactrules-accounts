@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,15 +19,19 @@ import java.util.List;
 public class AccountTypeController {
 
     private final AccountTypeService service;
+    private final AccountTypeCreateRequestValidator accountTypeCreateRequestValidator;
 
     @Autowired
-    public AccountTypeController(AccountTypeService service){
+    public AccountTypeController(AccountTypeService service,
+                                 AccountTypeCreateRequestValidator accountTypeCreateRequestValidator){
+
         this.service = service;
+        this.accountTypeCreateRequestValidator = accountTypeCreateRequestValidator;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Add a new AccountType")
-    public ResponseEntity<?> create(@RequestBody AccountTypeDto item ){
+    public ResponseEntity<?> create(@Valid @RequestBody AccountTypeCreateRequest item )  {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (item == null)
@@ -53,7 +56,10 @@ public class AccountTypeController {
         return new ResponseEntity<>(accountTypes, HttpStatus.OK);
     }
 
-
+    @InitBinder("accountTypeCreateRequest")
+    public void setupBinder(WebDataBinder binder) {
+        binder.addValidators(accountTypeCreateRequestValidator);
+    }
 
 
 }

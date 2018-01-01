@@ -3,7 +3,7 @@ package com.transactrules.accounts.web;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDto {
+public class AccountCreateRequest {
     public String accountTypeName;
     public String accountNumber;
 

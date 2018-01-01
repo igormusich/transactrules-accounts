@@ -21,19 +21,32 @@ public class AccountServiceImpl implements AccountService {
     AccountTypeRepository accountTypeRepository;
 
     @Override
-    public Account create(String accountTypeName, String accountNumber) {
+    public Account create(String accountTypeName, String accountNumber)  {
+        //List<ApiSubError> errors = new ArrayList<>();
 
-        /*Iterable<AccountType> iterable = accountTypeRepository.findAll();
+        if(accountTypeName==null || accountTypeName.isEmpty()){
+            //errors.add(new ApiValidationError(null,"accountTypeName",null, "accountTypeName must not be null or empty"));
+        }
 
-        Iterator<AccountType> iterator = iterable.iterator();
+        if(accountNumber==null || accountNumber.isEmpty()){
+            //errors.add(new ApiValidationError(null,"accountNumber",null, "accountNumber must not be null or empty"));
+        }
 
-        List<AccountType> accountTypes = new ArrayList<>();
-        iterator.forEachRemaining(accountTypes::add);
+        //ApiValidationException.throwIfHasErrors(errors);
 
+        Account existingAccount = accountRepository.findOne(accountNumber);
 
-        AccountType accountType = accountTypes.stream().filter(at-> at.getName().equalsIgnoreCase(accountTypeName)).findFirst().get();
-*/
-        AccountType accountType = accountTypeRepository.findByName(accountTypeName).get(0);
+        if(existingAccount != null){
+            //errors.add(new ApiValidationError(null, String.format("accountNumber %s already exists", accountNumber)));
+        }
+
+        AccountType accountType = accountTypeRepository.findByName(accountTypeName);
+
+        if(accountNumber == null){
+            //errors.add(new ApiValidationError(null, String.format("accountType %s does not exist", accountTypeName)));
+        }
+
+        //ApiValidationException.throwIfHasErrors(errors);
 
         Account account = new Account(accountType, accountNumber);
 

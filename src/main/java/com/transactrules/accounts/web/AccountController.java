@@ -22,7 +22,7 @@ public class AccountController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Create new Account")
-    public ResponseEntity<?> create(@RequestBody AccountDto item ){
+    public ResponseEntity<?> create(@RequestBody AccountCreateRequest item ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (item == null)

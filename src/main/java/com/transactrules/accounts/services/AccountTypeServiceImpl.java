@@ -21,7 +21,17 @@ public class AccountTypeServiceImpl implements AccountTypeService {
     }
 
     @Override
-    public AccountType create(AccountType accountType) {
+    public AccountType create(AccountType accountType)  {
+        //List<ApiSubError> errors = new ArrayList<>();
+
+        AccountType existingAccountType = accountTypeRepository.findByName(accountType.getName());
+
+        if(existingAccountType != null){
+            //throw new IllegalArgumentException("accountType with same name already exists");
+            //errors.add(new ApiValidationError(null, String.format("accountType %s does not exist", accountType.getName())));
+        }
+
+        //ApiValidationException.throwIfHasErrors(errors);
 
         if(accountType.getId()==null || accountType.getId().isEmpty()){
             accountType.setId(UUID.randomUUID().toString());
