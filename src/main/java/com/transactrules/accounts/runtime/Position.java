@@ -20,7 +20,7 @@ public class Position  {
 
     public Position(PositionType positionType) {
         this.amount = BigDecimal.ZERO;
-        this.positionTypeId = positionType.getId();
+        this.positionTypeId = positionType.getName();
     }
 
     public void applyOperation(TransactionOperation operation, BigDecimal value){

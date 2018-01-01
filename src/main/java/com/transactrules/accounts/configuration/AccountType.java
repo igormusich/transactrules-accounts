@@ -9,7 +9,6 @@ import org.joda.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -19,7 +18,6 @@ import java.util.function.Function;
 @DynamoDBTable(tableName = "AccountType")
 public class AccountType {
     
-    private String id;
 
     private String name;
     
@@ -44,21 +42,11 @@ public class AccountType {
     }
 
     public AccountType (String name) {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
     }
 
-    @DynamoDBHashKey(attributeName = "id")
-    public String getId(){
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    //@DynamoDBIndexHashKey(globalSecondaryIndexName = "idx_global_accountType_name")
-    @DynamoDBAttribute(attributeName = "Name")
+    @DynamoDBHashKey(attributeName = "name")
     public String getName(){
         return this.name;
     }
@@ -113,10 +101,10 @@ public class AccountType {
         this.optionTypes = optionTypes;
     }
 
-    public Optional<TransactionType> getTransactionType(String transactionTypeId){
+    public Optional<TransactionType> getTransactionType(String transactionTypeName){
 
         for(TransactionType transactionType : transactionTypes) {
-           if(transactionType.getId().equalsIgnoreCase(transactionTypeId)){
+           if(transactionType.getName().equalsIgnoreCase(transactionTypeName)){
                return Optional.of(transactionType);
            }
         }

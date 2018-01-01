@@ -7,9 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Created by Administrator on 11/26/2016.
@@ -27,15 +27,14 @@ public class AccountTypeRepositoryTest {
 
         repository.save(accountType);
 
-        assertThat(accountType.getId(),is(not(0)));
 
-        AccountType retrieved = repository.findOne(accountType.getId());
+        AccountType retrieved = repository.findOne(accountType.getName());
 
         assertThat(retrieved.getName(),is("simple"));
 
-        repository.delete(accountType.getId());
+        repository.delete(accountType.getName());
 
-        boolean exists =  repository.exists(accountType.getId());
+        boolean exists =  repository.exists(accountType.getName());
 
         assertThat(exists, is(false));
     }
@@ -46,7 +45,7 @@ public class AccountTypeRepositoryTest {
 
         repository.save(savingsAccount);
 
-        AccountType  readAccountType = repository.findOne(savingsAccount.getId());
+        AccountType  readAccountType = repository.findOne(savingsAccount.getName());
 
         assertThat( readAccountType.getPositionTypes().size(), is(2));
 

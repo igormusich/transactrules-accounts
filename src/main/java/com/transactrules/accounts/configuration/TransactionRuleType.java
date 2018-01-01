@@ -1,7 +1,6 @@
 package com.transactrules.accounts.configuration;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -11,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DynamoDBDocument
 public class TransactionRuleType  {
 
-    private String posititonTypeId;
+    private String posititonTypeName;
 
     private int transactionOperation;
 
@@ -21,16 +20,16 @@ public class TransactionRuleType  {
     }
 
     public TransactionRuleType(PositionType posititonType, TransactionOperation operation) {
-        this.posititonTypeId = posititonType.getId();
+        this.posititonTypeName = posititonType.getName();
         this.transactionOperation = operation.value();
     }
 
-    public String getPosititonTypeId() {
-        return posititonTypeId;
+    public String getPosititonTypeName() {
+        return posititonTypeName;
     }
 
-    public void setPosititonTypeId(String posititonTypeId) {
-        this.posititonTypeId = posititonTypeId;
+    public void setPosititonTypeName(String posititonTypeName) {
+        this.posititonTypeName = posititonTypeName;
     }
 
     public int getTransactionOperation() {

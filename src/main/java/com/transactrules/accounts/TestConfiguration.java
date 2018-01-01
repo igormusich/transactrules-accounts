@@ -1,12 +1,10 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.configuration.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
-
-import org.slf4j.Logger;
 
 
 @Component
@@ -25,7 +23,7 @@ public class TestConfiguration {
 
         accountTypeRepo.save(savingsAccountType);
 
-        logger.info("Saved account type Id:" + savingsAccountType.getId().toString());
+        logger.info("Saved account type:" + savingsAccountType.getName().toString());
 
         logger.info("Default configuration saved (SavingsAccount)");
 

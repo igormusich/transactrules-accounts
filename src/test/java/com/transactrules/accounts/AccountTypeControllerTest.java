@@ -44,8 +44,7 @@ public class AccountTypeControllerTest {
 
         this.mvc.perform(post("/accountTypes").content(createAccountJson).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.name").value("SimpleLoan"))
-                .andExpect(jsonPath("$.id").isString());
+                .andExpect(jsonPath("$.name").value("SimpleLoan"));
     }
 
 }

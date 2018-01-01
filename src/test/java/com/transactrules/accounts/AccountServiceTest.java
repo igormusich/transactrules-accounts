@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import java.math.BigDecimal;
 import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Created by Administrator on 11/26/2016.
@@ -56,7 +56,7 @@ public class AccountServiceTest {
 
         accountValuationService.createTransaction(depositTransactionType.get(), BigDecimal.valueOf(100));
 
-        Position currentPosition = account.getPositions().get(currentPositionType.get().getId());
+        Position currentPosition = account.getPositions().get(currentPositionType.get().getName());
 
         assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100)));
     }

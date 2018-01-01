@@ -19,7 +19,7 @@ public class Account {
 
     private boolean isActive;
 
-    private String accountTypeId;
+    private String accountTypeName;
 
     private Map<String,Position> positions = new HashMap<>();
 
@@ -41,7 +41,7 @@ public class Account {
 
     public Account(AccountType accountType, String accountNumber){
         this.accountNumber = accountNumber;
-        this.accountTypeId = accountType.getId();
+        this.accountTypeName = accountType.getName();
     }
 
     @DynamoDBHashKey
@@ -63,12 +63,12 @@ public class Account {
     }
 
     @DynamoDBAttribute
-    public String getAccountTypeId() {
-        return accountTypeId;
+    public String getAccountTypeName() {
+        return accountTypeName;
     }
 
-    public void setAccountTypeId(String accountTypeId) {
-        this.accountTypeId = accountTypeId;
+    public void setAccountTypeName(String accountTypeName) {
+        this.accountTypeName = accountTypeName;
     }
 
     @DynamoDBAttribute
@@ -127,26 +127,26 @@ public class Account {
 
     public void initialize(AccountType accountType){
         for(PositionType positionType: accountType.getPositionTypes()){
-            if(!positions.containsKey(positionType.getId())){
+            if(!positions.containsKey(positionType.getName())){
                 initializePosition(positionType);
             }
         }
 
-        /*for (DateType dateType: accountType.getDateTypes()) {
-            if(!dates.containsKey(dateType.getId())){
-                dates.put(dateType.getId(), new DateValue( LocalDate.now()));
+        for (DateType dateType: accountType.getDateTypes()) {
+            if(!dates.containsKey(dateType.getName())){
+                dates.put(dateType.getName(), new DateValue( LocalDate.now()));
             }
-        }*/
+        }
 
         for (AmountType amountType: accountType.getAmountTypes()) {
-            if(!amounts.containsKey(amountType.getId())){
-                amounts.put(amountType.getId(), new AmountValue( new BigDecimal(0)));
+            if(!amounts.containsKey(amountType.getName())){
+                amounts.put(amountType.getName(), new AmountValue( new BigDecimal(0)));
             }
         }
 
         for (OptionType optionType: accountType.getOptionTypes()){
-            if(!options.containsKey(optionType.getId())){
-                options.put(optionType.getId(), new OptionValue());
+            if(!options.containsKey(optionType.getName())){
+                options.put(optionType.getName(), new OptionValue());
             }
         }
     }
@@ -160,12 +160,12 @@ public class Account {
         DateValue dateValue;
 
 
-        if(!dates.containsKey(dateType.getId())){
+        if(!dates.containsKey(dateType.getName())){
             dateValue = new DateValue( date);
-            dates.put(dateType.getId(), dateValue);
+            dates.put(dateType.getName(), dateValue);
         }
         else{
-            dateValue = dates.get(dateType.getId());
+            dateValue = dates.get(dateType.getName());
         }
 
         return dateValue;
@@ -173,14 +173,14 @@ public class Account {
 
     public Position initializePosition(PositionType positionType) {
         Position position = new Position(positionType);
-        positions.put(positionType.getId(), position);
+        positions.put(positionType.getName(), position);
         return position;
     }
 
     public Schedule initializeSchedule(ScheduleType scheduleType){
         Schedule schedule = new Schedule(scheduleType);
 
-        schedules.put(scheduleType.getId(), schedule);
+        schedules.put(scheduleType.getName(), schedule);
 
         return schedule;
     }

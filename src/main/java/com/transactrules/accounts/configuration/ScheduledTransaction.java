@@ -11,9 +11,9 @@ public class ScheduledTransaction extends NamedAbstractEntity {
 
     private int timing;
 
-    private String scheduleTypeId;
+    private String scheduleTypeName;
 
-    private String dateTypeId;
+    private String dateTypeName;
 
     private String transactionTypeId;
 
@@ -39,12 +39,12 @@ public class ScheduledTransaction extends NamedAbstractEntity {
         this.timing = timing.value();
 
         if(dateType!=null)
-            this.dateTypeId = dateType.getId();
+            this.dateTypeName = dateType.getName();
 
         if(scheduleType!=null)
-            this.scheduleTypeId = scheduleType.getId();
+            this.scheduleTypeName = scheduleType.getName();
 
-        this.transactionTypeId = transactionType.getId();
+        this.transactionTypeId = transactionType.getName();
         this.amountExpression = amountExpression;
         this.sequence = sequence;
    }
@@ -60,21 +60,21 @@ public class ScheduledTransaction extends NamedAbstractEntity {
     }
 
     @DynamoDBAttribute
-    public String getScheduleTypeId() {
-        return scheduleTypeId;
+    public String getScheduleTypeName() {
+        return scheduleTypeName;
     }
 
-    public void setScheduleTypeId(String scheduleTypeId) {
-        this.scheduleTypeId = scheduleTypeId;
+    public void setScheduleTypeName(String scheduleTypeName) {
+        this.scheduleTypeName = scheduleTypeName;
     }
 
     @DynamoDBAttribute
-    public String getDateTypeId() {
-        return dateTypeId;
+    public String getDateTypeName() {
+        return dateTypeName;
     }
 
-    public void setDateTypeId(String dateTypeId) {
-        this.dateTypeId = dateTypeId;
+    public void setDateTypeName(String dateTypeName) {
+        this.dateTypeName = dateTypeName;
     }
 
     @DynamoDBAttribute

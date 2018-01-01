@@ -2,7 +2,6 @@ package com.transactrules.accounts.runtime;
 
 
 import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.DateType;
 import com.transactrules.accounts.configuration.TransactionType;
 
 import java.math.BigDecimal;
@@ -84,9 +83,7 @@ public abstract class AccountValuation
 
     public LocalDate StartDate(){
 
-        DateType dateType = accountType.getDateTypeByName("StartDate").get();
-
-        return account.getDates().get(dateType.getId()).getDate();
+        return account.getDates().get("StartDate").getDate();
 
     }
 

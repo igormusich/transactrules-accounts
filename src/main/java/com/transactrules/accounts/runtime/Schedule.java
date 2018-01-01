@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @DynamoDBDocument
 public class Schedule  {
 
-    private String scheduleTypeId;
+    private String scheduleTypeName;
 
     private LocalDate startDate;
 
@@ -40,16 +40,16 @@ public class Schedule  {
     }
 
     public Schedule(ScheduleType scheduleType){
-        scheduleTypeId = scheduleType.getId();
+        scheduleTypeName = scheduleType.getName();
     }
 
     @DynamoDBAttribute
-    public String getScheduleTypeId() {
-        return scheduleTypeId;
+    public String getScheduleTypeName() {
+        return scheduleTypeName;
     }
 
-    public void setScheduleTypeId(String scheduleTypeId) {
-        this.scheduleTypeId = scheduleTypeId;
+    public void setScheduleTypeName(String scheduleTypeName) {
+        this.scheduleTypeName = scheduleTypeName;
     }
 
     @DynamoDBAttribute

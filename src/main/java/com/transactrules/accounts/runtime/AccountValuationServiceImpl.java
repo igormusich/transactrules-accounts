@@ -29,7 +29,7 @@ public class AccountValuationServiceImpl implements AccountValuationService {
     @Override
     public void initialize(Account account) {
         this.account = account;
-        accountType = accountTypeRepository.findOne(account.getAccountTypeId());
+        accountType = accountTypeRepository.findOne(account.getAccountTypeName());
         actionDate = LocalDate.now();
         valueDate = LocalDate.now();
 
@@ -40,7 +40,7 @@ public class AccountValuationServiceImpl implements AccountValuationService {
     private void processTransaction(TransactionType transactionType, BigDecimal amount) {
 
         for (TransactionRuleType rule: transactionType.getTransactionRules()) {
-            Position position = account.getPositions().get(rule.getPosititonTypeId());
+            Position position = account.getPositions().get(rule.getPosititonTypeName());
 
             position.applyOperation(TransactionOperation.fromInteger( rule.getTransactionOperation()), amount);
         }

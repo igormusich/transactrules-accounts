@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @DynamoDBDocument
 public class Transaction  {
 
-    private String transactionTypeId;
+    private String transactionTypeName;
     private BigDecimal amount;
 
 
@@ -29,7 +29,7 @@ public class Transaction  {
     }
 
     public Transaction(TransactionType transactionType, BigDecimal amount, Account account, LocalDate actionDate, LocalDate valueDate) {
-        this.transactionTypeId = transactionType.getId();
+        this.transactionTypeName = transactionType.getName();
         this.amount = amount;
         this.accountNumber = account.getAccountNumber();
         this.actionDate = actionDate;
@@ -37,12 +37,12 @@ public class Transaction  {
     }
 
     @DynamoDBAttribute
-    public String getTransactionTypeId() {
-        return transactionTypeId;
+    public String getTransactionTypeName() {
+        return transactionTypeName;
     }
 
-    public void setTransactionTypeId(String transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
+    public void setTransactionTypeName(String transactionTypeName) {
+        this.transactionTypeName = transactionTypeName;
     }
 
     @DynamoDBAttribute

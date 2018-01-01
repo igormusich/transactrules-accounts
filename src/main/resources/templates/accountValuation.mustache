@@ -60,25 +60,25 @@ public class {{name}}Valuation extends AccountValuation {
         //initialize dates
 
     {{#dateTypes}}
-        _{{name}}= account.getDates().get("{{id}}");
+        _{{name}}= account.getDates().get("{{name}}");
     {{/dateTypes}}
 
         //initialize positions
 
     {{#positionTypes}}
-        _{{name}}= account.getPositions().get("{{id}}");
+        _{{name}}= account.getPositions().get("{{name}}");
     {{/positionTypes}}
 
         //initialize amounts
 
     {{#amountTypes}}
-        _{{name}}= account.getAmounts().get("{{id}}");
+        _{{name}}= account.getAmounts().get("{{name}}");
     {{/amountTypes}}
 
         //initialize options
 
     {{#optionTypes}}
-        _{{name}}= account.getOptions().get("{{id}}");
+        _{{name}}= account.getOptions().get("{{name}}");
         _{{name}}.setValues({{optionListExpression}});
     {{/optionTypes}}
 
