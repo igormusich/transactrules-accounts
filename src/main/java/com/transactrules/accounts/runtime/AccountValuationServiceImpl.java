@@ -42,7 +42,7 @@ public class AccountValuationServiceImpl implements AccountValuationService {
         for (TransactionRuleType rule: transactionType.getTransactionRules()) {
             Position position = account.getPositions().get(rule.getPosititonTypeName());
 
-            position.applyOperation(TransactionOperation.fromInteger( rule.getTransactionOperation()), amount);
+            position.applyOperation(TransactionOperation.fromString( rule.getTransactionOperation()), amount);
         }
     }
 

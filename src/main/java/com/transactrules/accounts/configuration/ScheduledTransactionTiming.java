@@ -1,27 +1,36 @@
 package com.transactrules.accounts.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum ScheduledTransactionTiming {
 
-    StartOfDay(1),
-    EndOfDay(2);
+    StartOfDay("START_OF_DAY"),
+    EndOfDay("END_OF_DAY");
 
-    private final int value;
+    private final String value;
 
-    ScheduledTransactionTiming(int value) {
+    ScheduledTransactionTiming(String value) {
         this.value = value;
     }
 
-    public int value() {
+    public String value() {
         return value;
     }
 
-    public static ScheduledTransactionTiming fromInteger(int x) {
-        switch(x) {
-            case 1:
-                return StartOfDay;
-            case 2:
-                return EndOfDay;
+    private static final Map<String, ScheduledTransactionTiming> lookup = new HashMap<>();
+
+    static
+    {
+        for(ScheduledTransactionTiming item : ScheduledTransactionTiming.values())
+        {
+            lookup.put(item.value(), item);
         }
-        return null;
     }
+
+    public static ScheduledTransactionTiming fromString(String value)
+    {
+        return lookup.get(value);
+    }
+
 }

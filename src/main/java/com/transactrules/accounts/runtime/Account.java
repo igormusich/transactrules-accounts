@@ -3,14 +3,13 @@ package com.transactrules.accounts.runtime;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.transactrules.accounts.configuration.*;
+import com.transactrules.accounts.utilities.DateValueMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @DynamoDBTable(tableName = "Account")
 public class Account {
@@ -80,12 +79,12 @@ public class Account {
         this.positions = positions;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBTypeConverted(converter = DateValueMapConverter.class)
     public Map<String, DateValue> getDates() {
         return dates;
     }
 
-    public void setDates(Map<String, DateValue> dates) {
+    public void setDates(Map<String,DateValue> dates) {
         this.dates = dates;
     }
 
@@ -132,10 +131,8 @@ public class Account {
             }
         }
 
-        for (DateType dateType: accountType.getDateTypes()) {
-            if(!dates.containsKey(dateType.getName())){
-                dates.put(dateType.getName(), new DateValue( LocalDate.now()));
-            }
+       for (DateType dateType: accountType.getDateTypes()) {
+            this.initializeDate(dateType, LocalDate.now());
         }
 
         for (AmountType amountType: accountType.getAmountTypes()) {
@@ -157,19 +154,21 @@ public class Account {
     }
 
     public DateValue initializeDate(DateType dateType, LocalDate date){
+
         DateValue dateValue;
 
-
-        if(!dates.containsKey(dateType.getName())){
+        if(dates.containsKey(dateType.getName())){
+            dateValue = dates.get(dateType.getName());
+        }
+        else
+        {
             dateValue = new DateValue( date);
             dates.put(dateType.getName(), dateValue);
-        }
-        else{
-            dateValue = dates.get(dateType.getName());
         }
 
         return dateValue;
     }
+
 
     public Position initializePosition(PositionType positionType) {
         Position position = new Position(positionType);

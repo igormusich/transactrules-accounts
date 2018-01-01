@@ -9,7 +9,7 @@ import com.transactrules.accounts.NamedAbstractEntity;
 @DynamoDBDocument
 public class ScheduledTransaction extends NamedAbstractEntity {
 
-    private int timing;
+    private String timing;
 
     private String scheduleTypeName;
 
@@ -50,12 +50,12 @@ public class ScheduledTransaction extends NamedAbstractEntity {
    }
 
    @DynamoDBAttribute
-    public int getTiming() {
+    public String getTiming() {
         return timing;
     }
 
 
-    public void setTiming(int timing) {
+    public void setTiming(String timing) {
         this.timing = timing;
     }
 

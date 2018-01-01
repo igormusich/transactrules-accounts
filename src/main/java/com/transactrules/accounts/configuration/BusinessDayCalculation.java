@@ -1,38 +1,39 @@
 package com.transactrules.accounts.configuration;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum BusinessDayCalculation {
-    AnyDay(1),
-    NextBusinessDay(2),
-    PreviousBusinessDay(3),
-    ClosestBusinessDayOrNext(4),
-    NextBusinessDayThisMonthOrPrevious(5);
+    AnyDay("ANY_DAY"),
+    NextBusinessDay("NEXT_BUSINESS_DAY"),
+    PreviousBusinessDay("PREVIOUS_BUSINESS_DAY"),
+    ClosestBusinessDayOrNext("CLOSEST_BUSINESS_DAY_NEXT"),
+    NextBusinessDayThisMonthOrPrevious("NEXT_BUSINESS_DAY_THIS_MONTH_OR_PREVIOUS");
 
-    private final int value;
+    private final String value;
 
-    BusinessDayCalculation(int value) {
+    BusinessDayCalculation(String value) {
         this.value = value;
     }
 
-    public int value() {
+    public String value() {
         return value;
     }
 
-    public static BusinessDayCalculation fromInteger(int x) {
-        switch(x) {
-            case 1:
-                return AnyDay;
-            case 2:
-                return NextBusinessDay;
-            case 3:
-                return PreviousBusinessDay;
-            case 4:
-                return ClosestBusinessDayOrNext;
-            case 5:
-                return NextBusinessDayThisMonthOrPrevious;
+    private static final Map<String, BusinessDayCalculation> lookup = new HashMap<>();
+
+    static
+    {
+        for(BusinessDayCalculation item : BusinessDayCalculation.values())
+        {
+            lookup.put(item.value(), item);
         }
-        return null;
     }
 
+    public static BusinessDayCalculation fromString(String value)
+    {
+        return lookup.get(value);
+    }
 
 }

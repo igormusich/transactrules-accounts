@@ -1,31 +1,37 @@
 package com.transactrules.accounts.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Administrator on 11/27/2016.
  */
 public enum ScheduleFrequency {
-    Daily(1),
-    Monthly(2);
+    Daily("DAILY"),
+    Monthly("MONTHLY");
 
-    private final int value;
+    private final String value;
 
-    private ScheduleFrequency(int value) {
+    private ScheduleFrequency(String value) {
         this.value = value;
     }
 
-    public int value() {
+    public String value() {
         return value;
     }
 
-    public static ScheduleFrequency fromInteger(int x) {
-        switch(x) {
-            case 1:
-                return Daily;
-            case 2:
-                return Monthly;
+    private static final Map<String, ScheduleFrequency> lookup = new HashMap<>();
+
+    static
+    {
+        for(ScheduleFrequency item : ScheduleFrequency.values())
+        {
+            lookup.put(item.value(), item);
         }
-        return null;
     }
 
-
+    public static ScheduleFrequency fromString(String value)
+    {
+        return lookup.get(value);
+    }
 }

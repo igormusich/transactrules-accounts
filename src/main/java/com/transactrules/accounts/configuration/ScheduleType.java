@@ -2,7 +2,6 @@ package com.transactrules.accounts.configuration;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
 
 
@@ -13,10 +12,9 @@ import com.transactrules.accounts.NamedAbstractEntity;
 public class ScheduleType extends NamedAbstractEntity {
 
 
-    private int scheduleFrequency;
+    private String scheduleFrequency;
 
-
-    private int scheduleEndType;
+    private String scheduleEndType;
 
     private String startDateExpression;
 
@@ -50,20 +48,20 @@ public class ScheduleType extends NamedAbstractEntity {
     }
 
     @DynamoDBAttribute
-    public int getScheduleFrequency() {
+    public String getScheduleFrequency() {
         return scheduleFrequency;
     }
 
-    public void setScheduleFrequency(int scheduleFrequency) {
+    public void setScheduleFrequency(String scheduleFrequency) {
         this.scheduleFrequency = scheduleFrequency;
     }
 
     @DynamoDBAttribute
-    public int getScheduleEndType() {
+    public String getScheduleEndType() {
         return scheduleEndType;
     }
 
-    public void setScheduleEndType(int scheduleEndType) {
+    public void setScheduleEndType(String scheduleEndType) {
         this.scheduleEndType = scheduleEndType;
     }
 

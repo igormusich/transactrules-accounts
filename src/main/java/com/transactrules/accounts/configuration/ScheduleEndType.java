@@ -1,33 +1,39 @@
 package com.transactrules.accounts.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Administrator on 11/27/2016.
  */
 public enum ScheduleEndType {
-    NoEnd(1),
-    EndDate(2),
-    Repeats(3);
+    NoEnd("NO_END"),
+    EndDate("END_DATE"),
+    Repeats("REPEATS");
 
-    private final int value;
+    private final String value;
 
-    ScheduleEndType(int value) {
+    ScheduleEndType(String value) {
         this.value = value;
     }
 
-    public int value() {
+    public String value() {
         return value;
     }
 
-    public static ScheduleEndType fromInteger(int x) {
-        switch(x) {
-            case 1:
-                return NoEnd;
-            case 2:
-                return EndDate;
-            case 3:
-                return Repeats;
+    private static final Map<String, ScheduleEndType> lookup = new HashMap<>();
+
+    static
+    {
+        for(ScheduleEndType item : ScheduleEndType.values())
+        {
+            lookup.put(item.value(), item);
         }
-        return null;
+    }
+
+    public static ScheduleEndType fromString(String value)
+    {
+        return lookup.get(value);
     }
 
 }

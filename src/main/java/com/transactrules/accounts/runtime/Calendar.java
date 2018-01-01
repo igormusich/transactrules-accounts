@@ -76,17 +76,17 @@ public class Calendar  implements BusinessDayCalculator {
 
     public LocalDate GetCalculatedBusinessDay(LocalDate date, BusinessDayCalculation adjsutment)
     {
-        if (adjsutment == BusinessDayCalculation.AnyDay)
+        if (adjsutment.equals(BusinessDayCalculation.AnyDay) )
         {
             return date;
         }
 
-        if (adjsutment == BusinessDayCalculation.PreviousBusinessDay)
+        if (adjsutment.equals(BusinessDayCalculation.PreviousBusinessDay))
         {
             return GetPreviousBusinessDay(date);
         }
 
-        if (adjsutment == BusinessDayCalculation.NextBusinessDay)
+        if (adjsutment.equals( BusinessDayCalculation.NextBusinessDay))
         {
             return GetNextBusinessDay(date);
         }
@@ -94,7 +94,7 @@ public class Calendar  implements BusinessDayCalculator {
         LocalDate previousBusinessDay = GetPreviousBusinessDay(date);
         LocalDate nextBusinessDay = GetPreviousBusinessDay(date);
 
-        if (adjsutment == BusinessDayCalculation.ClosestBusinessDayOrNext)
+        if (adjsutment.equals(BusinessDayCalculation.ClosestBusinessDayOrNext))
         {
             if (Period.between(date,previousBusinessDay).getDays() > Period.between(nextBusinessDay,date).getDays())
             {

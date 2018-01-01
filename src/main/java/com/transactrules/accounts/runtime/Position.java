@@ -12,7 +12,7 @@ public class Position  {
 
     private BigDecimal amount;
 
-    private String positionTypeId;
+    private String positionTypeName;
 
     public Position(){
 
@@ -20,7 +20,7 @@ public class Position  {
 
     public Position(PositionType positionType) {
         this.amount = BigDecimal.ZERO;
-        this.positionTypeId = positionType.getName();
+        this.positionTypeName = positionType.getName();
     }
 
     public void applyOperation(TransactionOperation operation, BigDecimal value){
@@ -62,11 +62,11 @@ public class Position  {
     }
 
     @DynamoDBAttribute
-    public String getPositionTypeId() {
-        return positionTypeId;
+    public String getPositionTypeName() {
+        return positionTypeName;
     }
 
-    public void setPositionTypeId(String positionTypeId) {
-        this.positionTypeId = positionTypeId;
+    public void setPositionTypeName(String positionTypeName) {
+        this.positionTypeName = positionTypeName;
     }
 }

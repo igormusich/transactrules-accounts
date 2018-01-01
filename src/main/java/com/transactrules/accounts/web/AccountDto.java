@@ -77,7 +77,7 @@ public class AccountDto {
         //dto.accountTypeName = accountType.getName();
 
         /*account.getPositions().values().stream()
-                .map(p-> new PositionDto(accountType.getPositionTypeById(p.getPositionTypeId()) )) .collect(Collectors.toList());
+                .map(p-> new PositionDto(accountType.getPositionTypeById(p.getPositionTypeName()) )) .collect(Collectors.toList());
 */
         return dto;
     }

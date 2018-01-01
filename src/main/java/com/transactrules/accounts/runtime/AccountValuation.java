@@ -83,8 +83,9 @@ public abstract class AccountValuation
 
     public LocalDate StartDate(){
 
-        return account.getDates().get("StartDate").getDate();
+        DateValue dateValue = account.getDates().get("StartDate");
 
+        return dateValue.getDate();
     }
 
     public LocalDate ValueDate(){

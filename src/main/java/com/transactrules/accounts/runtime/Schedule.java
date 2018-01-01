@@ -19,9 +19,9 @@ public class Schedule  {
 
     private LocalDate startDate;
 
-    private int endType;
+    private String endType;
 
-    private int frequency;
+    private String frequency;
 
     private LocalDate endDate;
 
@@ -29,7 +29,7 @@ public class Schedule  {
 
     private Integer numberOfRepeats;
 
-    private int businessDayCalculation;
+    private String businessDayCalculation;
 
     private List<ScheduleDate> includeDates = new ArrayList<>();
 
@@ -63,20 +63,20 @@ public class Schedule  {
     }
 
     @DynamoDBAttribute
-    public int getEndType() {
+    public String getEndType() {
         return endType;
     }
 
-    public void setEndType(int endType) {
+    public void setEndType(String endType) {
         this.endType = endType;
     }
 
     @DynamoDBAttribute
-    public int getFrequency() {
+    public String getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(int frequency) {
+    public void setFrequency(String frequency) {
         this.frequency = frequency;
     }
 
@@ -109,11 +109,11 @@ public class Schedule  {
     }
 
     @DynamoDBAttribute
-    public int getBusinessDayCalculation() {
+    public String getBusinessDayCalculation() {
         return businessDayCalculation;
     }
 
-    public void setBusinessDayCalculation(int businessDayCalculation) {
+    public void setBusinessDayCalculation(String businessDayCalculation) {
         this.businessDayCalculation = businessDayCalculation;
     }
 
@@ -157,11 +157,11 @@ public class Schedule  {
     {
         if (IsSimpleDailySchedule())
         {
-            if (endType == ScheduleEndType.NoEnd.value())
+            if (endType.equals(ScheduleEndType.NoEnd.value()))
             {
                 return date.isBefore(startDate);
             }
-            else if (endType == ScheduleEndType.EndDate.value())
+            else if (endType.equals(ScheduleEndType.EndDate.value()))
             {
                 return (date.isEqual(startDate) || date.isAfter(startDate)) &&
                         ( date.isEqual(endDate) || date.isBefore(endDate));
@@ -181,7 +181,9 @@ public class Schedule  {
 
     private Boolean IsSimpleDailySchedule()
     {
-        return this.frequency == ScheduleFrequency.Daily.value() && this.interval == 1 && this.businessDayCalculation == BusinessDayCalculation.AnyDay.value();
+        return this.frequency.equals(ScheduleFrequency.Daily.value())
+                && this.interval == 1 &&
+                this.businessDayCalculation.equals(BusinessDayCalculation.AnyDay.value());
     }
 
     public Boolean IsDue()
@@ -205,7 +207,7 @@ public class Schedule  {
 
         int repeats = 1;
         LocalDate iterator = startDate;
-        LocalDate adjustedDate = businessDayCalculator.GetCalculatedBusinessDay(iterator, BusinessDayCalculation.fromInteger(this.businessDayCalculation));
+        LocalDate adjustedDate = businessDayCalculator.GetCalculatedBusinessDay(iterator, BusinessDayCalculation.fromString(this.businessDayCalculation));
 
         while (!IsCompleted(repeats, adjustedDate, toDate))
         {
@@ -213,7 +215,7 @@ public class Schedule  {
 
             iterator = GetNextDate(repeats, iterator);
 
-            adjustedDate = businessDayCalculator.GetCalculatedBusinessDay(iterator, BusinessDayCalculation.fromInteger(this.businessDayCalculation));
+            adjustedDate = businessDayCalculator.GetCalculatedBusinessDay(iterator, BusinessDayCalculation.fromString(this.businessDayCalculation));
 
             repeats++;
         }
@@ -236,7 +238,7 @@ public class Schedule  {
 
     private LocalDate GetNextDate(int repeats, LocalDate iterator)
     {
-        if (this.frequency == ScheduleFrequency.Daily.value())
+        if (this.frequency.equals(ScheduleFrequency.Daily.value()))
         {
             iterator = startDate.plusDays(interval * repeats);
         }
@@ -255,18 +257,18 @@ public class Schedule  {
             return true;
         }
 
-        if (this.endType == ScheduleEndType.EndDate.value() && lastDate.isAfter(endDate))
+        if (this.endType.equals(ScheduleEndType.EndDate.value()) && lastDate.isAfter(endDate))
         {
             return true;
         }
 
 
-        if (this.endType == ScheduleEndType.NoEnd.value())
+        if (this.endType.equals(ScheduleEndType.NoEnd.value()))
         {
             return false;
         }
 
-        if (this.endType == ScheduleEndType.Repeats.value() &&
+        if (this.endType.equals(ScheduleEndType.Repeats.value()) &&
                 repeats > this.numberOfRepeats)
         {
             return true;

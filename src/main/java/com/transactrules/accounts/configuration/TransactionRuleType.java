@@ -12,7 +12,7 @@ public class TransactionRuleType  {
 
     private String posititonTypeName;
 
-    private int transactionOperation;
+    private String transactionOperation;
 
     public TransactionRuleType()
     {
@@ -32,11 +32,11 @@ public class TransactionRuleType  {
         this.posititonTypeName = posititonTypeName;
     }
 
-    public int getTransactionOperation() {
+    public String getTransactionOperation() {
         return transactionOperation;
     }
 
-    public void setTransactionOperation(int transactionOperation) {
+    public void setTransactionOperation(String transactionOperation) {
         this.transactionOperation = transactionOperation;
     }
 

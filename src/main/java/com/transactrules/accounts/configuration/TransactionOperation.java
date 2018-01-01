@@ -1,32 +1,39 @@
 package com.transactrules.accounts.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by 313798977 on 2016/11/12.
  */
 public enum TransactionOperation {
-    Add(1),
-    Subtract(-1);
+    Add("ADD"),
+    Subtract("SUBTRACT");
 
     @SuppressWarnings("unused")
-    private int value = 0;
+    private String value;
 
-
-    public int value(){
+    public String value(){
         return value;
     }
 
-    TransactionOperation(int value) {
+    TransactionOperation(String value) {
         this.value = value;
     }
 
-    public static TransactionOperation fromInteger(int x) {
-        switch(x) {
-            case 1:
-                return Add;
-            case -1:
-                return Subtract;
+    private static final Map<String, TransactionOperation> lookup = new HashMap<>();
+
+    static
+    {
+        for(TransactionOperation item : TransactionOperation.values())
+        {
+            lookup.put(item.value(), item);
         }
-        return null;
+    }
+
+    public static TransactionOperation fromString(String value)
+    {
+        return lookup.get(value);
     }
 
 }
