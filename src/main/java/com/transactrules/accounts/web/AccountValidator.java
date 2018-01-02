@@ -10,12 +10,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class AccountDtoValidator implements Validator {
+public class AccountValidator implements Validator {
     private AccountTypeRepository accountTypeRepository;
     private AccountRepository accountRepository;
 
     @Autowired
-    public AccountDtoValidator(
+    public AccountValidator(
             AccountTypeRepository accountTypeRepository,
             AccountRepository accountRepository) {
         this.accountTypeRepository = accountTypeRepository;
@@ -24,12 +24,12 @@ public class AccountDtoValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return AccountDto.class.isAssignableFrom(clazz);
+        return Account.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        AccountDto request = (AccountDto) target;
+        Account request = (Account) target;
 
         Account existingAccount = accountRepository.findOne(request.getAccountNumber());
 

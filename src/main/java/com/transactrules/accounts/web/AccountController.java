@@ -23,21 +23,19 @@ public class AccountController {
     AccountService service;
 
     @Autowired
-    private AccountDtoValidator accountDtoValidator;
+    private AccountValidator accountValidator;
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Create new Account")
-    public ResponseEntity<?> create(@Valid @RequestBody AccountDto item ) {
+    public ResponseEntity<?> create(@Valid @RequestBody Account account ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
-        if (item == null)
+        if (account == null)
         {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        Account savedItem = service.create(item.getAccountTypeName(),item.getAccountNumber());
-
-        AccountDto response = AccountDto.fromAccount(savedItem);
+        Account savedItem = service.create(account.getAccountTypeName(),account.getAccountNumber());
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -62,8 +60,9 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    @InitBinder("accountCreateRequest")
+    @InitBinder("account")
     public void setupBinder(WebDataBinder binder) {
-        binder.addValidators(accountDtoValidator);
+
+        binder.addValidators(accountValidator);
     }
 }

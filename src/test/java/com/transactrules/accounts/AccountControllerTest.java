@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.configuration.AccountTypeRepository;
-import com.transactrules.accounts.web.AccountDto;
+import com.transactrules.accounts.runtime.Account;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,9 +55,9 @@ public class AccountControllerTest {
 
 
     @Test
-    public void givenAccountTypeURLandPost_whenMockMVC_thenResponseOK() throws Exception {
+    public void givenAccountTypeandPost_whenMockMVC_thenResponseOK() throws Exception {
 
-        AccountDto createAccount = new AccountDto();
+        Account createAccount = new Account();
         createAccount.setAccountNumber(UUID.randomUUID().toString());
         createAccount.setAccountTypeName(accountType.getName());
 

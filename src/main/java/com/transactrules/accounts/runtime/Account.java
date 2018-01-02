@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @DynamoDBTable(tableName = "Account")
-public abstract class Account {
+public class Account {
 
     private String accountNumber;
 
@@ -218,10 +218,21 @@ public abstract class Account {
     }
 
 
-    public abstract void startOfDay();
-    public abstract void endOfOfDay();
-    public abstract String generatedAt();
-    public abstract void onDataChanged();
-    public abstract void calculateInstaments();
+    public  void startOfDay(){
+
+    }
+
+    public  void endOfOfDay(){
+
+    }
+    public  String generatedAt(){
+        return null;
+    }
+    public  void onDataChanged(){
+
+    }
+    public  void calculateInstaments(){
+
+    }
 
 }
