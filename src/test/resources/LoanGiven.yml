@@ -1,0 +1,129 @@
+---
+name: "LoanGiven"
+positionTypes:
+- name: "ConversionInterest"
+- name: "EarlyRedemptionFee"
+- name: "InterestAccrued"
+- name: "InterestCapitalized"
+- name: "Principal"
+dateTypes:
+- name: "StartDate"
+- name: "AccrualStart"
+- name: "EndDate"
+amountTypes:
+- name: "RedemptionAmount"
+  valueDated: false
+- name: "AdditionalAdvanceAmount"
+  valueDated: false
+- name: "ConversionInterestAmount"
+  valueDated: false
+- name: "AdvanceAmount"
+  valueDated: false
+rateTypes:
+- name: "InterestRate"
+optionTypes:
+- name: "AccrualOption"
+  optionListExpression: "com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions()"
+scheduledTransactions:
+- name: "Advance"
+  timing: "START_OF_DAY"
+  scheduleTypeName: null
+  dateTypeName: "StartDate"
+  transactionTypeId: "Advance"
+  amountExpression: "Advance()"
+  sequence: 1
+- name: "InterestAccrual"
+  timing: "END_OF_DAY"
+  scheduleTypeName: "AccrualSchedule"
+  dateTypeName: null
+  transactionTypeId: "InterestAccrued"
+  amountExpression: "com.transactrules.accounts.calculations.AccrualCalculation.InterestAccrued(AccrualOption(),\
+    \ Principal(), InterestRate(), ValueDate())"
+  sequence: 1
+- name: "InterestCapitalized"
+  timing: "END_OF_DAY"
+  scheduleTypeName: "InterestSchedule"
+  dateTypeName: null
+  transactionTypeId: "InterestCapitalized"
+  amountExpression: "InterestAccrued()"
+  sequence: 2
+transactionTypes:
+- name: "InterestAccrued"
+  maximumPrecision: true
+  transactionRules:
+  - posititonTypeName: "InterestAccrued"
+    transactionOperation: "ADD"
+- name: "InterestCapitalized"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "Principal"
+    transactionOperation: "ADD"
+  - posititonTypeName: "InterestAccrued"
+    transactionOperation: "SUBTRACT"
+  - posititonTypeName: "InterestCapitalized"
+    transactionOperation: "ADD"
+- name: "Redemption"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "Principal"
+    transactionOperation: "SUBTRACT"
+- name: "Advance"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "Principal"
+    transactionOperation: "ADD"
+- name: "AdditionalAdvance"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "Principal"
+    transactionOperation: "ADD"
+- name: "ConversionInterest"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "ConversionInterest"
+    transactionOperation: "ADD"
+- name: "EarlyRedemptionFee"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "EarlyRedemptionFee"
+    transactionOperation: "ADD"
+- name: "FXResultInterest"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "InterestAccrued"
+    transactionOperation: "ADD"
+- name: "FXResultPrincipal"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "Principal"
+    transactionOperation: "ADD"
+- name: "InterestPayment"
+  maximumPrecision: false
+  transactionRules:
+  - posititonTypeName: "InterestAccrued"
+    transactionOperation: "SUBTRACT"
+scheduleTypes:
+- name: "AccrualSchedule"
+  scheduleFrequency: "DAILY"
+  scheduleEndType: "NO_END"
+  startDateExpression: "this.StartDate()"
+  endDateExpression: ""
+  numberOfRepeatsExpression: ""
+  intervalExpression: "1"
+  calculated: true
+- name: "InterestSchedule"
+  scheduleFrequency: "MONTHLY"
+  scheduleEndType: "END_DATE"
+  startDateExpression: null
+  endDateExpression: null
+  numberOfRepeatsExpression: null
+  intervalExpression: "1"
+  calculated: false
+- name: "RedemptionSchedule"
+  scheduleFrequency: "MONTHLY"
+  scheduleEndType: "END_DATE"
+  startDateExpression: null
+  endDateExpression: null
+  numberOfRepeatsExpression: null
+  intervalExpression: "1"
+  calculated: false

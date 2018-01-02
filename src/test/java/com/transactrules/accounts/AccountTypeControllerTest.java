@@ -36,7 +36,7 @@ public class AccountTypeControllerTest {
 
 
     @Test
-    public void givenAccountTypeURLandPost_whenMockMVC_thenResponseOK() throws Exception {
+    public void givenSimpleLoanUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
 
         java.net.URL url = getClass().getResource("/SimpleLoan.json");
         java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
@@ -45,6 +45,18 @@ public class AccountTypeControllerTest {
         this.mvc.perform(post("/accountTypes").content(createAccountJson).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.name").value("SimpleLoan"));
+    }
+
+    @Test
+    public void givenLoanGivenYmlUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
+
+        java.net.URL url = getClass().getResource("/LoanGiven.yml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        String createAccountTypeYml = new String(java.nio.file.Files.readAllBytes(resPath));
+
+        this.mvc.perform(post("/accountTypes").content(createAccountTypeYml).contentType("text/yml")).andDo(print()).andExpect(status().isCreated())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.name").value("LoanGiven"));
     }
 
 }

@@ -19,19 +19,19 @@ import java.util.List;
 public class AccountTypeController {
 
     private final AccountTypeService service;
-    private final AccountTypeCreateRequestValidator accountTypeCreateRequestValidator;
+    private final AccountTypeValidator accountTypeValidator;
 
     @Autowired
     public AccountTypeController(AccountTypeService service,
-                                 AccountTypeCreateRequestValidator accountTypeCreateRequestValidator){
+                                 AccountTypeValidator accountTypeValidator){
 
         this.service = service;
-        this.accountTypeCreateRequestValidator = accountTypeCreateRequestValidator;
+        this.accountTypeValidator = accountTypeValidator;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Add a new AccountType")
-    public ResponseEntity<?> create(@Valid @RequestBody AccountTypeCreateRequest item )  {
+    public ResponseEntity<?> create(@Valid @RequestBody AccountType item )  {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (item == null)
@@ -39,7 +39,7 @@ public class AccountTypeController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        final AccountType savedItem = service.create(item.toAccountType());
+        final AccountType savedItem = service.create(item);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{name}")
@@ -58,7 +58,7 @@ public class AccountTypeController {
 
     @InitBinder("accountTypeCreateRequest")
     public void setupBinder(WebDataBinder binder) {
-        binder.addValidators(accountTypeCreateRequestValidator);
+        binder.addValidators(accountTypeValidator);
     }
 
 
