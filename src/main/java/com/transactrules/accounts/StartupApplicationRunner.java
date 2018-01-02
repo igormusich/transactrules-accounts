@@ -61,7 +61,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
             CreateTable(Calendar.class, dynamoDBMapper, amazonDynamoDB);
         }
 
-        testConfiguration.run();
+        //testConfiguration.run();
     }
 
     private boolean contains(List<String> listTablesResult, String tableName) {

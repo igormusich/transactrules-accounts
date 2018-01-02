@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.runtime.DateValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,13 @@ public class DateValueMapConverter implements DynamoDBTypeConverter<String, Map<
 
     Logger logger = LoggerFactory.getLogger(DateValueMapConverter.class);
 
+
+
     @Override
     public String convert(Map<String,DateValue> objects) {
         //Jackson object mapper
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
+
         try {
             String objectsString = objectMapper.writeValueAsString(objects);
             return objectsString;
@@ -33,7 +37,7 @@ public class DateValueMapConverter implements DynamoDBTypeConverter<String, Map<
 
     @Override
     public Map<String,DateValue> unconvert(String objectsString) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
         try {
             Map<String,DateValue> objects = objectMapper.readValue(objectsString, new TypeReference<Map<String,DateValue>>(){});
             return objects;
