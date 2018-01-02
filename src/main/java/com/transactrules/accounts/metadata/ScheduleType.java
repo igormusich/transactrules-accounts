@@ -1,4 +1,4 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;

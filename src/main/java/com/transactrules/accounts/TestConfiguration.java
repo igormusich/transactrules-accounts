@@ -1,6 +1,6 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.configuration.*;
+import com.transactrules.accounts.metadata.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class TestConfiguration {
     public void run() throws Exception {
         Logger logger = LoggerFactory.getLogger(TestConfiguration.class);
 
-        logger.info("Saving default configuration (SavingsAccount)");
+        logger.info("Saving default metadata (SavingsAccount)");
 
         AccountType savingsAccountType = createSavingsAccountType();
 
@@ -25,7 +25,7 @@ public class TestConfiguration {
 
         logger.info("Saved account type:" + savingsAccountType.getName().toString());
 
-        logger.info("Default configuration saved (SavingsAccount)");
+        logger.info("Default metadata saved (SavingsAccount)");
 
         logger.info("press any key ...");
     }

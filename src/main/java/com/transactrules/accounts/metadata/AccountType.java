@@ -1,4 +1,4 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Aggregate root for account configuration
+ * Aggregate root for account metadata
  */
 
 @DynamoDBTable(tableName = "AccountType")

@@ -1,4 +1,4 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

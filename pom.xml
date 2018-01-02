@@ -240,7 +240,7 @@
 					<systemPropertyVariables>
 						<!--
                         Set a system property for the test clients to use when connecting.
-                        Something like Apache's commons-configuration can pick this up
+                        Something like Apache's commons-metadata can pick this up
                         transparently.
                         -->
 						<amazon.dynamo.endpoint>http://localhost:${dynamodblocal.port}</amazon.dynamo.endpoint>

@@ -3,8 +3,8 @@ package com.transactrules.accounts;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.AccountTypeRepository;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
 import org.junit.Before;
 import org.junit.Test;

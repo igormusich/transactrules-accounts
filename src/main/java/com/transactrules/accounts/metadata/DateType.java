@@ -1,15 +1,17 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.NamedAbstractEntity;
 
 
 @DynamoDBDocument
-public class RateType extends NamedAbstractEntity {
+public class DateType extends NamedAbstractEntity {
 
-    public RateType(){}
 
-    public RateType(String name) {
+    public DateType(){}
+
+    DateType(String name) {
+
         super(name);
     }
 

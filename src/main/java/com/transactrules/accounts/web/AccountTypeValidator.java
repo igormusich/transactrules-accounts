@@ -1,9 +1,9 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.AccountTypeRepository;
-import com.transactrules.accounts.configuration.TransactionRuleType;
-import com.transactrules.accounts.configuration.TransactionType;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.AccountTypeRepository;
+import com.transactrules.accounts.metadata.TransactionRuleType;
+import com.transactrules.accounts.metadata.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

@@ -1,4 +1,4 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
@@ -7,7 +7,7 @@ import com.transactrules.accounts.NamedAbstractEntity;
 import java.util.*;
 
 /**
- * Define configuration for transaction type
+ * Define metadata for transaction type
  */
 
 @DynamoDBDocument

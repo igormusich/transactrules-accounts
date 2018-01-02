@@ -1,6 +1,6 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.services.AccountService;
 import io.swagger.annotations.ApiOperation;

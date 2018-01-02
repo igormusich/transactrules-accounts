@@ -4,7 +4,7 @@ package com.transactrules.accounts.runtime;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.transactrules.accounts.configuration.BusinessDayCalculation;
+import com.transactrules.accounts.metadata.BusinessDayCalculation;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

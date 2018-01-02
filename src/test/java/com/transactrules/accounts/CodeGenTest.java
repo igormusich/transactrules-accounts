@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -4,7 +4,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.Calendar;
 import org.slf4j.Logger;

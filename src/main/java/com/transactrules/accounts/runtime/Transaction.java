@@ -2,7 +2,7 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.transactrules.accounts.configuration.TransactionType;
+import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.math.BigDecimal;

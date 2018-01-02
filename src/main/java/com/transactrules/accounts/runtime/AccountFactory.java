@@ -1,7 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.StartupApplicationRunner;
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

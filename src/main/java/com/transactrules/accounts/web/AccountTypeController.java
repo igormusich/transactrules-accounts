@@ -1,6 +1,6 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.services.AccountTypeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

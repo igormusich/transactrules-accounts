@@ -1,6 +1,13 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.configuration.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transactrules.accounts.config.ObjectMapperConfiguration;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.PositionType;
+import com.transactrules.accounts.metadata.TransactionOperation;
+import com.transactrules.accounts.metadata.TransactionType;
+
+import java.io.IOException;
 
 
 /**
@@ -33,6 +40,30 @@ public class AccountTypeFactory {
 
         interestCapitalizedTransaction.addRule(interestAccruedPosition, TransactionOperation.Subtract );
         interestCapitalizedTransaction.addRule(currentPosition, TransactionOperation.Add );
+
+        return accountType;
+    }
+
+    public static AccountType createLoanGivenAccountType(){
+        java.net.URL url = AccountTypeFactory.class.getResource("/LoanGiven.yml");
+        java.nio.file.Path resPath = null;
+        String createAccountTypeYml =null;
+
+        try {
+            resPath = java.nio.file.Paths.get(url.toURI());
+            createAccountTypeYml = new String(java.nio.file.Files.readAllBytes(resPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ObjectMapper objectMapper = ObjectMapperConfiguration.getYamlObjectMapper();
+
+        AccountType accountType= null;
+        try {
+            accountType = (AccountType) objectMapper.readValue(createAccountTypeYml, AccountType.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return accountType;
     }

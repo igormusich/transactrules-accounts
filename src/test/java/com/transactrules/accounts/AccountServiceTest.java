@@ -1,9 +1,9 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.AccountTypeRepository;
-import com.transactrules.accounts.configuration.PositionType;
-import com.transactrules.accounts.configuration.TransactionType;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.AccountTypeRepository;
+import com.transactrules.accounts.metadata.PositionType;
+import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.AccountFactory;
 import com.transactrules.accounts.runtime.AccountValuationService;

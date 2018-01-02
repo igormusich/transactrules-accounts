@@ -1,9 +1,9 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.BusinessDayCalculation;
-import com.transactrules.accounts.configuration.ScheduleEndType;
-import com.transactrules.accounts.configuration.ScheduleFrequency;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.BusinessDayCalculation;
+import com.transactrules.accounts.metadata.ScheduleEndType;
+import com.transactrules.accounts.metadata.ScheduleFrequency;
 import com.transactrules.accounts.runtime.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;

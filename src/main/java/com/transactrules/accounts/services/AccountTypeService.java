@@ -1,6 +1,6 @@
 package com.transactrules.accounts.services;
 
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 
 import java.util.List;
 

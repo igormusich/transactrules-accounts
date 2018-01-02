@@ -4,7 +4,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.transactrules.accounts.StartupApplicationRunner;
-import com.transactrules.accounts.configuration.AccountType;
+import com.transactrules.accounts.metadata.AccountType;
 import net.openhft.compiler.CompilerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

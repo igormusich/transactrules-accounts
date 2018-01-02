@@ -1,9 +1,7 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.configuration.*;
+import com.transactrules.accounts.metadata.*;
 import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.HolidayDate;
-import com.transactrules.accounts.runtime.Transaction;
 
 import java.time.LocalDate;
 
@@ -124,29 +122,6 @@ public class TestUtility {
 
         /*
 
-                    ScheduledTransactions = new List<ScheduledTransaction>() {
-                         new ScheduledTransaction {
-                            AmountExpression = "AdvanceAmount",
-                                    DateType = startDate,
-                                    Timing = ScheduledTransactionTiming.StartOfDay,
-                                    TransactionType = advanceTransactionType,
-                                    Sequence =1
-                        },
-                                new ScheduledTransaction {
-                            AmountExpression = "TransactRules.Calculations.AccrualCalculation.InterestAccrued(accrualOption: AccrualOption, principal: Principal, rate: InterestRate, valueDate:  TransactRules.Core.Utilities.SessionState.Current.ValueDate)",
-                                    ScheduleType = accrualSchedule,
-                                    Timing = ScheduledTransactionTiming.EndOfDay,
-                                    TransactionType = interestAccruedTransactionType,
-                                    Sequence =1
-                        },
-                                new ScheduledTransaction {
-                            AmountExpression = "InterestAccrued",
-                                    ScheduleType = interestSchedule,
-                                    Timing = ScheduledTransactionTiming.EndOfDay,
-                                    TransactionType = interestCapitalizedTransactionType,
-                                    Sequence =2
-                        }
-                    },
 
                     InstalmentTypes = new List<InstalmentType>() {
                         new InstalmentType {

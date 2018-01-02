@@ -1,7 +1,7 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.AccountTypeRepository;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;

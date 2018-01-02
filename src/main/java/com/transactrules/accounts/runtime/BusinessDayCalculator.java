@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime;
 
-import com.transactrules.accounts.configuration.BusinessDayCalculation;
+import com.transactrules.accounts.metadata.BusinessDayCalculation;
 
 import java.time.LocalDate;
 

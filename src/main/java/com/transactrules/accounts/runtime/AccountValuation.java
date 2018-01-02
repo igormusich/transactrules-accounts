@@ -1,8 +1,8 @@
 package com.transactrules.accounts.runtime;
 
 
-import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.configuration.TransactionType;
+import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

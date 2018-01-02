@@ -2,10 +2,10 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.transactrules.accounts.configuration.BusinessDayCalculation;
-import com.transactrules.accounts.configuration.ScheduleEndType;
-import com.transactrules.accounts.configuration.ScheduleFrequency;
-import com.transactrules.accounts.configuration.ScheduleType;
+import com.transactrules.accounts.metadata.BusinessDayCalculation;
+import com.transactrules.accounts.metadata.ScheduleEndType;
+import com.transactrules.accounts.metadata.ScheduleFrequency;
+import com.transactrules.accounts.metadata.ScheduleType;
 import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.time.LocalDate;

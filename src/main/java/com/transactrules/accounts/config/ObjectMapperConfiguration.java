@@ -37,4 +37,12 @@ public class ObjectMapperConfiguration {
 
         return objectMapper;
     }
+
+    public static ObjectMapper getYamlObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+        return  objectMapper;
+    }
 }

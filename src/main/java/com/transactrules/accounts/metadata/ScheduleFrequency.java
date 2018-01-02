@@ -1,4 +1,4 @@
-package com.transactrules.accounts.configuration;
+package com.transactrules.accounts.metadata;
 
 import java.util.HashMap;
 import java.util.Map;

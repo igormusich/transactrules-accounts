@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime;
 
-import com.transactrules.accounts.configuration.TransactionType;
+import com.transactrules.accounts.metadata.TransactionType;
 
 import java.math.BigDecimal;
 
