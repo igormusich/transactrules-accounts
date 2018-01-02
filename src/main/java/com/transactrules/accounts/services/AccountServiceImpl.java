@@ -3,6 +3,7 @@ package com.transactrules.accounts.services;
 import com.transactrules.accounts.configuration.AccountType;
 import com.transactrules.accounts.configuration.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.AccountFactory;
 import com.transactrules.accounts.runtime.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,17 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountTypeRepository accountTypeRepository;
 
+    @Autowired
+    AccountFactory accountFactory;
+
     @Override
     public Account create(String accountTypeName, String accountNumber)  {
 
         AccountType accountType = accountTypeRepository.findByName(accountTypeName);
 
-        Account account = new Account(accountType, accountNumber);
+        Account account = accountFactory.createAccount(accountType); //new Account(accountType, accountNumber);
 
-        account.initialize(accountType);
+        account.setAccountNumber(accountNumber);
 
         account= accountRepository.save(account);
 

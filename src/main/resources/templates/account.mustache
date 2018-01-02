@@ -1,16 +1,12 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.configuration.AccountType;
-import com.transactrules.accounts.runtime.DateValue;
-import com.transactrules.accounts.runtime.AmountValue;
-import com.transactrules.accounts.runtime.OptionValue;
-import com.transactrules.accounts.runtime.Position;
-import com.transactrules.accounts.runtime.Transaction;
+import com.transactrules.accounts.configuration.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class {{name}}Valuation extends AccountValuation {
+public class {{name}} extends Account {
 
 {{#positionTypes}}
     private Position _{{name}};
@@ -63,40 +59,40 @@ public class {{name}}Valuation extends AccountValuation {
 {{/scheduleTypes}}
 
     @Override
-    public void initialize(Account account, AccountType accountType) {
+    public void initialize(AccountType accountType) {
 
-        super.initialize(account, accountType);
+        super.initialize(accountType);
 
         //initialize dates
 
     {{#dateTypes}}
-        _{{name}}= account.getDates().get("{{name}}");
+        _{{name}}= this.getDates().get("{{name}}");
     {{/dateTypes}}
 
         //initialize positions
 
     {{#positionTypes}}
-        _{{name}}= account.getPositions().get("{{name}}");
+        _{{name}}= this.getPositions().get("{{name}}");
     {{/positionTypes}}
 
         //initialize amounts
 
     {{#amountTypes}}
-        _{{name}}= account.getAmounts().get("{{name}}");
+        _{{name}}= this.getAmounts().get("{{name}}");
     {{/amountTypes}}
 
         //initialize options
 
     {{#optionTypes}}
-        _{{name}}= account.getOptions().get("{{name}}");
+        _{{name}}= this.getOptions().get("{{name}}");
         _{{name}}.setValues({{optionListExpression}});
     {{/optionTypes}}
 
         //initialize schedules
 
     {{#scheduleTypes}}
-        Schedule _{{name}} = account.getSchedules().get("{{name}}");
-        _{{name}}.setBusinessDayCalculator(account.businessDayCalculator);
+        Schedule _{{name}} = this.getSchedules().get("{{name}}");
+        _{{name}}.setBusinessDayCalculator(this.businessDayCalculator);
     {{#isCalculated}}
         Set{{name}}CalculatedProperties(_{{name}});
     {{/isCalculated}}
@@ -120,8 +116,8 @@ public class {{name}}Valuation extends AccountValuation {
 {{/scheduleTypes}}
 
     @Override
-    public void processTransaction(Transaction transaction) {
-
+    public void processTransaction(TransactionType transactionType, BigDecimal amount) {
+        super.processTransaction(transactionType,amount);
     }
 
     @Override

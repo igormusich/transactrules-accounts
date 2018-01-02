@@ -5,6 +5,7 @@ import com.transactrules.accounts.configuration.AccountTypeRepository;
 import com.transactrules.accounts.configuration.PositionType;
 import com.transactrules.accounts.configuration.TransactionType;
 import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.AccountFactory;
 import com.transactrules.accounts.runtime.AccountValuationService;
 import com.transactrules.accounts.runtime.Position;
 import org.junit.Before;
@@ -28,6 +29,10 @@ import static org.hamcrest.Matchers.is;
 public class AccountServiceTest {
 
     @Autowired
+    private AccountFactory accountFactory;
+
+
+    @Autowired
     private AccountTypeRepository accountTypeRepository;
 
     @Autowired
@@ -38,13 +43,14 @@ public class AccountServiceTest {
     @Before
     public void initialize()
     {
+
         accountTypeRepository.save(savingsAccountType);
     }
 
     @Test
     public void ProcessTransaction_deposit(){
 
-       Account account = new Account(savingsAccountType, "001");
+        Account account = accountFactory.createAccount(savingsAccountType);
 
         Optional<TransactionType> depositTransactionType = savingsAccountType.getTransactionTypeByName("Deposit");
         Optional<PositionType> currentPositionType = savingsAccountType.getPositionTypeByName("Current");
@@ -52,9 +58,9 @@ public class AccountServiceTest {
         assertThat(depositTransactionType.isPresent(), is(true));
         assertThat(currentPositionType.isPresent(), is(true));
 
-        accountValuationService.initialize(account);
+        //accountValuationService.initialize(account);
 
-        accountValuationService.createTransaction(depositTransactionType.get(), BigDecimal.valueOf(100));
+        account.createTransaction(depositTransactionType.get(), BigDecimal.valueOf(100));
 
         Position currentPosition = account.getPositions().get(currentPositionType.get().getName());
 

@@ -6,13 +6,14 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.transactrules.accounts.configuration.*;
 import com.transactrules.accounts.utilities.DateValueMapConverter;
+import com.transactrules.accounts.utilities.ScheduleMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
 @DynamoDBTable(tableName = "Account")
-public class Account {
+public abstract class Account {
 
     private String accountNumber;
 
@@ -33,6 +34,9 @@ public class Account {
     private List<Transaction> transactions = new ArrayList<>();
 
     public transient BusinessDayCalculator businessDayCalculator;
+
+    public transient LocalDate actionDate;
+    public transient LocalDate valueDate;
 
     public Account() {
 
@@ -106,7 +110,7 @@ public class Account {
         this.options = options;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBTypeConverted(converter = ScheduleMapConverter.class)
     public Map<String, Schedule> getSchedules() {
         return schedules;
     }
@@ -125,6 +129,8 @@ public class Account {
     }
 
     public void initialize(AccountType accountType){
+        this.accountTypeName = accountType.getName();
+
         for(PositionType positionType: accountType.getPositionTypes()){
             if(!positions.containsKey(positionType.getName())){
                 initializePosition(positionType);
@@ -144,6 +150,12 @@ public class Account {
         for (OptionType optionType: accountType.getOptionTypes()){
             if(!options.containsKey(optionType.getName())){
                 options.put(optionType.getName(), new OptionValue());
+            }
+        }
+
+        for (ScheduleType scheduleType: accountType.getScheduleTypes()){
+            if(!schedules.containsKey(scheduleType.getName())){
+                initializeSchedule(scheduleType);
             }
         }
     }
@@ -171,7 +183,7 @@ public class Account {
 
 
     public Position initializePosition(PositionType positionType) {
-        Position position = new Position(positionType);
+        Position position = new Position();
         positions.put(positionType.getName(), position);
         return position;
     }
@@ -183,5 +195,33 @@ public class Account {
 
         return schedule;
     }
+
+
+    public Transaction createTransaction(TransactionType transactionType, BigDecimal amount) {
+
+        Transaction transaction = new Transaction(transactionType,amount,this, actionDate, valueDate);
+
+        processTransaction(transactionType, amount);
+
+        addTransaction(transaction);
+
+        return transaction;
+    }
+
+    public void processTransaction(TransactionType transactionType, BigDecimal amount) {
+
+        for (TransactionRuleType rule: transactionType.getTransactionRules()) {
+            Position position = getPositions().get(rule.getPosititonTypeName());
+
+            position.applyOperation(TransactionOperation.fromString( rule.getTransactionOperation()), amount);
+        }
+    }
+
+
+    public abstract void startOfDay();
+    public abstract void endOfOfDay();
+    public abstract String generatedAt();
+    public abstract void onDataChanged();
+    public abstract void calculateInstaments();
 
 }

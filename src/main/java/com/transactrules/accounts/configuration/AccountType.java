@@ -34,7 +34,8 @@ public class AccountType {
     private List<ScheduledTransaction> scheduledTransactions = new ArrayList<>();
     
     private List<TransactionType> transactionTypes = new ArrayList<>();
-    
+
+
     private List<ScheduleType> scheduleTypes = new ArrayList<>();
 
     public AccountType() {
@@ -100,6 +101,34 @@ public class AccountType {
     public void setOptionTypes(List<OptionType> optionTypes) {
         this.optionTypes = optionTypes;
     }
+
+    @DynamoDBAttribute(attributeName = "RateTypes")
+    public List<RateType> getRateTypes() {
+        return rateTypes;
+    }
+
+    public void setRateTypes(List<RateType> rateTypes) {
+        this.rateTypes = rateTypes;
+    }
+
+    @DynamoDBAttribute(attributeName = "ScheduledTransactions")
+    public List<ScheduledTransaction> getScheduledTransactions() {
+        return scheduledTransactions;
+    }
+
+    public void setScheduledTransactions(List<ScheduledTransaction> scheduledTransactions) {
+        this.scheduledTransactions = scheduledTransactions;
+    }
+
+    @DynamoDBAttribute(attributeName = "ScheduleTypes")
+    public List<ScheduleType> getScheduleTypes() {
+        return scheduleTypes;
+    }
+
+    public void setScheduleTypes(List<ScheduleType> scheduleTypes) {
+        this.scheduleTypes = scheduleTypes;
+    }
+
 
     public Optional<TransactionType> getTransactionType(String transactionTypeName){
 

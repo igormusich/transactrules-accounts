@@ -2,7 +2,6 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.transactrules.accounts.configuration.PositionType;
 import com.transactrules.accounts.configuration.TransactionOperation;
 
 import java.math.BigDecimal;
@@ -12,15 +11,9 @@ public class Position  {
 
     private BigDecimal amount;
 
-    private String positionTypeName;
 
-    public Position(){
-
-    }
-
-    public Position(PositionType positionType) {
+    public Position() {
         this.amount = BigDecimal.ZERO;
-        this.positionTypeName = positionType.getName();
     }
 
     public void applyOperation(TransactionOperation operation, BigDecimal value){
@@ -61,12 +54,4 @@ public class Position  {
         this.amount = amount;
     }
 
-    @DynamoDBAttribute
-    public String getPositionTypeName() {
-        return positionTypeName;
-    }
-
-    public void setPositionTypeName(String positionTypeName) {
-        this.positionTypeName = positionTypeName;
-    }
 }

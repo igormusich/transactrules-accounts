@@ -2,13 +2,13 @@ package com.transactrules.accounts.calculations;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AccrualCalculation {
-    public static Iterable<String> AccrualOptions() {
+    public static List<String> AccrualOptions() {
         return new ArrayList<>(Arrays.asList("Actual", "360", "365", "30/360"));
     }
 

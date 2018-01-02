@@ -5,8 +5,11 @@ import com.transactrules.accounts.configuration.BusinessDayCalculation;
 import com.transactrules.accounts.configuration.ScheduleEndType;
 import com.transactrules.accounts.configuration.ScheduleFrequency;
 import com.transactrules.accounts.runtime.*;
-import com.transactrules.accounts.runtime.Account;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,8 +17,12 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ScheduleTest {
+
+    @Autowired
+    AccountFactory accountFactory;
     
    @Test
     public void TestSchedules()
@@ -66,14 +73,11 @@ public class ScheduleTest {
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-        Account account = new Account();
+        Account account = accountFactory.createAccount(accountType);
 
-        account.initializeDate(accountType.getDateTypeByName("StartDate").get(),startDate);
-        account.initializeDate(accountType.getDateTypeByName("AccrualStart").get(),startDate);
-        account.initializeDate(accountType.getDateTypeByName("EndDate").get(),endDate);
-
-        account.initialize(accountType);
-
+        account.getDates().get("StartDate").setDate(startDate);
+        account.getDates().get("AccrualStart").setDate(startDate);
+        account.getDates().get("EndDate").setDate(endDate);
 
         //account.Amounts.Add(new AmountValue { AmountType = "AdvanceAmount", Value = 624000 });
         //account.Rates.Add(new RateValue { RateType = "InterestRate", Value = (decimal)3.04/100, ValueDate = startDate });

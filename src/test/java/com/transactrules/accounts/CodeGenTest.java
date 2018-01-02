@@ -1,5 +1,7 @@
 package com.transactrules.accounts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -32,13 +34,16 @@ public class CodeGenTest {
             //CompilerUtils.CACHED_COMPILER;
 
     @Autowired
-    public CodeGenService codeGenService;
+    private CodeGenService codeGenService;
+
+    @Autowired
+    private AccountFactory accountFactory;
 
     @Test
     public void TestCodeGenerationTemplate() {
         StringWriter writer = new StringWriter();
         MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile("templates//accountValuation.mustache");
+        Mustache mustache = mf.compile("templates//account.mustache");
         try {
             mustache.execute(writer, TestUtility.CreateLoanGivenAccountType()).flush();
         } catch (IOException e) {
@@ -56,26 +61,24 @@ public class CodeGenTest {
 
         AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
 
-        Class aClass = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType);
 
-        AccountValuation valuation1 = (AccountValuation) aClass.newInstance();
+        Account account1 = (Account) aClass.newInstance();
 
-        String timestamp1 = valuation1.generatedAt();
+        String timestamp1 = account1.generatedAt();
 
         LocalDate startDate = LocalDate.of(2013, 3, 8);
         LocalDate endDate = startDate.plusYears (25);
         Calendar calendar = TestUtility.CreateEuroZoneCalendar();
-
-        Account account = CreateLoanGivenAccount(loanGivenAcccountType,startDate, endDate,calendar);
-
-        valuation1.initialize(account, loanGivenAcccountType);
+ 
 
         //this shold get the value from cache
-        Class class2 = codeGenService.getAccountValuationClass(loanGivenAcccountType);
-        AccountValuation valuation2 = (AccountValuation) class2.newInstance();
-        String timestamp2 = valuation2.generatedAt();
+        Class class2 = codeGenService.getAccountClass(loanGivenAcccountType);
+        Account account2 = (Account) class2.newInstance();
+        String timestamp2 = account2.generatedAt();
 
         assertThat(timestamp1, equalToIgnoringCase(timestamp2));
+
 
         //this should regenerate the code
         //codeGenService.evictAccountType(loanGivenAcccountType);
@@ -86,6 +89,11 @@ public class CodeGenTest {
 
         assertThat(timestamp2, not(equalToIgnoringCase(timestamp3)));*/
 
+        YAMLFactory yf = new YAMLFactory();
+        ObjectMapper mapper = new ObjectMapper(yf);
+
+        String yamlString = mapper.writeValueAsString(loanGivenAcccountType);
+
     }
 
     @Test
@@ -94,9 +102,9 @@ public class CodeGenTest {
         AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
         loanGivenAcccountType.setName("localLoanGiven");
 
-        Class aClass = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType);
 
-        AccountValuation loanGivenValuation = (AccountValuation) aClass.newInstance();
+        Account loanGivenValuation = (Account) aClass.newInstance();
 
         LocalDate startDate = LocalDate.of(2013, 3, 8);
         LocalDate endDate = startDate.plusYears (25);
@@ -104,19 +112,14 @@ public class CodeGenTest {
 
         Account account = CreateLoanGivenAccount(loanGivenAcccountType,startDate, endDate,calendar);
 
-        loanGivenValuation.initialize(account, loanGivenAcccountType);
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-        Account account = new Account();
+        Account account = accountFactory.createAccount(accountType);
 
-        account.initializeDate(accountType.getDateTypeByName("StartDate").get(),startDate);
-        account.initializeDate(accountType.getDateTypeByName("AccrualStart").get(),startDate);
-        account.initializeDate(accountType.getDateTypeByName("EndDate").get(),endDate);
-
-
-        account.initialize(accountType);
-
+        account.getDates().get("StartDate").setDate(startDate);
+        account.getDates().get("AccrualStart").setDate(startDate);
+        account.getDates().get("EndDate").setDate(endDate);
 
         //account.Amounts.Add(new AmountValue { AmountType = "AdvanceAmount", Value = 624000 });
         //account.Rates.Add(new RateValue { RateType = "InterestRate", Value = (decimal)3.04/100, ValueDate = startDate });

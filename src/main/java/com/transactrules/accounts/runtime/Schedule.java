@@ -35,6 +35,8 @@ public class Schedule  {
 
     private List<ScheduleDate> excludeDates = new ArrayList<>();
 
+    public transient BusinessDayCalculator businessDayCalculator;
+
     public Schedule() {
 
     }
@@ -150,8 +152,6 @@ public class Schedule  {
     public void setCachedDates(Map<LocalDate, List<LocalDate>> cachedDates) {
         this.cachedDates = cachedDates;
     }
-
-    public transient BusinessDayCalculator businessDayCalculator;
 
     public Boolean IsDue(LocalDate date)
     {
