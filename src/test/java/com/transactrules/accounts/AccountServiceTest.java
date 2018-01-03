@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -51,6 +52,6 @@ public class AccountServiceTest {
 
         Position currentPosition = account.getPositions().get("Current");
 
-        assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100)));
+        assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100.00).setScale(2, RoundingMode.HALF_DOWN)));
     }
 }

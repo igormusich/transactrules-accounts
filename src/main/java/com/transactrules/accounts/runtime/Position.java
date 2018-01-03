@@ -32,7 +32,7 @@ public class Position  {
     public BigDecimal add(BigDecimal value) {
         BigDecimal result = amount.add(value);
 
-        amount = value;
+        amount = result;
 
         return amount;
     }
@@ -40,7 +40,7 @@ public class Position  {
     public BigDecimal subtract(BigDecimal value) {
         BigDecimal result = amount.subtract(value);
 
-        amount = value;
+        amount = result;
 
         return amount;
     }

@@ -5,6 +5,7 @@ import com.transactrules.accounts.metadata.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.math.RoundingMode;
 
 public class {{name}} extends Account {
 
@@ -83,7 +84,8 @@ public class {{name}} extends Account {
         //initialize positions
 
     {{#positionTypes}}
-        _{{name}}= this.getPositions().get("{{name}}");
+        _{{name}} = new Position();
+        this.getPositions().put("{{name}}", _{{name}});
     {{/positionTypes}}
 
         //initialize amounts
@@ -102,7 +104,6 @@ public class {{name}} extends Account {
         //initialize rates
     {{#rateTypes}}
         _{{name}}= this.getRates().get("{{name}}");
-
     {{/rateTypes}}
 
         //initialize schedules
@@ -173,6 +174,9 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 {{#transactionTypes}}
             case "{{name}}":
     {{#transactionRules}}
+        {{^maximumPrecision}}
+                amount = amount.setScale(2, RoundingMode.HALF_DOWN);
+        {{/maximumPrecision}}
         {{#add}}
                 _{{posititonTypeName}}.add(amount);
         {{/add}}

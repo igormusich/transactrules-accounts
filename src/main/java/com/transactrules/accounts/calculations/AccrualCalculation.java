@@ -1,6 +1,7 @@
 package com.transactrules.accounts.calculations;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class AccrualCalculation {
                 break;
         }
 
-        accrued = principal.multiply(rate).divide(divisor);
+        accrued = principal.multiply(rate).divide(divisor, 16, RoundingMode.HALF_DOWN);
 
         if (accrualOption.equalsIgnoreCase("30/360")  && valueDate.isEqual( valueDate.with(TemporalAdjusters.lastDayOfMonth())))
         {

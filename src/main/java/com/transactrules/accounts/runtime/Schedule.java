@@ -160,7 +160,7 @@ public class Schedule  {
         {
             if (endType.equals(ScheduleEndType.NoEnd.value()))
             {
-                return date.isBefore(startDate);
+                return(date.isEqual(startDate) || date.isAfter(startDate));
             }
             else if (endType.equals(ScheduleEndType.EndDate.value()))
             {

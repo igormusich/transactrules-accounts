@@ -57,7 +57,7 @@ public class LoanGivenTest {
 
         Position currentPosition = account.getPositions().get("Principal");
 
-        assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100)));
+        assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100.00).setScale(2,BigDecimal.ROUND_HALF_DOWN)));
 
     }
 
@@ -122,6 +122,9 @@ public class LoanGivenTest {
 
         account.forecast(endDate);
 
+        assertThat(account.getPositions().get("Principal").getAmount(), is(BigDecimal.valueOf(1333778.93)));
+        assertThat(account.getPositions().get("InterestCapitalized").getAmount(), is(BigDecimal.valueOf(709778.93)));
+        assertThat( account.getPositions().get("InterestAccrued").getAmount().compareTo(BigDecimal.valueOf(0.005)), is(-1));
 
     }
 
@@ -133,7 +136,47 @@ public class LoanGivenTest {
         Assert.IsTrue(account.GetPosition("InterestAccrued").Value<(decimal)0.005);
         Assert.AreEqual((decimal)709778.93, account.GetPosition("InterestCapitalized").Value);*/
 
+    /*public void TestPaymentCalc()
+            {
+                DateTime startDate = new DateTime(2013, 3, 8);
+                DateTime endDate = startDate.AddYears(25);
+                Calendar calendar = Utility.CreateEuroZoneCalendar();
 
+                SessionState.Current.ValueDate = startDate;
+
+                var account = CreateLoanGivenAccount(startDate, endDate, calendar);
+
+                var client = AccountFactory.CreateTransactionClient(Utility.CreateLoanGivenAccountType(), account);
+
+                //var client = new TransactRules.Runtime.LoanGiven { Account = account };
+
+                client.Initialize();
+
+                var accrualSchedule = account.GetSchedule("AccrualSchedule");
+                var interestSchedule = account.GetSchedule("InterestSchedule");
+                var redemptionSchedule = account.GetSchedule("RedemptionSchedule");
+
+                DateTime interestStart = new DateTime(2013, 3, 31);
+
+                interestSchedule.StartDate = interestStart;
+                interestSchedule.EndDate = endDate;
+                interestSchedule.IncludeDates.Add(new ScheduleDate { Value = endDate });
+
+                redemptionSchedule.StartDate = interestStart;
+                redemptionSchedule.EndDate = endDate;
+                redemptionSchedule.IncludeDates.Add(new ScheduleDate { Value = endDate });
+
+                var accrualOption = account.GetOption("AccrualOption");
+
+                accrualOption.Value = "365";
+
+                client.CalculateInstaments();
+
+                var instalments = account.GetInstalments("Redemptions");
+
+                Assert.IsTrue(Math.Abs((decimal)2964.37 - instalments.First().Amount) <(decimal) 0.01);
+                Assert.IsTrue(Math.Abs((decimal)2964.37 - instalments.Last().Amount) < (decimal)0.01);
+            }*/
     private Account CreateLoanGivenAccount(LocalDate startDate, LocalDate endDate,BusinessDayCalculator businessDayCalculator) {
 
         AccountBuilder builder = new AccountBuilder(loanGivenAccountType, "ACC-002-043434", codeGenService );
@@ -148,6 +191,25 @@ public class LoanGivenTest {
 
 
         return builder.getAccount();
+    }
+
+    private Account CreateLocalLoanGivenAccount(LocalDate startDate, LocalDate endDate,BusinessDayCalculator businessDayCalculator){
+        Account account = new LocalLoanGivenTestAccount();
+
+        account.setAccountTypeName(loanGivenAccountType.getName());
+        account.setAccountNumber("ACC-002-043434");
+        account.businessDayCalculator = businessDayCalculator;
+
+        account.getDates().put("StartDate", new DateValue(startDate));
+        account.getDates().put("AccrualStart", new DateValue(startDate));
+        account.getDates().put("EndDate", new DateValue(endDate));
+        account.getAmounts().put("AdvanceAmount", new AmountValue(BigDecimal.valueOf(624000),startDate));
+        account.getRates().put("InterestRate", new RateValue(BigDecimal.valueOf(3.04/100), startDate));
+        account.getOptions().put("AccrualOption", new OptionValue("365"));
+
+        account.setCalculated();
+
+        return account;
     }
 
 }
