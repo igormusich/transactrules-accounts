@@ -2,6 +2,8 @@ package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
 
 
@@ -15,7 +17,7 @@ public class ScheduledTransaction extends NamedAbstractEntity {
 
     private String dateTypeName;
 
-    private String transactionTypeId;
+    private String transactionTypeName;
 
     private String amountExpression;
 
@@ -44,7 +46,7 @@ public class ScheduledTransaction extends NamedAbstractEntity {
         if(scheduleType!=null)
             this.scheduleTypeName = scheduleType.getName();
 
-        this.transactionTypeId = transactionType.getName();
+        this.transactionTypeName = transactionType.getName();
         this.amountExpression = amountExpression;
         this.sequence = sequence;
    }
@@ -78,12 +80,12 @@ public class ScheduledTransaction extends NamedAbstractEntity {
     }
 
     @DynamoDBAttribute
-    public String getTransactionTypeId() {
-        return transactionTypeId;
+    public String getTransactionTypeName() {
+        return transactionTypeName;
     }
 
-    public void setTransactionTypeId(String transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
+    public void setTransactionTypeName(String transactionTypeName) {
+        this.transactionTypeName = transactionTypeName;
     }
 
     @DynamoDBAttribute
@@ -103,4 +105,30 @@ public class ScheduledTransaction extends NamedAbstractEntity {
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
     }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getIsStartOfDay(){
+        return timing.equalsIgnoreCase(ScheduledTransactionTiming.StartOfDay.value());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getIsEndOfDay(){
+        return timing.equalsIgnoreCase(ScheduledTransactionTiming.EndOfDay.value());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasSchedule(){
+
+        return (this.scheduleTypeName !=null && (!this.scheduleTypeName.isEmpty()));
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasDate(){
+        return (this.dateTypeName !=null && (!this.dateTypeName.isEmpty()));
+    }
+
 }

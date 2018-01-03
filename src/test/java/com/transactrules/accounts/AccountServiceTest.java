@@ -2,8 +2,6 @@ package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
-import com.transactrules.accounts.metadata.PositionType;
-import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.AccountBuilder;
 import com.transactrules.accounts.runtime.CodeGenService;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -50,17 +47,9 @@ public class AccountServiceTest {
 
         Account account = builder.getAccount();
 
-        Optional<TransactionType> depositTransactionType = savingsAccountType.getTransactionTypeByName("Deposit");
-        Optional<PositionType> currentPositionType = savingsAccountType.getPositionTypeByName("Current");
+        account.createTransaction("Deposit", BigDecimal.valueOf(100));
 
-        assertThat(depositTransactionType.isPresent(), is(true));
-        assertThat(currentPositionType.isPresent(), is(true));
-
-        //accountValuationService.initialize(account);
-
-        account.createTransaction(depositTransactionType.get(), BigDecimal.valueOf(100));
-
-        Position currentPosition = account.getPositions().get(currentPositionType.get().getName());
+        Position currentPosition = account.getPositions().get("Current");
 
         assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100)));
     }

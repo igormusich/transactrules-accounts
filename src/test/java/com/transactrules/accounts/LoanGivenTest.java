@@ -1,8 +1,6 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.PositionType;
-import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.services.AccountTypeService;
 import org.junit.Before;
@@ -55,12 +53,9 @@ public class LoanGivenTest {
 
         Account account = CreateLoanGivenAccount(startDate, endDate,calendar);
 
-        TransactionType advance = loanGivenAccountType.getTransactionType("Advance").get();
-        PositionType principal = loanGivenAccountType.addPositionType("Principal");
+        account.processTransaction("Advance", BigDecimal.valueOf(100));
 
-        account.processTransaction(advance, BigDecimal.valueOf(100));
-
-        Position currentPosition = account.getPositions().get(principal.getName());
+        Position currentPosition = account.getPositions().get("Principal");
 
         assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100)));
 
@@ -102,6 +97,42 @@ public class LoanGivenTest {
         assertThat(interestDates.get(11), is(LocalDate.of (2014,2,28)));
 
     }
+
+    @Test
+    public void TestForecast(){
+
+        LocalDate startDate = LocalDate.of(2013, 3, 8);
+        LocalDate endDate = startDate.plusYears(25);
+        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
+
+        Account account = CreateLoanGivenAccount(startDate, endDate,calendar);
+
+        Schedule accrualSchedule = account.getSchedules().get("AccrualSchedule");
+
+        Schedule interestSchedule = account.getSchedules().get("InterestSchedule");
+
+        LocalDate interestStart =  LocalDate.of(2013, 3, 31);
+
+        interestSchedule.setStartDate(interestStart);
+        interestSchedule.setEndDate(endDate);
+
+        interestSchedule.getIncludeDates().add(new ScheduleDate(endDate));
+
+        account.valueDate = startDate;
+
+        account.forecast(endDate);
+
+
+    }
+
+
+/*
+        client.Forecast(endDate);
+
+        Assert.AreEqual((decimal)1333778.93, account.GetPosition("Principal").Value);
+        Assert.IsTrue(account.GetPosition("InterestAccrued").Value<(decimal)0.005);
+        Assert.AreEqual((decimal)709778.93, account.GetPosition("InterestCapitalized").Value);*/
+
 
     private Account CreateLoanGivenAccount(LocalDate startDate, LocalDate endDate,BusinessDayCalculator businessDayCalculator) {
 

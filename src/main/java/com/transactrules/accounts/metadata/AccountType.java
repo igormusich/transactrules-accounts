@@ -6,9 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import org.joda.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -114,6 +112,7 @@ public class AccountType {
 
     @DynamoDBAttribute(attributeName = "ScheduledTransactions")
     public List<ScheduledTransaction> getScheduledTransactions() {
+        Collections.sort( scheduledTransactions, Comparator.comparing(ScheduledTransaction::getSequence));
         return scheduledTransactions;
     }
 

@@ -24,6 +24,10 @@ public class {{name}} extends Account {
     private OptionValue _{{name}};
 {{/optionTypes}}
 
+{{#rateTypes}}
+    private RateValue _{{name}};
+{{/rateTypes}}
+
 {{#scheduleTypes}}
     private Schedule _{{name}};
 {{/scheduleTypes}}
@@ -52,11 +56,18 @@ public class {{name}} extends Account {
     }
 {{/optionTypes}}
 
+
 {{#scheduleTypes}}
     public Schedule {{name}}(){
         return _{{name}};
     }
 {{/scheduleTypes}}
+
+{{#rateTypes}}
+    public BigDecimal {{name}}(){
+    return _{{name}}.getValue();
+    }
+{{/rateTypes}}
 
     @Override
     public void setCalculated() {
@@ -88,6 +99,12 @@ public class {{name}} extends Account {
         _{{name}}.setValues({{optionListExpression}});
     {{/optionTypes}}
 
+        //initialize rates
+    {{#rateTypes}}
+        _{{name}}= this.getRates().get("{{name}}");
+
+    {{/rateTypes}}
+
         //initialize schedules
 
     {{#scheduleTypes}}
@@ -96,7 +113,7 @@ public class {{name}} extends Account {
             Schedule schedule = new Schedule();
             this.getSchedules().put("{{name}}", schedule);
         }
-        Schedule _{{name}} = this.getSchedules().get("{{name}}");
+        _{{name}} = this.getSchedules().get("{{name}}");
         _{{name}}.setBusinessDayCalculator(this.businessDayCalculator);
     {{#isCalculated}}
         Set{{name}}CalculatedProperties(_{{name}});
@@ -150,18 +167,67 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 {{/scheduleTypes}}
 
     @Override
-    public void processTransaction(TransactionType transactionType, BigDecimal amount) {
-        super.processTransaction(transactionType,amount);
+    public void processTransaction(String transactionTypeName, BigDecimal amount){
+
+        switch(transactionTypeName) {
+{{#transactionTypes}}
+            case "{{name}}":
+    {{#transactionRules}}
+        {{#add}}
+                _{{posititonTypeName}}.add(amount);
+        {{/add}}
+        {{#subtract}}
+                _{{posititonTypeName}}.subtract(amount);
+        {{/subtract}}
+    {{/transactionRules}}
+                break;
+{{/transactionTypes}}
+            default:
+                throw new IllegalArgumentException("Invalid transactionTypeName : " + transactionTypeName);
+        }
     }
 
     @Override
     public void startOfDay() {
 
+{{#scheduledTransactions}}
+{{#isStartOfDay}}
+    {{#hasSchedule}}
+        if (_{{scheduleTypeName}}.isDue(valueDate)){
+            BigDecimal amount = {{amountExpression}};
+            createTransaction("{{transactionTypeName}}", amount);
+        }
+    {{/hasSchedule}}
+    {{#hasDate}}
+        if (_{{dateTypeName}}.isDue(valueDate)){
+            BigDecimal amount = {{amountExpression}};
+            createTransaction("{{transactionTypeName}}", amount);
+        }
+    {{/hasDate}}
+{{/isStartOfDay}}
+{{/scheduledTransactions}}
     }
+
+
 
     @Override
     public void endOfOfDay() {
-
+{{#scheduledTransactions}}
+    {{#isEndOfDay}}
+        {{#hasSchedule}}
+            if (_{{scheduleTypeName}}.isDue(valueDate)){
+                BigDecimal amount = {{amountExpression}};
+                createTransaction("{{transactionTypeName}}", amount);
+            }
+        {{/hasSchedule}}
+        {{#hasDate}}
+            if (_{{dateTypeName}}.isDue(valueDate)){
+                BigDecimal amount = {{amountExpression}};
+                createTransaction("{{transactionTypeName}}", amount);
+            }
+        {{/hasDate}}
+    {{/isEndOfDay}}
+{{/scheduledTransactions}}
     }
 
     @Override

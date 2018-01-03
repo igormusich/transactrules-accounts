@@ -103,7 +103,7 @@ public class TestUtility {
                 ScheduledTransactionTiming.StartOfDay,
                 startDate,
                 advanceTransactionType,
-                "Advance()",
+                "AdvanceAmount()",
                 1);
 
         loanGiven.addScheduledTransaction(

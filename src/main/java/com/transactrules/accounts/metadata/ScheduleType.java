@@ -155,4 +155,6 @@ public class ScheduleType extends NamedAbstractEntity {
         return (numberOfRepeatsExpression!=null && !numberOfRepeatsExpression.isEmpty());
     }
 
+
+
 }

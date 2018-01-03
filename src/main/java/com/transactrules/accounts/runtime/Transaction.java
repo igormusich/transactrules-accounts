@@ -2,7 +2,6 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.math.BigDecimal;
@@ -28,8 +27,8 @@ public class Transaction  {
 
     }
 
-    public Transaction(TransactionType transactionType, BigDecimal amount, Account account, LocalDate actionDate, LocalDate valueDate) {
-        this.transactionTypeName = transactionType.getName();
+    public Transaction(String transactionTypeName, BigDecimal amount, Account account, LocalDate actionDate, LocalDate valueDate) {
+        this.transactionTypeName = transactionTypeName;
         this.amount = amount;
         this.accountNumber = account.getAccountNumber();
         this.actionDate = actionDate;

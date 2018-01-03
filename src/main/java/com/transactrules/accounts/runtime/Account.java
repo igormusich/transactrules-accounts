@@ -1,14 +1,9 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.utilities.AmountValueMapConverter;
-import com.transactrules.accounts.utilities.DateValueMapConverter;
-import com.transactrules.accounts.utilities.RateValueMapConverter;
-import com.transactrules.accounts.utilities.ScheduleMapConverter;
+import com.transactrules.accounts.utilities.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,6 +36,8 @@ public class Account {
     private Map<String,Schedule> schedules = new HashMap<>();
 
     private List<Transaction> transactions = new ArrayList<>();
+
+    private Map<String, InstalmentSet> instalmentSets = new HashMap<>();
 
     public transient BusinessDayCalculator businessDayCalculator;
 
@@ -137,13 +134,22 @@ public class Account {
         this.schedules = schedules;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBTypeConverted(converter = TransactionListConverter.class)
     public List<Transaction> getTransactions() {
         return transactions;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    @DynamoDBTypeConverted(converter = InstalmentSetConverter.class)
+    public Map<String, InstalmentSet> getInstalmentSets() {
+        return instalmentSets;
+    }
+
+    public void setInstalmentSets(Map<String, InstalmentSet> instalmentSets) {
+        this.instalmentSets = instalmentSets;
     }
 
     @DynamoDBAttribute
@@ -198,24 +204,20 @@ public class Account {
     }
 
 
-    public Transaction createTransaction(TransactionType transactionType, BigDecimal amount) {
+    public Transaction createTransaction(String transactionTypeName, BigDecimal amount) {
 
-        Transaction transaction = new Transaction(transactionType,amount,this, actionDate, valueDate);
+        Transaction transaction = new Transaction(transactionTypeName,amount,this, actionDate, valueDate);
 
-        processTransaction(transactionType, amount);
+        processTransaction(transactionTypeName, amount);
 
         addTransaction(transaction);
 
         return transaction;
     }
 
-    public void processTransaction(TransactionType transactionType, BigDecimal amount) {
 
-        for (TransactionRuleType rule: transactionType.getTransactionRules()) {
-            Position position = getPositions().get(rule.getPosititonTypeName());
+    public void processTransaction(String transactionTypeName, BigDecimal amount){
 
-            position.applyOperation(TransactionOperation.fromString( rule.getTransactionOperation()), amount);
-        }
     }
 
     public  void startOfDay(){
@@ -233,6 +235,49 @@ public class Account {
     }
     public  void calculateInstaments(){
 
+    }
+
+    public void forecast(LocalDate futureDate)
+    {
+        LocalDate originalValueDate = valueDate;
+
+
+        if (!isActive)
+        {
+            startOfDay();
+        }
+
+        while (valueDate.isBefore(futureDate) || valueDate.isEqual(futureDate) )
+        {
+            endOfOfDay();
+
+            valueDate = valueDate.plusDays(1);
+
+            startOfDay();
+        }
+
+        valueDate = originalValueDate;
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public LocalDate ValueDate(){
+        return valueDate;
+    }
+
+    public void setFutureInstalmentValue(String instalmentType, ScheduledTransactionTiming timing, BigDecimal value)
+    {
+       /* for (Instal instalment in Account.GetInstalments(instalmentType))
+        {
+            if (!instalment.HasFixedValue)
+            {
+                if ( (timing == ScheduledTransactionTiming.StartOfDay && instalment.ValueDate > SessionState.Current.ValueDate)
+                        || (timing == ScheduledTransactionTiming.EndOfDay && instalment.ValueDate >= SessionState.Current.ValueDate))
+                {
+                    instalment.Amount = value;
+                }
+            }
+        }*/
     }
 
 }

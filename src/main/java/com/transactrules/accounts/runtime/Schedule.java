@@ -2,6 +2,7 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.metadata.ScheduleEndType;
 import com.transactrules.accounts.metadata.ScheduleFrequency;
@@ -153,7 +154,7 @@ public class Schedule  {
         this.cachedDates = cachedDates;
     }
 
-    public Boolean IsDue(LocalDate date)
+    public Boolean isDue(LocalDate date)
     {
         if (IsSimpleDailySchedule())
         {
@@ -186,9 +187,10 @@ public class Schedule  {
                 this.businessDayCalculation.equals(BusinessDayCalculation.AnyDay.value());
     }
 
-    public Boolean IsDue()
+    @JsonIgnore
+    public Boolean isDue()
     {
-        return IsDue(SessionState.current().valueDate());
+        return isDue(SessionState.current().valueDate());
     }
 
     private transient Map<LocalDate, List<LocalDate>> cachedDates = new HashMap<>();

@@ -1,6 +1,9 @@
 package com.transactrules.accounts.metadata;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -24,6 +27,7 @@ public class TransactionRuleType  {
         this.transactionOperation = operation.value();
     }
 
+    @DynamoDBAttribute
     public String getPosititonTypeName() {
         return posititonTypeName;
     }
@@ -32,12 +36,25 @@ public class TransactionRuleType  {
         this.posititonTypeName = posititonTypeName;
     }
 
+    @DynamoDBAttribute
     public String getTransactionOperation() {
         return transactionOperation;
     }
 
     public void setTransactionOperation(String transactionOperation) {
         this.transactionOperation = transactionOperation;
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getAdd(){
+        return transactionOperation.equals(TransactionOperation.Add.value());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getSubtract(){
+        return transactionOperation.equals(TransactionOperation.Subtract.value());
     }
 
 }

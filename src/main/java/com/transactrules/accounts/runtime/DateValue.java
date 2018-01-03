@@ -23,4 +23,8 @@ public class DateValue{
         this.date = date;
     }
 
+    public Boolean isDue(LocalDate valueDate){
+        return date.isEqual(valueDate);
+    }
+
 }
