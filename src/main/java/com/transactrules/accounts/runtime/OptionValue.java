@@ -18,6 +18,10 @@ public class OptionValue {
 
     }
 
+    public OptionValue(String value){
+        this.value = value;
+    }
+
     @DynamoDBAttribute
     public List<String> getValues() {
         return values;

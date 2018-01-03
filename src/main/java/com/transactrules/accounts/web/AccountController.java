@@ -35,7 +35,7 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        Account savedItem = service.create(account.getAccountTypeName(),account.getAccountNumber());
+        Account savedItem = service.create(account);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")

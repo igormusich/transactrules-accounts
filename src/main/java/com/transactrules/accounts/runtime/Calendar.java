@@ -1,15 +1,18 @@
 package com.transactrules.accounts.runtime;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
+import com.transactrules.accounts.utilities.HolidayDateListConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,7 +42,7 @@ public class Calendar  implements BusinessDayCalculator {
         this.name = name;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBTypeConverted(converter = HolidayDateListConverter.class)
     public List<HolidayDate> getHolidays() {
         return holidays;
     }

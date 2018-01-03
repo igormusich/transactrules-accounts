@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,9 +36,6 @@ public class CodeGenTest {
 
     @Autowired
     private CodeGenService codeGenService;
-
-    @Autowired
-    private AccountFactory accountFactory;
 
     @Test
     public void TestCodeGenerationTemplate() {
@@ -115,18 +113,18 @@ public class CodeGenTest {
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-        Account account = accountFactory.createAccount(accountType);
 
-        account.getDates().get("StartDate").setDate(startDate);
-        account.getDates().get("AccrualStart").setDate(startDate);
-        account.getDates().get("EndDate").setDate(endDate);
+        AccountBuilder builder = new AccountBuilder(accountType,"ACC-02-9378927", codeGenService);
 
-        //account.Amounts.Add(new AmountValue { AmountType = "AdvanceAmount", Value = 624000 });
-        //account.Rates.Add(new RateValue { RateType = "InterestRate", Value = (decimal)3.04/100, ValueDate = startDate });
+        builder.setBusinessDayCalculator(businessDayCalculator)
+            .addDateValue("StartDate", startDate)
+            .addDateValue("AccrualStart", startDate)
+            .addDateValue("EndDate", endDate)
+            .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
+            .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
+            .addOptionValue("AccrualOption", "365");
 
-        account.businessDayCalculator = businessDayCalculator;
-
-        return account;
+        return builder.getAccount();
     }
 
 }

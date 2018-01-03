@@ -12,6 +12,11 @@ public class RateValue {
 
     }
 
+    public RateValue(BigDecimal value, LocalDate valueDate) {
+        this.value = value;
+        this.valueDate = valueDate;
+    }
+
     public BigDecimal getValue() {
         return value;
     }
@@ -28,16 +33,3 @@ public class RateValue {
         this.valueDate = valueDate;
     }
 }
-
-/*public class RateValue:Entity
-        {
-public virtual Entity Consumer { get; set; }
-public virtual decimal Value { get; set; }
-public virtual DateTime? ValueDate { get; set; }
-public virtual string RateType { get; set; }
-
-public static implicit operator decimal(RateValue rateValue)
-        {
-        return rateValue.Value;
-        }
-        }*/

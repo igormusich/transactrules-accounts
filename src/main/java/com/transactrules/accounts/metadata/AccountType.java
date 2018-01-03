@@ -35,8 +35,9 @@ public class AccountType {
     
     private List<TransactionType> transactionTypes = new ArrayList<>();
 
-
     private List<ScheduleType> scheduleTypes = new ArrayList<>();
+
+    private List<InstalmentType> instalmentTypes = new ArrayList<>();
 
     public AccountType() {
 
@@ -129,6 +130,14 @@ public class AccountType {
         this.scheduleTypes = scheduleTypes;
     }
 
+    @DynamoDBAttribute(attributeName = "InstalmentTypes")
+    public List<InstalmentType> getInstalmentTypes() {
+        return instalmentTypes;
+    }
+
+    public void setInstalmentTypes(List<InstalmentType> instalmentTypes) {
+        this.instalmentTypes = instalmentTypes;
+    }
 
     public Optional<TransactionType> getTransactionType(String transactionTypeName){
 
@@ -170,12 +179,13 @@ public class AccountType {
     public ScheduleType addCalculatedScheduleType(String name,
                                                   ScheduleFrequency frequency,
                                                   ScheduleEndType endType,
+                                                  BusinessDayCalculation businessDayCalculation,
                                                   String startDateExpression,
                                                   String endDateExpression,
                                                   String numberOfRepeatsExpression,
                                                   String intervalExpression){
 
-        ScheduleType scheduleType = new ScheduleType(name, frequency,endType, startDateExpression, endDateExpression,numberOfRepeatsExpression,intervalExpression,true);
+        ScheduleType scheduleType = new ScheduleType(name, frequency,endType,businessDayCalculation, startDateExpression, endDateExpression,numberOfRepeatsExpression,intervalExpression,true);
 
         scheduleTypes.add(scheduleType);
 
@@ -185,17 +195,33 @@ public class AccountType {
     public ScheduleType addUserInputScheduleType(String name,
                                                  ScheduleFrequency frequency,
                                                  ScheduleEndType endType,
+                                                 BusinessDayCalculation businessDayCalculation,
                                                  String startDateExpression,
                                                  String endDateExpression,
                                                  String numberOfRepeatsExpression,
                                                  String intervalExpression){
 
-        ScheduleType scheduleType = new ScheduleType( name, frequency,endType, startDateExpression, endDateExpression,numberOfRepeatsExpression,intervalExpression,false);
+        ScheduleType scheduleType = new ScheduleType( name, frequency,endType,businessDayCalculation, startDateExpression, endDateExpression,numberOfRepeatsExpression,intervalExpression,false);
 
         scheduleTypes.add(scheduleType);
 
         return  scheduleType;
     }
+
+    public InstalmentType addInstalmentType(String name, String timing, String scheduleType, String transactionType, String positionType, String interestAccrued, String interestCapitalized) {
+        InstalmentType instalmentType = new InstalmentType(name);
+        instalmentType.setTiming(timing);
+        instalmentType.setScheduleType(scheduleType);
+        instalmentType.setTransactionType(transactionType);
+        instalmentType.setPositionType( positionType);
+        instalmentType.setInterestAccrued(interestAccrued);
+        instalmentType.setInterestCapitalized(interestCapitalized);
+
+        instalmentTypes.add(instalmentType);
+
+        return instalmentType;
+    }
+
 
     public Optional<PositionType> getPositionTypeByName(String name){
         return positionTypes.stream().filter(pt -> pt.getName().equalsIgnoreCase(name)).findFirst();

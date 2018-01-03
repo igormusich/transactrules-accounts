@@ -1,6 +1,9 @@
 package com.transactrules.accounts;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transactrules.accounts.config.ObjectMapperConfiguration;
+import com.transactrules.accounts.metadata.AccountType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,9 +53,10 @@ public class AccountTypeControllerTest {
     @Test
     public void givenLoanGivenYmlUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
 
-        java.net.URL url = getClass().getResource("/LoanGiven.yml");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String createAccountTypeYml = new String(java.nio.file.Files.readAllBytes(resPath));
+        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        ObjectMapper objectMapper = ObjectMapperConfiguration.getYamlObjectMapper();
+
+        String createAccountTypeYml = objectMapper.writeValueAsString(accountType);
 
         this.mvc.perform(post("/accountTypes").content(createAccountTypeYml).contentType("text/yml")).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))

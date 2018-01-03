@@ -59,9 +59,9 @@ public class {{name}} extends Account {
 {{/scheduleTypes}}
 
     @Override
-    public void initialize(AccountType accountType) {
+    public void setCalculated() {
 
-        super.initialize(accountType);
+        super.setCalculated();
 
         //initialize dates
 
@@ -91,6 +91,11 @@ public class {{name}} extends Account {
         //initialize schedules
 
     {{#scheduleTypes}}
+        if(!this.getSchedules().containsKey("{{name}}"))
+        {
+            Schedule schedule = new Schedule();
+            this.getSchedules().put("{{name}}", schedule);
+        }
         Schedule _{{name}} = this.getSchedules().get("{{name}}");
         _{{name}}.setBusinessDayCalculator(this.businessDayCalculator);
     {{#isCalculated}}
@@ -103,15 +108,44 @@ public class {{name}} extends Account {
     {{/scheduleTypes}}
     }
 
-{{#scheduleTypes}}
-{{#isCalculated}}
-    public void Set{{name}}CalculatedProperties(Schedule schedule){
-    }
-{{/isCalculated}}
 
+{{#scheduleTypes}}
+    {{#isCalculated}}
+public void Set{{name}}CalculatedProperties(Schedule schedule)
+{
+    schedule.setStartDate({{startDateExpression}});
+    schedule.setInterval({{intervalExpression}});
+    schedule.setBusinessDayCalculation("{{businessDayCalculation}}");
+    schedule.setFrequency("{{scheduleFrequency}}");
+    schedule.setEndType("{{scheduleEndType}}");
+{{#hasEndDate}}
+    schedule.setEndDate({{endDateExpression}});
+{{/hasEndDate}}
+{{#hasNumberOfRepeatsExpression}}
+    schedule.setNumberOfRepeats({{numberOfRepeatsExpression}});
+{{/hasNumberOfRepeatsExpression}}
+}
+{{/isCalculated}}
 {{^isCalculated}}
-    public void Set{{name}}DefaultProperties(Schedule schedule){
-    }
+
+public void Set{{name}}DefaultProperties(Schedule schedule)
+{
+    schedule.setBusinessDayCalculation("{{businessDayCalculation}}");
+    schedule.setFrequency("{{scheduleFrequency}}");
+    schedule.setEndType("{{scheduleEndType}}");
+{{#hasStartDateExpression}}
+    schedule.setStartDate({{startDateExpression}});
+{{/hasStartDateExpression}}
+{{#hasEndDateExpression}}
+    schedule.setStartDate({{endDateExpression}});
+{{/hasEndDateExpression}}
+{{#hasIntervalExpression}}
+    schedule.setInterval({{intervalExpression}});
+{{/hasIntervalExpression}}
+{{#hasNumberOfRepeatsExpression}}
+    schedule.setNumberOfRepeats({{numberOfRepeatsExpression}});
+{{/hasNumberOfRepeatsExpression}}
+}
 {{/isCalculated}}
 {{/scheduleTypes}}
 

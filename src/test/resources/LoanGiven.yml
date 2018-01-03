@@ -110,7 +110,8 @@ scheduleTypes:
   endDateExpression: ""
   numberOfRepeatsExpression: ""
   intervalExpression: "1"
-  calculated: true
+  businessDayCalculation: "ANY_DAY"
+  isCalculated: true
 - name: "InterestSchedule"
   scheduleFrequency: "MONTHLY"
   scheduleEndType: "END_DATE"
@@ -118,7 +119,8 @@ scheduleTypes:
   endDateExpression: null
   numberOfRepeatsExpression: null
   intervalExpression: "1"
-  calculated: false
+  businessDayCalculation: "ANY_DAY"
+  isCalculated: false
 - name: "RedemptionSchedule"
   scheduleFrequency: "MONTHLY"
   scheduleEndType: "END_DATE"
@@ -126,4 +128,13 @@ scheduleTypes:
   endDateExpression: null
   numberOfRepeatsExpression: null
   intervalExpression: "1"
-  calculated: false
+  businessDayCalculation: "ANY_DAY"
+  isCalculated: false
+instalmentTypes:
+- name: "Redemptions"
+  timing: "START_OF_DAY"
+  scheduleType: "RedemptionSchedule"
+  transactionType: "Redemption"
+  positionType: "Principal"
+  interestAccrued: "InterestAccrued"
+  interestCapitalized: "InterestCapitalized"

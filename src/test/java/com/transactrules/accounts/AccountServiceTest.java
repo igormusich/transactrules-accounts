@@ -5,8 +5,8 @@ import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountFactory;
-import com.transactrules.accounts.runtime.AccountValuationService;
+import com.transactrules.accounts.runtime.AccountBuilder;
+import com.transactrules.accounts.runtime.CodeGenService;
 import com.transactrules.accounts.runtime.Position;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,14 +29,10 @@ import static org.hamcrest.Matchers.is;
 public class AccountServiceTest {
 
     @Autowired
-    private AccountFactory accountFactory;
-
-
-    @Autowired
     private AccountTypeRepository accountTypeRepository;
 
     @Autowired
-    private AccountValuationService accountValuationService;
+    CodeGenService codeGenService;
 
     private AccountType savingsAccountType = AccountTypeFactory.createSavingsAccountType();
 
@@ -50,7 +46,9 @@ public class AccountServiceTest {
     @Test
     public void ProcessTransaction_deposit(){
 
-        Account account = accountFactory.createAccount(savingsAccountType);
+        AccountBuilder builder = new AccountBuilder(savingsAccountType, "ACC-002-98392", codeGenService);
+
+        Account account = builder.getAccount();
 
         Optional<TransactionType> depositTransactionType = savingsAccountType.getTransactionTypeByName("Deposit");
         Optional<PositionType> currentPositionType = savingsAccountType.getPositionTypeByName("Current");

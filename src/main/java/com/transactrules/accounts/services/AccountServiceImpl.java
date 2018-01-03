@@ -2,9 +2,7 @@ package com.transactrules.accounts.services;
 
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountFactory;
-import com.transactrules.accounts.runtime.AccountRepository;
+import com.transactrules.accounts.runtime.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +20,39 @@ public class AccountServiceImpl implements AccountService {
     AccountTypeRepository accountTypeRepository;
 
     @Autowired
-    AccountFactory accountFactory;
+    CalendarRepository calendarRepository;
+
+    @Autowired
+    CodeGenService codeGenService;
 
     @Override
-    public Account create(String accountTypeName, String accountNumber)  {
+    public Account create(Account prototype)  {
 
-        AccountType accountType = accountTypeRepository.findByName(accountTypeName);
+        AccountType accountType = accountTypeRepository.findByName(prototype.getAccountTypeName());
 
-        Account account = accountFactory.createAccount(accountType); //new Account(accountType, accountNumber);
+        AccountBuilder builder = new AccountBuilder(accountType, prototype.getAccountNumber(), codeGenService );
 
-        account.setAccountNumber(accountNumber);
+        for (String name: prototype.getDates().keySet()) {
+            builder.addDateValue(name, prototype.getDates().get(name));
+        }
+
+        for (String name: prototype.getAmounts().keySet()) {
+            builder.addAmountValue(name, prototype.getAmounts().get(name));
+        }
+
+        for (String name: prototype.getRates().keySet()) {
+            builder.addRateValue(name, prototype.getRates().get(name));
+        }
+
+        for (String name: prototype.getOptions().keySet()) {
+            builder.addOptionValue(name, prototype.getOptions().get(name));
+        }
+
+        for (String name: prototype.getSchedules().keySet()) {
+            builder.addSchedule(name, prototype.getSchedules().get(name));
+        }
+
+        Account account = builder.getAccount();
 
         account= accountRepository.save(account);
 

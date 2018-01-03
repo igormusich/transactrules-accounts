@@ -5,12 +5,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.transactrules.accounts.metadata.*;
+import com.transactrules.accounts.utilities.AmountValueMapConverter;
 import com.transactrules.accounts.utilities.DateValueMapConverter;
+import com.transactrules.accounts.utilities.RateValueMapConverter;
 import com.transactrules.accounts.utilities.ScheduleMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @DynamoDBTable(tableName = "Account")
 public class Account {
@@ -21,9 +26,13 @@ public class Account {
 
     private String accountTypeName;
 
+    private String[] calendarNames;
+
     private Map<String,Position> positions = new HashMap<>();
 
     private Map<String,DateValue> dates = new HashMap<>();
+
+    private Map<String,RateValue> rates = new HashMap<>();
 
     private Map<String,AmountValue> amounts = new HashMap<>();
 
@@ -42,9 +51,9 @@ public class Account {
 
     }
 
-    public Account(AccountType accountType, String accountNumber){
+    public Account(String accountNumber, String accountTypeName) {
         this.accountNumber = accountNumber;
-        this.accountTypeName = accountType.getName();
+        this.accountTypeName = accountTypeName;
     }
 
     @DynamoDBHashKey
@@ -92,7 +101,16 @@ public class Account {
         this.dates = dates;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBTypeConverted(converter = RateValueMapConverter.class)
+    public Map<String, RateValue> getRates() {
+        return rates;
+    }
+
+    public void setRates(Map<String, RateValue> rates) {
+        this.rates = rates;
+    }
+
+    @DynamoDBTypeConverted(converter = AmountValueMapConverter.class)
     public Map<String, AmountValue> getAmounts() {
         return amounts;
     }
@@ -128,36 +146,17 @@ public class Account {
         this.transactions = transactions;
     }
 
-    public void initialize(AccountType accountType){
-        this.accountTypeName = accountType.getName();
+    @DynamoDBAttribute
+    public String[] getCalendarNames() {
+        return calendarNames;
+    }
 
-        for(PositionType positionType: accountType.getPositionTypes()){
-            if(!positions.containsKey(positionType.getName())){
-                initializePosition(positionType);
-            }
-        }
+    public void setCalendarNames(String[] calendarNames) {
+        this.calendarNames = calendarNames;
+    }
 
-       for (DateType dateType: accountType.getDateTypes()) {
-            this.initializeDate(dateType, LocalDate.now());
-        }
+    public void setCalculated(){
 
-        for (AmountType amountType: accountType.getAmountTypes()) {
-            if(!amounts.containsKey(amountType.getName())){
-                amounts.put(amountType.getName(), new AmountValue( new BigDecimal(0)));
-            }
-        }
-
-        for (OptionType optionType: accountType.getOptionTypes()){
-            if(!options.containsKey(optionType.getName())){
-                options.put(optionType.getName(), new OptionValue());
-            }
-        }
-
-        for (ScheduleType scheduleType: accountType.getScheduleTypes()){
-            if(!schedules.containsKey(scheduleType.getName())){
-                initializeSchedule(scheduleType);
-            }
-        }
     }
 
 
@@ -191,6 +190,8 @@ public class Account {
     public Schedule initializeSchedule(ScheduleType scheduleType){
         Schedule schedule = new Schedule(scheduleType);
 
+        schedule.businessDayCalculator = this.businessDayCalculator;
+
         schedules.put(scheduleType.getName(), schedule);
 
         return schedule;
@@ -216,7 +217,6 @@ public class Account {
             position.applyOperation(TransactionOperation.fromString( rule.getTransactionOperation()), amount);
         }
     }
-
 
     public  void startOfDay(){
 

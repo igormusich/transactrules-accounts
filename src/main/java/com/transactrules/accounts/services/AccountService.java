@@ -6,7 +6,7 @@ import com.transactrules.accounts.runtime.Account;
 import java.util.List;
 
 public interface AccountService {
-    Account create(String accountTypeName, String accountNumber);
+    Account create(Account prototype);
     List<Account> findAll();
     Account findByAccountNumber(String accountNumber);
 }

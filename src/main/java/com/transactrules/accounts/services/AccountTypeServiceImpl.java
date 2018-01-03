@@ -21,9 +21,6 @@ public class AccountTypeServiceImpl implements AccountTypeService {
 
     @Override
     public AccountType create(AccountType accountType)  {
-        //List<ApiSubError> errors = new ArrayList<>();
-
-        AccountType existingAccountType = accountTypeRepository.findByName(accountType.getName());
 
         AccountType result = accountTypeRepository.save(accountType);
 

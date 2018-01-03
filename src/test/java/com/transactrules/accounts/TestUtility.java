@@ -25,6 +25,7 @@ public class TestUtility {
             "AccrualSchedule",
                 ScheduleFrequency.Daily,
                 ScheduleEndType.NoEnd,
+                BusinessDayCalculation.AnyDay,
                 "this.StartDate()",
                 "",
                 "",
@@ -35,6 +36,7 @@ public class TestUtility {
         "InterestSchedule",
                ScheduleFrequency.Monthly,
                ScheduleEndType.EndDate,
+               BusinessDayCalculation.AnyDay,
                null,
                null,
                null,
@@ -44,6 +46,7 @@ public class TestUtility {
             "RedemptionSchedule",
             ScheduleFrequency.Monthly,
             ScheduleEndType.EndDate,
+            BusinessDayCalculation.AnyDay,
             null,
             null,
             null,
@@ -119,23 +122,14 @@ public class TestUtility {
                 "InterestAccrued()",
                 2);
 
+        loanGiven.addInstalmentType(
+                "Redemptions",
+                ScheduledTransactionTiming.StartOfDay.value(),
+                redemptionSchedule.name,
+                "Redemption","Principal",
+                "InterestAccrued",
+                "InterestCapitalized" );
 
-        /*
-
-
-                    InstalmentTypes = new List<InstalmentType>() {
-                        new InstalmentType {
-                            InterestACapitalized = interestCapitalizedPosition,
-                                    InterestAccrued = interestAccruedPosition,
-                                    Name ="Redemptions",
-                                    PrincipalPositionType = principalPosition,
-                                    ScheduleType = redemptionSchedule,
-                                    Timing = ScheduledTransactionTiming.StartOfDay,
-                                    TransactionType = redemptionTransactionType
-                        }
-                    }
-        };
-*/
         return loanGiven;
     }
 

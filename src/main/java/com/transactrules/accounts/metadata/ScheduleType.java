@@ -2,6 +2,8 @@ package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
 
 
@@ -24,6 +26,8 @@ public class ScheduleType extends NamedAbstractEntity {
 
     private String intervalExpression;
 
+    private String businessDayCalculation;
+
     private Boolean isCalculated;
 
     public ScheduleType(){}
@@ -32,6 +36,7 @@ public class ScheduleType extends NamedAbstractEntity {
             String name,
             ScheduleFrequency frequency,
             ScheduleEndType endType,
+            BusinessDayCalculation businessDayCalculation,
             String startDateExpression,
             String endDateExpression,
             String numberOfRepeatsExpression,
@@ -40,6 +45,7 @@ public class ScheduleType extends NamedAbstractEntity {
         super(name);
         this.scheduleFrequency = frequency.value();
         this.scheduleEndType = endType.value();
+        this.businessDayCalculation = businessDayCalculation.value();
         this.startDateExpression = startDateExpression;
         this.endDateExpression = endDateExpression;
         this.numberOfRepeatsExpression = numberOfRepeatsExpression;
@@ -102,12 +108,51 @@ public class ScheduleType extends NamedAbstractEntity {
     }
 
     @DynamoDBAttribute
-    public Boolean getCalculated() {
+    public Boolean getIsCalculated() {
         return isCalculated;
     }
 
-    public void setCalculated(Boolean calculated) {
+    public void setIsCalculated(Boolean calculated) {
         isCalculated = calculated;
+    }
+
+    @DynamoDBAttribute
+    public String getBusinessDayCalculation() {
+        return businessDayCalculation;
+    }
+
+    public void setBusinessDayCalculation(String businessDayCalculation) {
+        this.businessDayCalculation = businessDayCalculation;
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasEndDate() {
+        return scheduleEndType.equalsIgnoreCase(ScheduleEndType.EndDate.value());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasStartDateExpression(){
+        return (startDateExpression!=null && !startDateExpression.isEmpty());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasEndDateExpression(){
+        return (endDateExpression!=null && !endDateExpression.isEmpty());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasIntervalExpression(){
+        return (intervalExpression!=null && !intervalExpression.isEmpty());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasNumberOfRepeatsExpression(){
+        return (numberOfRepeatsExpression!=null && !numberOfRepeatsExpression.isEmpty());
     }
 
 }

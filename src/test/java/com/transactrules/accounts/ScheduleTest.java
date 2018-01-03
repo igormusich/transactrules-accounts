@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import static org.hamcrest.Matchers.is;
 public class ScheduleTest {
 
     @Autowired
-    AccountFactory accountFactory;
+    CodeGenService codeGenService;
     
    @Test
     public void TestSchedules()
@@ -73,17 +74,16 @@ public class ScheduleTest {
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-        Account account = accountFactory.createAccount(accountType);
+       AccountBuilder builder = new AccountBuilder(accountType,"10010", codeGenService);
 
-        account.getDates().get("StartDate").setDate(startDate);
-        account.getDates().get("AccrualStart").setDate(startDate);
-        account.getDates().get("EndDate").setDate(endDate);
+       builder.setBusinessDayCalculator(businessDayCalculator)
+               .addDateValue("StartDate", startDate)
+               .addDateValue("AccrualStart",startDate)
+               .addDateValue("EndDate", endDate)
+               .addAmountValue("AdvanceAmount",BigDecimal.valueOf(624000), startDate)
+               .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
+               .addOptionValue("AccrualOption", "365");
 
-        //account.Amounts.Add(new AmountValue { AmountType = "AdvanceAmount", Value = 624000 });
-        //account.Rates.Add(new RateValue { RateType = "InterestRate", Value = (decimal)3.04/100, ValueDate = startDate });
-
-        account.businessDayCalculator = businessDayCalculator;
-
-        return account;
+        return builder.getAccount();
     }
 }
