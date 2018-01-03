@@ -78,6 +78,10 @@ public class AccountBuilder {
         return addAmountValue(name,new AmountValue(amount,valueDate));
     }
 
+    public AccountBuilder addAmountValue(String name, BigDecimal amount){
+        return addAmountValue(name,new AmountValue(amount,null));
+    }
+
     public AccountBuilder setBusinessDayCalculator(BusinessDayCalculator businessDayCalculator) {
         this.businessDayCalculator = businessDayCalculator;
 
