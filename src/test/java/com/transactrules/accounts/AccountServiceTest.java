@@ -3,9 +3,8 @@ package com.transactrules.accounts;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountBuilder;
 import com.transactrules.accounts.runtime.CodeGenService;
-import com.transactrules.accounts.runtime.Position;
+import com.transactrules.accounts.services.AccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,45 +12,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.time.LocalDate;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
-/**
- * Created by Administrator on 11/26/2016.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AccountServiceTest {
 
     @Autowired
-    private AccountTypeRepository accountTypeRepository;
+    AccountService accountService;
 
     @Autowired
     CodeGenService codeGenService;
 
-    private AccountType savingsAccountType = AccountTypeFactory.createSavingsAccountType();
+    @Autowired
+    private AccountTypeRepository accountTypeRepository;
+
+    private AccountType accountType;
+
+    private final String accountTypeName = "AccountType_AccountServiceTest";
 
     @Before
-    public void initialize()
-    {
+    public void setup() {
 
-        accountTypeRepository.save(savingsAccountType);
+        accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType.setName(accountTypeName);
+
+        accountTypeRepository.save(accountType);
+
     }
 
     @Test
-    public void ProcessTransaction_deposit(){
+    public void createLoanAccountTest(){
+        Account account = TestUtility.CreateLoanGivenAccount("AC-002-043243", LocalDate.now(),LocalDate.now().plusYears(10),codeGenService);
 
-        AccountBuilder builder = new AccountBuilder(savingsAccountType, "ACC-002-98392", codeGenService);
+        account.setAccountTypeName(accountTypeName);
 
-        Account account = builder.getAccount();
-
-        account.createTransaction("Deposit", BigDecimal.valueOf(100));
-
-        Position currentPosition = account.getPositions().get("Current");
-
-        assertThat(currentPosition.getAmount(), is(BigDecimal.valueOf(100.00).setScale(2, RoundingMode.HALF_DOWN)));
+        accountService.create(account);
     }
 }

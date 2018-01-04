@@ -13,9 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 
@@ -23,12 +26,12 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest
 public class LoanGivenTest {
 
+    @Autowired
+    CodeGenService codeGenService;
 
     @Autowired
     AccountTypeService accountTypeService;
 
-    @Autowired
-    CodeGenService codeGenService;
 
     AccountType loanGivenAccountType;
 
@@ -49,9 +52,8 @@ public class LoanGivenTest {
     {
         LocalDate startDate = LocalDate.of(2013, 3, 8);
         LocalDate endDate = startDate.plusYears(25);
-        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account account = CreateLoanGivenAccount(startDate, endDate,calendar);
+        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-9827387",startDate, endDate,codeGenService);
 
         account.processTransaction("Advance", BigDecimal.valueOf(100));
 
@@ -66,9 +68,8 @@ public class LoanGivenTest {
     {
         LocalDate startDate = LocalDate.of(2013, 3, 8);
         LocalDate endDate = startDate.plusYears(25);
-        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account account = CreateLoanGivenAccount(startDate, endDate,calendar);
+        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-9827287",startDate, endDate,codeGenService);
 
         Schedule accrualSchedule = account.getSchedules().get("AccrualSchedule");
 
@@ -103,20 +104,8 @@ public class LoanGivenTest {
 
         LocalDate startDate = LocalDate.of(2013, 3, 8);
         LocalDate endDate = startDate.plusYears(25);
-        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account account = CreateLoanGivenAccount(startDate, endDate,calendar);
-
-        Schedule accrualSchedule = account.getSchedules().get("AccrualSchedule");
-
-        Schedule interestSchedule = account.getSchedules().get("InterestSchedule");
-
-        LocalDate interestStart =  LocalDate.of(2013, 3, 31);
-
-        interestSchedule.setStartDate(interestStart);
-        interestSchedule.setEndDate(endDate);
-
-        interestSchedule.getIncludeDates().add(new ScheduleDate(endDate));
+        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-9327387",startDate, endDate,codeGenService);
 
         account.valueDate = startDate;
 
@@ -128,13 +117,33 @@ public class LoanGivenTest {
 
     }
 
+    @Test
+    public void TestPaymentCalc(){
+        LocalDate startDate = LocalDate.of(2013, 3, 8);
+        LocalDate endDate = startDate.plusYears(25);
+        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-/*
-        client.Forecast(endDate);
+        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-0982397", startDate, endDate,codeGenService);
 
-        Assert.AreEqual((decimal)1333778.93, account.GetPosition("Principal").Value);
-        Assert.IsTrue(account.GetPosition("InterestAccrued").Value<(decimal)0.005);
-        Assert.AreEqual((decimal)709778.93, account.GetPosition("InterestCapitalized").Value);*/
+        account.valueDate = startDate;
+
+        account.calculateInstaments();
+
+        InstalmentSet instalments = account.getInstalmentSets().get("Redemptions");
+
+        List<LocalDate> dateList = new ArrayList<>(instalments.getInstalments().keySet());
+
+        Collections.sort(dateList);
+
+        assertThat(dateList.size(), greaterThan(0));
+
+        BigDecimal firstAmount = instalments.getInstalments().get(dateList.get(0)).getAmount();
+        BigDecimal lastAmount = instalments.getInstalments().get(dateList.get(dateList.size()-1)).getAmount();
+
+        assertThat(firstAmount.subtract(BigDecimal.valueOf( 2964.37)).compareTo(BigDecimal.valueOf(01)), is(-1));
+        assertThat(lastAmount.subtract(BigDecimal.valueOf( 2964.37)).compareTo(BigDecimal.valueOf(01)), is(-1));
+
+    }
 
     /*public void TestPaymentCalc()
             {
@@ -174,42 +183,10 @@ public class LoanGivenTest {
 
                 var instalments = account.GetInstalments("Redemptions");
 
-                Assert.IsTrue(Math.Abs((decimal)2964.37 - instalments.First().Amount) <(decimal) 0.01);
+                Assert.IsTrue(Math.Abs((decimal)2964.37  - instalments.First().Amount) <(decimal) 0.01);
                 Assert.IsTrue(Math.Abs((decimal)2964.37 - instalments.Last().Amount) < (decimal)0.01);
             }*/
-    private Account CreateLoanGivenAccount(LocalDate startDate, LocalDate endDate,BusinessDayCalculator businessDayCalculator) {
-
-        AccountBuilder builder = new AccountBuilder(loanGivenAccountType, "ACC-002-043434", codeGenService );
-
-        builder.setBusinessDayCalculator(businessDayCalculator)
-                .addDateValue("StartDate", startDate)
-                .addDateValue("AccrualStart",startDate)
-                .addDateValue("EndDate", endDate)
-                .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
-                .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
-                .addOptionValue("AccrualOption", "365");
 
 
-        return builder.getAccount();
-    }
-
-    private Account CreateLocalLoanGivenAccount(LocalDate startDate, LocalDate endDate,BusinessDayCalculator businessDayCalculator){
-        Account account = new LocalLoanGivenTestAccount();
-
-        account.setAccountTypeName(loanGivenAccountType.getName());
-        account.setAccountNumber("ACC-002-043434");
-        account.businessDayCalculator = businessDayCalculator;
-
-        account.getDates().put("StartDate", new DateValue(startDate));
-        account.getDates().put("AccrualStart", new DateValue(startDate));
-        account.getDates().put("EndDate", new DateValue(endDate));
-        account.getAmounts().put("AdvanceAmount", new AmountValue(BigDecimal.valueOf(624000),startDate));
-        account.getRates().put("InterestRate", new RateValue(BigDecimal.valueOf(3.04/100), startDate));
-        account.getOptions().put("AccrualOption", new OptionValue("365"));
-
-        account.setCalculated();
-
-        return account;
-    }
 
 }

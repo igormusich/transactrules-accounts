@@ -1,11 +1,12 @@
 package com.transactrules.accounts.runtime;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.TransactionType;
+import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
+import com.transactrules.accounts.utilities.Solver;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.List;
 
 public class {{name}} extends Account {
 
@@ -33,6 +34,10 @@ public class {{name}} extends Account {
     private Schedule _{{name}};
 {{/scheduleTypes}}
 
+{{#instalmentTypes}}
+    private InstalmentSet _{{name}};
+{{/instalmentTypes}}
+
 {{#positionTypes}}
     public BigDecimal {{name}}() {
         return _{{name}}.getAmount();
@@ -57,12 +62,17 @@ public class {{name}} extends Account {
     }
 {{/optionTypes}}
 
-
 {{#scheduleTypes}}
     public Schedule {{name}}(){
         return _{{name}};
     }
 {{/scheduleTypes}}
+
+{{#instalmentTypes}}
+    public InstalmentSet {{name}}(){
+        return _{{name}};
+    }
+{{/instalmentTypes}}
 
 {{#rateTypes}}
     public BigDecimal {{name}}(){
@@ -124,8 +134,26 @@ public class {{name}} extends Account {
     {{/isCalculated}}
 
     {{/scheduleTypes}}
+
+    {{#instalmentTypes}}
+        if(!this.getInstalmentSets().containsKey("{{name}}"))
+        {
+            _{{name}} = new InstalmentSet();
+            this.getInstalmentSets().put("{{name}}", _{{name}});
+        }
+        else {
+            _{{name}} = this.getInstalmentSets().get("{{name}}");
+        }
+    {{/instalmentTypes}}
     }
 
+{{#instalmentTypes}}
+    public void Initialize{{name}}(){
+        for(LocalDate date : _{{scheduleType}}.GetAllDates()){
+            _{{name}}.getInstalments().put(date, new InstalmentValue( BigDecimal.ZERO, false));
+        }
+    }
+{{/instalmentTypes}}
 
 {{#scheduleTypes}}
     {{#isCalculated}}
@@ -210,6 +238,14 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
     {{/hasDate}}
 {{/isStartOfDay}}
 {{/scheduledTransactions}}
+{{#instalmentTypes}}
+    {{#isStartOfDay}}
+        if({{name}}().getInstalments().containsKey(valueDate)){
+            InstalmentValue instalmentValue={{name}}().getInstalments().get(valueDate);
+            createTransaction("{{transactionType}}",instalmentValue.getAmount());
+        }
+    {{/isStartOfDay}}
+{{/instalmentTypes}}
     }
 
 
@@ -232,6 +268,14 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
         {{/hasDate}}
     {{/isEndOfDay}}
 {{/scheduledTransactions}}
+{{#instalmentTypes}}
+    {{#isEndOfDay}}
+            if(_{{name}}.getInstalments().containsKey(valueDate)){
+                InstalmentValue instalmentValue= _{{name}}.getInstalments().get(valueDate);
+                createTransaction("{{transactionType}}",instalmentValue.getAmount());
+            }
+    {{/isEndOfDay}}
+{{/instalmentTypes}}
     }
 
     @Override
@@ -241,9 +285,43 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 
     @Override
     public void calculateInstaments() {
-
+    {{#instalmentTypes}}
+        if (_{{name}}.getInstalments().size()==0){
+            Initialize{{name}}();
+        }
+    {{/instalmentTypes}}
+    {{#instalmentTypes}}
+        Calculate{{name}}Instalments();
+    {{/instalmentTypes}}
     }
 
+{{#instalmentTypes}}
+    public BigDecimal GetClosingBalanceFor{{name}}(BigDecimal value) {
+
+        this.setFutureInstalmentValue("{{name}}", ScheduledTransactionTiming.{{timingEnum}}, value);
+
+        List<LocalDate> dates = _{{scheduleType}}.GetAllDates();
+
+        LocalDate lastDate = dates.get(dates.size()-1);
+
+        this.snapshot();
+
+        this.forecast(lastDate);
+
+        BigDecimal result = Principal();
+
+        this.restoreSnapshot();
+
+        return result;
+    }
+{{/instalmentTypes}}
+
+{{#instalmentTypes}}
+    public void Calculate{{name}}Instalments() {
+        Solver solver = new Solver();
+        BigDecimal amount = solver.FindFunctionZero( this::GetClosingBalanceFor{{name}},  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
+    }
+{{/instalmentTypes}}
     @Override
     public String generatedAt(){
         return "{{#currentTimestamp}}generate{{/currentTimestamp}}";

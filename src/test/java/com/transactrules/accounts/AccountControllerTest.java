@@ -6,8 +6,6 @@ import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountBuilder;
-import com.transactrules.accounts.runtime.BusinessDayCalculator;
 import com.transactrules.accounts.runtime.CodeGenService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,6 +43,8 @@ public class AccountControllerTest {
 
     private MockMvc mvc;
 
+    private final String accountTypeName = "AccountType_AccountControllerTest";
+
     @Before
     public void setup() {
         mvc = MockMvcBuilders
@@ -53,9 +52,14 @@ public class AccountControllerTest {
                 .build();
 
         accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("loanGivenControllerTest");
+
+        String accountTypeYaml;
+
+        accountType.setName(accountTypeName);
 
         accountTypeRepository.save(accountType);
+
+
 
     }
 
@@ -64,7 +68,11 @@ public class AccountControllerTest {
     @Test
     public void givenAccountTypeandPost_whenMockMVC_thenResponseOK() throws Exception {
 
-        Account createAccount = CreateLoanGivenAccount("AC-002-098398", LocalDate.now(),LocalDate.now().plusYears(10),null);
+        Account createAccount = TestUtility.CreateLoanGivenAccount("AC-002-098398", LocalDate.now(),LocalDate.now().plusYears(10),codeGenService);
+
+        String yaml = ObjectMapperConfiguration.getYamlObjectMapper().writeValueAsString(createAccount);
+
+        createAccount.setAccountTypeName(accountTypeName);
 
         ObjectMapper mapper = ObjectMapperConfiguration.getObjectMapper();
         String createAccountJson = mapper.writeValueAsString(createAccount);
@@ -75,20 +83,6 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.accountTypeName").value(createAccount.getAccountTypeName()));
     }
 
-    private Account CreateLoanGivenAccount(String accountNumber, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
 
-        AccountBuilder builder = new AccountBuilder(accountType, accountNumber, codeGenService );
-
-        builder.setBusinessDayCalculator(businessDayCalculator)
-                .addDateValue("StartDate", startDate)
-                .addDateValue("AccrualStart",startDate)
-                .addDateValue("EndDate", endDate)
-                .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
-                .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
-                .addOptionValue("AccrualOption", "365");
-
-
-        return builder.getAccount();
-    }
 
 }

@@ -6,7 +6,9 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.*;
+import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.Calendar;
+import com.transactrules.accounts.runtime.CodeGenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -94,37 +95,6 @@ public class CodeGenTest {
 
     }
 
-    @Test
-    public void EvaluateGenerated() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, IOException {
 
-        AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
-        loanGivenAcccountType.setName("localLoanGiven");
-
-        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType);
-
-        Account loanGivenValuation = (Account) aClass.newInstance();
-
-        LocalDate startDate = LocalDate.of(2013, 3, 8);
-        LocalDate endDate = startDate.plusYears (25);
-        Calendar calendar = TestUtility.CreateEuroZoneCalendar();
-
-        Account account = CreateLoanGivenAccount(loanGivenAcccountType,startDate, endDate,calendar);
-
-    }
-
-    private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-
-        AccountBuilder builder = new AccountBuilder(accountType,"ACC-02-9378927", codeGenService);
-
-        builder.setBusinessDayCalculator(businessDayCalculator)
-            .addDateValue("StartDate", startDate)
-            .addDateValue("AccrualStart", startDate)
-            .addDateValue("EndDate", endDate)
-            .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
-            .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
-            .addOptionValue("AccrualOption", "365");
-
-        return builder.getAccount();
-    }
 
 }

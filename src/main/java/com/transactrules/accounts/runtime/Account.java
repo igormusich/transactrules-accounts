@@ -2,7 +2,10 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.transactrules.accounts.metadata.*;
+import com.transactrules.accounts.metadata.DateType;
+import com.transactrules.accounts.metadata.PositionType;
+import com.transactrules.accounts.metadata.ScheduleType;
+import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
 import com.transactrules.accounts.utilities.*;
 
 import java.math.BigDecimal;
@@ -43,6 +46,8 @@ public class Account {
 
     public transient LocalDate actionDate;
     public transient LocalDate valueDate;
+
+
 
     public Account() {
 
@@ -161,6 +166,9 @@ public class Account {
         this.calendarNames = calendarNames;
     }
 
+    private List<Transaction> snapshotTransactions;
+    private Map<String, Position> snapshotPositions;
+
     public void setCalculated(){
 
     }
@@ -194,7 +202,7 @@ public class Account {
     }
 
     public Schedule initializeSchedule(ScheduleType scheduleType){
-        Schedule schedule = new Schedule(scheduleType);
+        Schedule schedule = new Schedule();
 
         schedule.businessDayCalculator = this.businessDayCalculator;
 
@@ -267,17 +275,38 @@ public class Account {
 
     public void setFutureInstalmentValue(String instalmentType, ScheduledTransactionTiming timing, BigDecimal value)
     {
-       /* for (Instal instalment in Account.GetInstalments(instalmentType))
+        InstalmentSet instalmentSet = this.getInstalmentSets().get(instalmentType);
+
+       for (LocalDate instalmentDate: instalmentSet.getInstalments().keySet())
         {
-            if (!instalment.HasFixedValue)
+            InstalmentValue instalment = instalmentSet.getInstalments().get(instalmentDate);
+            if (!instalment.getHasFixedValue())
             {
-                if ( (timing == ScheduledTransactionTiming.StartOfDay && instalment.ValueDate > SessionState.Current.ValueDate)
-                        || (timing == ScheduledTransactionTiming.EndOfDay && instalment.ValueDate >= SessionState.Current.ValueDate))
+                if ( (timing == ScheduledTransactionTiming.StartOfDay && instalmentDate.isAfter(valueDate))
+                        || (timing == ScheduledTransactionTiming.EndOfDay && (instalmentDate.isAfter(valueDate) || instalmentDate.isEqual(valueDate))))
                 {
-                    instalment.Amount = value;
+                    instalment.setAmount(value);
                 }
             }
-        }*/
+        }
     }
 
+    public void snapshot() {
+        snapshotPositions = positions;
+        snapshotTransactions =  transactions;
+
+        positions = new HashMap<>();
+
+        for (String name:snapshotPositions.keySet())
+        {
+            positions.put(name, new Position());
+        }
+
+        transactions = new ArrayList<>();
+    }
+
+    public void restoreSnapshot() {
+        positions = snapshotPositions;
+        transactions = snapshotTransactions;
+    }
 }

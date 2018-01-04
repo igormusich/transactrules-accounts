@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.metadata.ScheduleEndType;
 import com.transactrules.accounts.metadata.ScheduleFrequency;
-import com.transactrules.accounts.metadata.ScheduleType;
 import com.transactrules.accounts.utilities.LocalDateFormat;
 
 import java.time.LocalDate;
@@ -15,8 +14,6 @@ import java.util.stream.Collectors;
 
 @DynamoDBDocument
 public class Schedule  {
-
-    private String scheduleTypeName;
 
     private LocalDate startDate;
 
@@ -36,23 +33,14 @@ public class Schedule  {
 
     private List<ScheduleDate> excludeDates = new ArrayList<>();
 
+    @JsonIgnore
     public transient BusinessDayCalculator businessDayCalculator;
+
+    @JsonIgnore
+    private transient Map<LocalDate, List<LocalDate>> cachedDates = new HashMap<>();
 
     public Schedule() {
 
-    }
-
-    public Schedule(ScheduleType scheduleType){
-        scheduleTypeName = scheduleType.getName();
-    }
-
-    @DynamoDBAttribute
-    public String getScheduleTypeName() {
-        return scheduleTypeName;
-    }
-
-    public void setScheduleTypeName(String scheduleTypeName) {
-        this.scheduleTypeName = scheduleTypeName;
     }
 
     @DynamoDBAttribute
@@ -192,8 +180,6 @@ public class Schedule  {
     {
         return isDue(SessionState.current().valueDate());
     }
-
-    private transient Map<LocalDate, List<LocalDate>> cachedDates = new HashMap<>();
 
     public List<LocalDate> GetAllDates()
     {

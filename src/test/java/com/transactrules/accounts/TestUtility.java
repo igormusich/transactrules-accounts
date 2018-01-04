@@ -1,8 +1,9 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.runtime.Calendar;
+import com.transactrules.accounts.runtime.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TestUtility {
@@ -131,6 +132,65 @@ public class TestUtility {
                 "InterestCapitalized" );
 
         return loanGiven;
+    }
+
+    public static Account CreateLoanGivenAccount(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
+
+        AccountBuilder builder = new AccountBuilder( CreateLoanGivenAccountType(), accountNumber, codeGenService );
+
+        builder.setBusinessDayCalculator(CreateEuroZoneCalendar())
+                .addDateValue("StartDate", startDate)
+                .addDateValue("AccrualStart",startDate)
+                .addDateValue("EndDate", endDate)
+                .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
+                .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
+                .addOptionValue("AccrualOption", "365")
+        ;
+
+
+        Account account =  builder.getAccount();
+
+        account.setCalculated();
+
+        return account;
+    }
+
+    public static Account CreateLoanGivenAccountWithSchedules(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
+
+        AccountBuilder builder = new AccountBuilder( CreateLoanGivenAccountType(), accountNumber, codeGenService );
+        BusinessDayCalculator calendar = CreateEuroZoneCalendar();
+
+
+
+        builder.setBusinessDayCalculator(calendar)
+                .addDateValue("StartDate", startDate)
+                .addDateValue("AccrualStart",startDate)
+                .addDateValue("EndDate", endDate)
+                .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
+                .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
+                .addOptionValue("AccrualOption", "365")
+        ;
+
+
+        Account account =  builder.getAccount();
+
+        account.setCalculated();
+
+        //Schedule accrualSchedule = account.getSchedules().get("AccrualSchedule");
+        Schedule interestSchedule = account.getSchedules().get("InterestSchedule");
+        Schedule redemptionSchedule = account.getSchedules().get("RedemptionSchedule");
+
+        LocalDate interestStart = LocalDate.of (2013, 3, 31);
+
+        interestSchedule.setStartDate(interestStart);
+        interestSchedule.setEndDate(endDate);
+        interestSchedule.getIncludeDates().add(new ScheduleDate (endDate) );
+
+        redemptionSchedule.setStartDate(interestStart);
+        redemptionSchedule.setEndDate(endDate);
+        redemptionSchedule.getIncludeDates().add(new ScheduleDate (endDate) );
+
+        return account;
     }
 
     public static Calendar CreateEuroZoneCalendar()
