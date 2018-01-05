@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 
@@ -12,6 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class ScheduledTransaction extends NamedAbstractEntity {
 
     @NotBlank
+    @ApiModelProperty(dataType = "string", allowableValues = "START_OF_DAY, END_OF_DAY", value = "Transaction timing", notes = "Controls if the scheduled transaction is applied in start of day or end of day operation")
     private String timing;
 
     private String scheduleTypeName;

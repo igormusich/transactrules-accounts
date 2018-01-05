@@ -5,17 +5,25 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 
 /**
  * Created by Administrator on 11/27/2016.
  */
+@ApiModel()
 @DynamoDBDocument
 public class ScheduleType extends NamedAbstractEntity {
 
 
+    @NotBlank
+    @ApiModelProperty(dataType = "string", allowableValues = "DAILY, MONTHLY", value = "Schedule repeat period", notes = "Defines the recurrence period for the schedule")
     private String scheduleFrequency;
 
+    @NotBlank
+    @ApiModelProperty(dataType = "string", allowableValues = "NO_END, END_DATE, REPEATS", value = "Schedule end", notes = "Schedules can be open ended, end on specific date or after specified number of repeats")
     private String scheduleEndType;
 
     private String startDateExpression;
@@ -26,6 +34,8 @@ public class ScheduleType extends NamedAbstractEntity {
 
     private String intervalExpression;
 
+    @NotBlank
+    @ApiModelProperty(dataType = "string", allowableValues ="ANY_DAY, NEXT_BUSINESS_DAY, PREVIOUS_BUSINESS_DAY , CLOSEST_BUSINESS_DAY_NEXT , NEXT_BUSINESS_DAY_THIS_MONTH_OR_PREVIOUS", value = "Define working day adjustment", notes ="In case when working day adjustments need to be applied determines how the adjustment needs to be applied")
     private String businessDayCalculation;
 
     private Boolean isCalculated;

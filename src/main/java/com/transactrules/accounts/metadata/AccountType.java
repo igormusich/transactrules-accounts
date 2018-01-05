@@ -4,6 +4,7 @@ package com.transactrules.accounts.metadata;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import io.swagger.annotations.ApiModel;
 import org.joda.time.LocalDateTime;
 
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.function.Function;
  * Aggregate root for account metadata
  */
 
+@ApiModel
 @DynamoDBTable(tableName = "AccountType")
 public class AccountType {
     
