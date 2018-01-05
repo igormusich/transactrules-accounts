@@ -149,7 +149,7 @@ public class {{name}} extends Account {
 
 {{#instalmentTypes}}
     public void Initialize{{name}}(){
-        for(LocalDate date : _{{scheduleType}}.GetAllDates()){
+        for(LocalDate date : _{{scheduleTypeName}}.GetAllDates()){
             _{{name}}.getInstalments().put(date, new InstalmentValue( BigDecimal.ZERO, false));
         }
     }
@@ -206,10 +206,10 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
         {{/maximumPrecision}}
         {{#add}}
-                _{{posititonTypeName}}.add(amount);
+                _{{positionTypeName}}.add(amount);
         {{/add}}
         {{#subtract}}
-                _{{posititonTypeName}}.subtract(amount);
+                _{{positionTypeName}}.subtract(amount);
         {{/subtract}}
     {{/transactionRules}}
                 break;
@@ -242,7 +242,7 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
     {{#isStartOfDay}}
         if({{name}}().getInstalments().containsKey(valueDate)){
             InstalmentValue instalmentValue={{name}}().getInstalments().get(valueDate);
-            createTransaction("{{transactionType}}",instalmentValue.getAmount());
+            createTransaction("{{transactionTypeName}}",instalmentValue.getAmount());
         }
     {{/isStartOfDay}}
 {{/instalmentTypes}}
@@ -272,7 +272,7 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
     {{#isEndOfDay}}
             if(_{{name}}.getInstalments().containsKey(valueDate)){
                 InstalmentValue instalmentValue= _{{name}}.getInstalments().get(valueDate);
-                createTransaction("{{transactionType}}",instalmentValue.getAmount());
+                createTransaction("{{transactionTypeName}}",instalmentValue.getAmount());
             }
     {{/isEndOfDay}}
 {{/instalmentTypes}}
@@ -300,7 +300,7 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 
         this.setFutureInstalmentValue("{{name}}", ScheduledTransactionTiming.{{timingEnum}}, value);
 
-        List<LocalDate> dates = _{{scheduleType}}.GetAllDates();
+        List<LocalDate> dates = _{{scheduleTypeName}}.GetAllDates();
 
         LocalDate lastDate = dates.get(dates.size()-1);
 

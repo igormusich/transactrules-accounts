@@ -5,20 +5,23 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
-
+import org.hibernate.validator.constraints.NotBlank;
 
 
 @DynamoDBDocument
 public class ScheduledTransaction extends NamedAbstractEntity {
 
+    @NotBlank
     private String timing;
 
     private String scheduleTypeName;
 
     private String dateTypeName;
 
+    @NotBlank
     private String transactionTypeName;
 
+    @NotBlank
     private String amountExpression;
 
     private Integer sequence;

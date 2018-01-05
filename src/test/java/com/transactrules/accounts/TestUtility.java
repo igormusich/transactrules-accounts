@@ -125,7 +125,7 @@ public class TestUtility {
 
         loanGiven.addInstalmentType(
                 "Redemptions",
-                ScheduledTransactionTiming.StartOfDay.value(),
+                ScheduledTransactionTiming.StartOfDay,
                 redemptionSchedule.name,
                 "Redemption","Principal",
                 "InterestAccrued",

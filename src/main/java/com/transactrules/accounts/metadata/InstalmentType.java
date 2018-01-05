@@ -5,17 +5,22 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
+import org.hibernate.validator.constraints.NotBlank;
 
 @DynamoDBDocument
 public class InstalmentType extends NamedAbstractEntity {
 
+    @NotBlank
     private String timing; //ScheduledTransactionTiming
-    private String scheduleType;
-    private String transactionType;
-    private String positionType;
+    @NotBlank
+    private String scheduleTypeName;
+    @NotBlank
+    private String transactionTypeName;
+    @NotBlank
+    private String positionTypeName;
     //required for amortization calculations
-    private String interestAccrued;
-    private String interestCapitalized;
+    private String interestAccruedPositionTypeName;
+    private String interestCapitalizedPositionTypeName;
 
     public InstalmentType(){
         super();
@@ -35,48 +40,48 @@ public class InstalmentType extends NamedAbstractEntity {
     }
 
     @DynamoDBAttribute
-    public String getScheduleType() {
-        return scheduleType;
+    public String getScheduleTypeName() {
+        return scheduleTypeName;
     }
 
-    public void setScheduleType(String scheduleType) {
-        this.scheduleType = scheduleType;
-    }
-
-    @DynamoDBAttribute
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
+    public void setScheduleTypeName(String scheduleTypeName) {
+        this.scheduleTypeName = scheduleTypeName;
     }
 
     @DynamoDBAttribute
-    public String getPositionType() {
-        return positionType;
+    public String getTransactionTypeName() {
+        return transactionTypeName;
     }
 
-    public void setPositionType(String positionType) {
-        this.positionType = positionType;
-    }
-
-    @DynamoDBAttribute
-    public String getInterestAccrued() {
-        return interestAccrued;
-    }
-
-    public void setInterestAccrued(String interestAccrued) {
-        this.interestAccrued = interestAccrued;
+    public void setTransactionTypeName(String transactionTypeName) {
+        this.transactionTypeName = transactionTypeName;
     }
 
     @DynamoDBAttribute
-    public String getInterestCapitalized() {
-        return interestCapitalized;
+    public String getPositionTypeName() {
+        return positionTypeName;
     }
 
-    public void setInterestCapitalized(String interestACapitalized) {
-        this.interestCapitalized = interestACapitalized;
+    public void setPositionTypeName(String positionTypeName) {
+        this.positionTypeName = positionTypeName;
+    }
+
+    @DynamoDBAttribute
+    public String getInterestAccruedPositionTypeName() {
+        return interestAccruedPositionTypeName;
+    }
+
+    public void setInterestAccruedPositionTypeName(String interestAccruedPositionTypeName) {
+        this.interestAccruedPositionTypeName = interestAccruedPositionTypeName;
+    }
+
+    @DynamoDBAttribute
+    public String getInterestCapitalizedPositionTypeName() {
+        return interestCapitalizedPositionTypeName;
+    }
+
+    public void setInterestCapitalizedPositionTypeName(String interestACapitalized) {
+        this.interestCapitalizedPositionTypeName = interestACapitalized;
     }
 
     @JsonIgnore

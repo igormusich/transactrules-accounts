@@ -4,17 +4,21 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 
 /**
  * Created by 313798977 on 2016/11/12.
  */
 
+@ApiModel
 @DynamoDBDocument
 public class TransactionRuleType  {
 
     private String posititonTypeName;
 
+    @ApiModelProperty(dataType = "string", allowableValues = "ADD, SUBTRACT", value = "Transaction Operation", notes = "Controls how does transaction affect specific position")
     private String transactionOperation;
 
     public TransactionRuleType()
@@ -28,11 +32,11 @@ public class TransactionRuleType  {
     }
 
     @DynamoDBAttribute
-    public String getPosititonTypeName() {
+    public String getPositionTypeName() {
         return posititonTypeName;
     }
 
-    public void setPosititonTypeName(String posititonTypeName) {
+    public void setPositionTypeName(String posititonTypeName) {
         this.posititonTypeName = posititonTypeName;
     }
 

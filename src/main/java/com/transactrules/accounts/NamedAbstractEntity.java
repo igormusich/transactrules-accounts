@@ -3,7 +3,7 @@ package com.transactrules.accounts;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by Igor Music on 2016/11/11.
@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @DynamoDBDocument
 public abstract class NamedAbstractEntity {
 
-    @NotEmpty
+    @NotBlank
     protected String name;
 
 

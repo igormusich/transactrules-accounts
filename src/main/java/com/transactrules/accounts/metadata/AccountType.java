@@ -207,14 +207,14 @@ public class AccountType {
         return  scheduleType;
     }
 
-    public InstalmentType addInstalmentType(String name, String timing, String scheduleType, String transactionType, String positionType, String interestAccrued, String interestCapitalized) {
+    public InstalmentType addInstalmentType(String name, ScheduledTransactionTiming timing, String scheduleType, String transactionType, String positionType, String interestAccrued, String interestCapitalized) {
         InstalmentType instalmentType = new InstalmentType(name);
-        instalmentType.setTiming(timing);
-        instalmentType.setScheduleType(scheduleType);
-        instalmentType.setTransactionType(transactionType);
-        instalmentType.setPositionType( positionType);
-        instalmentType.setInterestAccrued(interestAccrued);
-        instalmentType.setInterestCapitalized(interestCapitalized);
+        instalmentType.setTiming(timing.value());
+        instalmentType.setScheduleTypeName(scheduleType);
+        instalmentType.setTransactionTypeName(transactionType);
+        instalmentType.setPositionTypeName( positionType);
+        instalmentType.setInterestAccruedPositionTypeName(interestAccrued);
+        instalmentType.setInterestCapitalizedPositionTypeName(interestCapitalized);
 
         instalmentTypes.add(instalmentType);
 
