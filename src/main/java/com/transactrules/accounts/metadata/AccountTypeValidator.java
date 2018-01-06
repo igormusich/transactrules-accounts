@@ -9,6 +9,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.lang.model.SourceVersion;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 
 @Component
@@ -64,7 +67,7 @@ public class AccountTypeValidator implements Validator {
     }
 
     private void validateIfAccountTypeExists(Errors errors, AccountType request) {
-        AccountType existingAccountType = accountTypeRepository.findByName(request.getName());
+        AccountType existingAccountType = accountTypeRepository.findOne(request.getName());
 
         if (existingAccountType!=null) {
             errors.rejectValue("name", ApiErrorCode.ALREADY_EXISTS.getCode());
@@ -73,12 +76,21 @@ public class AccountTypeValidator implements Validator {
 
 
     private void evaluateCompiledClass(Errors errors, AccountType accountType) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            Class accountClass =  codeGenService.getAccountClass(accountType);
+            PrintWriter writer = new PrintWriter(os);
+            Class accountClass =  codeGenService.getAccountClass(accountType, writer);
             Account account = (Account) accountClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            errors.reject(ApiErrorCode.EVALUATION_FAILED.getCode(), e.getMessage());
+            String aString = "";
+
+            try {
+                aString = new String(os.toByteArray(),"UTF-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+            errors.reject(ApiErrorCode.EVALUATION_FAILED.getCode(), e.getMessage() + aString);
         }
     }
 

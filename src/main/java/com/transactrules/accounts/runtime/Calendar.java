@@ -1,9 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.utilities.HolidayDateListConverter;
 
@@ -22,15 +20,18 @@ public class Calendar  implements BusinessDayCalculator {
 
     private String name;
 
+    private Boolean isDefault;
+
     private List<HolidayDate> holidays = new ArrayList<>();
 
     public Calendar(){
 
     }
 
-    public Calendar(String name){
+    public Calendar(String name, Boolean isDefault){
 
         this.name = name;
+        this.isDefault = isDefault;
     }
 
     @DynamoDBHashKey
@@ -40,6 +41,15 @@ public class Calendar  implements BusinessDayCalculator {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @DynamoDBAttribute
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 
     @DynamoDBTypeConverted(converter = HolidayDateListConverter.class)
@@ -66,6 +76,7 @@ public class Calendar  implements BusinessDayCalculator {
         return (holidaysMap().containsKey(date)==false);
     }
 
+    @DynamoDBIgnore
     protected Map<LocalDate, HolidayDate> holidaysMap()
     {
 

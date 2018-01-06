@@ -1,6 +1,5 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.services.AccountService;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +44,7 @@ public class AccountController {
     }
 
     @RequestMapping(method= RequestMethod.GET)
-    @ApiOperation(value = "Get all Accounts", response = AccountType.class, responseContainer="List")
+    @ApiOperation(value = "Get all Accounts", response = Account.class, responseContainer="List")
     public ResponseEntity<?> findAll(){
         List<Account> accounts = service.findAll();
 
@@ -53,7 +52,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/{id}", method= RequestMethod.GET)
-    @ApiOperation(value = "Get Account by Account Number", response = AccountType.class, responseContainer="List")
+    @ApiOperation(value = "Get Account by Account Number", response = Account.class, responseContainer="List")
     public ResponseEntity<?> findByAccountNumber( @PathVariable("id") String accountNumber){
         Account account = service.findByAccountNumber(accountNumber);
 

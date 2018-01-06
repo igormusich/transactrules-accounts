@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 @Component
@@ -25,8 +26,9 @@ public class CodeGenService {
     private Logger logger = LoggerFactory.getLogger(StartupApplicationRunner.class);
 
     @Cacheable(value = "accountClasses", key = "#accountType.name")
-    public Class getAccountClass(AccountType accountType) throws ClassNotFoundException, IOException {
+    public Class getAccountClass(AccountType accountType, PrintWriter printWriter) throws ClassNotFoundException, IOException {
         StringWriter writer = new StringWriter();
+
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache mustache = mf.compile("templates//account.mustache");
 
@@ -39,7 +41,10 @@ public class CodeGenService {
         logger.info("Generated code:");
         logger.info(sourceCode);
 
-        Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, sourceCode);
+        Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(this.getClass().getClassLoader(),className, sourceCode,printWriter);
+
+        //Class aClass = CompilerUtils.CACHED_COMPILER.loadFromJava(className, sourceCode);
+
 
         return aClass;
     }

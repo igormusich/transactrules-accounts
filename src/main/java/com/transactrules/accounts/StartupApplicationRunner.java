@@ -5,9 +5,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.CalendarRepository;
+import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +34,14 @@ public class StartupApplicationRunner implements ApplicationRunner {
     @Autowired
     CalendarRepository calendarRepository;
 
+    @Autowired
+    SystemPropertiesRepository systemPropertiesRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-        String[] tableNames = {"AccountType","Account","Calendar"};
+        String[] tableNames = {"AccountType","Account","Calendar","Transaction", "SystemProperties"};
 
         List<String> listTablesResult = amazonDynamoDB.listTables().getTableNames();
 
@@ -66,7 +67,18 @@ public class StartupApplicationRunner implements ApplicationRunner {
             CreateTable(Calendar.class, dynamoDBMapper, amazonDynamoDB);
         }
 
+        if(!contains(listTablesResult,"Transaction")) {
+            CreateTable(Transaction.class, dynamoDBMapper, amazonDynamoDB);
+        }
+
+        if(!contains(listTablesResult,"SystemProperties")) {
+            CreateTable(SystemProperties.class, dynamoDBMapper, amazonDynamoDB);
+        }
+
+        systemPropertiesRepository.save(new SystemProperties("default", LocalDate.now()));
+
         calendarRepository.save(StartupApplicationRunner.CreateEuroZoneCalendar());
+
 
         testConfiguration.run();
     }
@@ -151,7 +163,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
     public static Calendar CreateEuroZoneCalendar()
     {
 
-        return new Calendar("Euro Zone")
+        return new Calendar("Euro Zone",true)
                 .add("GOOD FRIDAY", LocalDate.parse("2000-04-21"))
                 .add("EASTER MONDAY", LocalDate.parse("2000-04-24"))
                 .add("LABOUR DAY (01 MAY)", LocalDate.parse("2000-05-01"))

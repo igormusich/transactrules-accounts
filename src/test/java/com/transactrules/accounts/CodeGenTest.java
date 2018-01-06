@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDate;
 
@@ -60,7 +62,7 @@ public class CodeGenTest {
 
         AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
 
-        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType);
+        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType, new PrintWriter(new ByteArrayOutputStream()));
 
         Account account1 = (Account) aClass.newInstance();
 
@@ -72,7 +74,7 @@ public class CodeGenTest {
  
 
         //this shold get the value from cache
-        Class class2 = codeGenService.getAccountClass(loanGivenAcccountType);
+        Class class2 = codeGenService.getAccountClass(loanGivenAcccountType,new PrintWriter(new ByteArrayOutputStream()));
         Account account2 = (Account) class2.newInstance();
         String timestamp2 = account2.generatedAt();
 

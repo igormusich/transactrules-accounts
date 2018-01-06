@@ -4,11 +4,13 @@ public class ApiFieldError {
     private String field;
     private String code;
     private Object rejectedValue;
+    private String message;
 
-    public ApiFieldError(String field, String code, Object rejectedValue) {
+    public ApiFieldError(String field, String code, Object rejectedValue, String description) {
         this.field = field;
         this.code = code;
         this.rejectedValue = rejectedValue;
+        this.message = description;
     }
 
     public String getField() {
@@ -21,6 +23,10 @@ public class ApiFieldError {
 
     public Object getRejectedValue() {
         return rejectedValue;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

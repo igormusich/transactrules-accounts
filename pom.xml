@@ -61,6 +61,11 @@
             <version>4.5.2</version>
         </dependency>
 		<dependency>
+			<groupId>com.amazonaws.services.dynamodbv2</groupId>
+			<artifactId>amazon-dynamodb-transactions</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.spullara.mustache.java</groupId>
 			<artifactId>compiler</artifactId>
 			<version>0.9.5</version>

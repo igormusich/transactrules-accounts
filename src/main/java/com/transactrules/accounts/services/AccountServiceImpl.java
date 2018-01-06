@@ -1,8 +1,11 @@
 package com.transactrules.accounts.services;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +26,20 @@ public class AccountServiceImpl implements AccountService {
     CalendarRepository calendarRepository;
 
     @Autowired
+    TransactionRepository transactionRepository;
+
+    @Autowired
     CodeGenService codeGenService;
+
+    @Autowired
+    private AmazonDynamoDB amazonDynamoDB;
+
+    private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
     public Account create(Account prototype)  {
 
-        AccountType accountType = accountTypeRepository.findByName(prototype.getAccountTypeName());
+        AccountType accountType = accountTypeRepository.findOne(prototype.getAccountTypeName());
 
         AccountBuilder builder = new AccountBuilder(accountType, prototype.getAccountNumber(), codeGenService );
 
@@ -77,4 +88,45 @@ public class AccountServiceImpl implements AccountService {
 
         return account;
     }
+
+    @Override
+    public Transaction createTransaction(Transaction transaction) throws InterruptedException {
+
+        //TransactionManager txManager = new TransactionManager(amazonDynamoDB, "Transaction", "Account");
+
+        //com.amazonaws.services.dynamodbv2.transactions.Transaction tx = txManager.newTransaction();
+
+        try {
+
+            Account dbAccount = accountRepository.findOne(transaction.getAccountNumber());
+            AccountType accountType = accountTypeRepository.findOne(dbAccount.getAccountTypeName());
+
+            //Class accountClass = codeGenService.getAccountClass(accountType);
+
+            //Account account = (Account) accountClass.newInstance();
+
+            Account account = new localLoanGiven();
+
+            account.initializeFromPrototype(dbAccount);
+
+            account.setCalculated();
+
+            //this should update the balances
+            account.createTransaction(transaction);
+
+            accountRepository.save(account);
+
+            transactionRepository.save(transaction);
+
+            //tx.commit();
+        }
+        catch (Exception ex){
+            //tx.delete();
+            logger.error(ex.toString());
+        }
+
+
+        return transaction;
+    }
+
 }

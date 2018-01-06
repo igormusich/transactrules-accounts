@@ -4,6 +4,7 @@ import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.CodeGenService;
+import com.transactrules.accounts.runtime.Transaction;
 import com.transactrules.accounts.services.AccountService;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,8 +33,10 @@ public class AccountServiceTest {
     private AccountTypeRepository accountTypeRepository;
 
     private AccountType accountType;
+    private Account account;
 
     private final String accountTypeName = "AccountType_AccountServiceTest";
+    private final String accountNumber = "AC-account-service-test";
 
     @Before
     public void setup() {
@@ -39,14 +46,24 @@ public class AccountServiceTest {
 
         accountTypeRepository.save(accountType);
 
-    }
-
-    @Test
-    public void createLoanAccountTest(){
-        Account account = TestUtility.CreateLoanGivenAccount("AC-002-043243", LocalDate.now(),LocalDate.now().plusYears(10),codeGenService);
+        account = TestUtility.CreateLoanGivenAccount(accountNumber, LocalDate.now(),LocalDate.now().plusYears(10),codeGenService);
 
         account.setAccountTypeName(accountTypeName);
 
         accountService.create(account);
+
+    }
+
+    @Test
+    public void createTransactionTest() throws InterruptedException {
+
+        BigDecimal principal =  account.getPositions().get("Principal").getAmount();
+
+        accountService.createTransaction(new Transaction(accountNumber,"AdditionalAdvance", BigDecimal.valueOf(100), LocalDate.now(),LocalDate.now()));
+
+        Account updatedAccount = accountService.findByAccountNumber(accountNumber);
+
+        assertThat(updatedAccount.getPositions().get("Principal").getAmount(), is(principal.add(BigDecimal.valueOf(100))));
+
     }
 }

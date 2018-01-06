@@ -37,7 +37,7 @@ public class AccountValidator implements Validator {
             errors.rejectValue("accountNumber", ApiErrorCode.ALREADY_EXISTS.getCode(), null, String.format("Account number %s already exists", request.getAccountNumber()));
         }
 
-        AccountType accountType = accountTypeRepository.findByName(request.getAccountTypeName());
+        AccountType accountType = accountTypeRepository.findOne(request.getAccountTypeName());
 
         if(accountType == null){
             errors.rejectValue("accountTypeName", ApiErrorCode.NO_SUCH_TYPE.getCode(), null, String.format("AccountType  %s does not exists", request.getAccountTypeName()));

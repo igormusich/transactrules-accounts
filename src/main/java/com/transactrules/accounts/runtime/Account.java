@@ -58,6 +58,23 @@ public class Account {
         this.accountTypeName = accountTypeName;
     }
 
+    public void initializeFromPrototype(Account prototype) {
+        this.accountNumber = prototype.accountNumber;
+        this.isActive = prototype.isActive;
+        this.accountTypeName = prototype.accountTypeName;
+        this.calendarNames = prototype.calendarNames;
+        this.positions = prototype.positions;
+        this.dates = prototype.dates;
+        this.rates = prototype.rates;
+        this.amounts = prototype.amounts;
+        this.options = prototype.options;
+        this.schedules = prototype.schedules;
+        this.transactions = prototype.transactions;
+        this.instalmentSets = prototype.instalmentSets;
+        this.businessDayCalculator = prototype.businessDayCalculator;
+    }
+
+
     @DynamoDBHashKey
     public String getAccountNumber() {
         return accountNumber;
@@ -139,7 +156,7 @@ public class Account {
         this.schedules = schedules;
     }
 
-    @DynamoDBTypeConverted(converter = TransactionListConverter.class)
+    @DynamoDBIgnore
     public List<Transaction> getTransactions() {
         return transactions;
     }
@@ -214,9 +231,20 @@ public class Account {
 
     public Transaction createTransaction(String transactionTypeName, BigDecimal amount) {
 
-        Transaction transaction = new Transaction(transactionTypeName,amount,this, actionDate, valueDate);
+        Transaction transaction = new Transaction(this.getAccountNumber(), transactionTypeName,amount, actionDate, valueDate);
 
         processTransaction(transactionTypeName, amount);
+
+        addTransaction(transaction);
+
+        return transaction;
+    }
+
+    public Transaction createTransaction(Transaction transaction) {
+
+        //TODO: implement backdating logic if transaction.valueDate < SystemParameters.actionDate
+
+        processTransaction(transaction.getTransactionTypeName(), transaction.getAmount());
 
         addTransaction(transaction);
 

@@ -1,9 +1,10 @@
-package com.transactrules.accounts.metadata;
+package com.transactrules.accounts.runtime;
 
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 
+
 @EnableScan
-public interface AccountTypeRepository extends CrudRepository<AccountType, String> {
+public interface SystemPropertiesRepository extends CrudRepository<SystemProperties,String> {
 
 }

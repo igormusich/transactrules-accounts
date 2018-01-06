@@ -196,7 +196,7 @@ public class TestUtility {
     public static Calendar CreateEuroZoneCalendar()
     {
         
-        return new Calendar("Euro Zone")
+        return new Calendar("Euro Zone",true)
         .add("GOOD FRIDAY", LocalDate.parse("2000-04-21"))
             .add("EASTER MONDAY", LocalDate.parse("2000-04-24"))
             .add("LABOUR DAY (01 MAY)", LocalDate.parse("2000-05-01"))

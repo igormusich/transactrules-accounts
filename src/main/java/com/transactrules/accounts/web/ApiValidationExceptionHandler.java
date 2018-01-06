@@ -31,7 +31,8 @@ public class ApiValidationExceptionHandler extends ResponseEntityExceptionHandle
                 .map(fieldError -> new ApiFieldError(
                         fieldError.getField(),
                         fieldError.getCode(),
-                        fieldError.getRejectedValue())
+                        fieldError.getRejectedValue(),
+                        fieldError.getDefaultMessage())
                 )
                 .collect(toList());
 
@@ -39,7 +40,8 @@ public class ApiValidationExceptionHandler extends ResponseEntityExceptionHandle
                 .getGlobalErrors()
                 .stream()
                 .map(globalError -> new ApiGlobalError(
-                        globalError.getCode())
+                        globalError.getCode(),
+                        globalError.getDefaultMessage())
                 )
                 .collect(toList());
 

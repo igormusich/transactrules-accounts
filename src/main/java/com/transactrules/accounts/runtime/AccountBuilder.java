@@ -4,6 +4,8 @@ import com.transactrules.accounts.metadata.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -145,7 +147,8 @@ public class AccountBuilder {
         Account account = null;
 
         try{
-            Class accountClass = codeGenService.getAccountClass(accountType);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            Class accountClass = codeGenService.getAccountClass(accountType, new PrintWriter(os));
 
             account = (Account) accountClass.newInstance();
 

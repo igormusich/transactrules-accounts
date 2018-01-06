@@ -1,5 +1,18 @@
 # transactrules-accounts
 
+This project depends on dynamodb-transactions, which does not exist on public Maven repo.
+
+In order to build you need to do following:
+
+```bash
+git clone https://github.com/awslabs/dynamodb-transactions
+
+cd dynamodb-transactions
+
+mvn clean package
+```
+
+
 To build docker image:
 
 ```bash
