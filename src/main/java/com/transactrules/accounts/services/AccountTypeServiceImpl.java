@@ -38,4 +38,11 @@ public class AccountTypeServiceImpl implements AccountTypeService {
 
         return list;
     }
+
+    @Override
+    public AccountType findByClassName(String className) {
+        AccountType result = accountTypeRepository.findOne(className);
+
+        return result;
+    }
 }

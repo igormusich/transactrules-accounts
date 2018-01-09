@@ -57,6 +57,14 @@ public class AccountTypeController {
         return new ResponseEntity<>(accountTypes, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{className}", method= RequestMethod.GET)
+    @ApiOperation(value = "Get AccountType by class Name", response = AccountType.class)
+    public ResponseEntity<?> findByAccountNumber( @PathVariable("className") String className){
+        AccountType accountType = service.findByClassName(className);
+
+        return new ResponseEntity<>(accountType, HttpStatus.OK);
+    }
+
     @InitBinder("accountType")
     public void setupBinder(WebDataBinder binder) {
         binder.addValidators(accountTypeValidator);

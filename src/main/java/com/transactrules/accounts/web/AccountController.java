@@ -52,7 +52,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/{id}", method= RequestMethod.GET)
-    @ApiOperation(value = "Get Account by Account Number", response = Account.class, responseContainer="List")
+    @ApiOperation(value = "Get Account by Account Number", response = Account.class)
     public ResponseEntity<?> findByAccountNumber( @PathVariable("id") String accountNumber){
         Account account = service.findByAccountNumber(accountNumber);
 

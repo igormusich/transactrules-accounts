@@ -7,8 +7,7 @@
 	<artifactId>accounts</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
-
-	<className>accounts</className>
+	<name>accounts</name>
 	<description>Rule based transaction processing framework</description>
 
 	<parent>
