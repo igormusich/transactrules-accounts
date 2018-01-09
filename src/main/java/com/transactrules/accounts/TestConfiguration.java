@@ -23,7 +23,7 @@ public class TestConfiguration {
 
         accountTypeRepo.save(savingsAccountType);
 
-        logger.info("Saved account type:" + savingsAccountType.getName().toString());
+        logger.info("Saved account type:" + savingsAccountType.getClassName().toString());
 
         logger.info("Default metadata saved (SavingsAccount)");
 
@@ -32,7 +32,7 @@ public class TestConfiguration {
 
     public static AccountType createSavingsAccountType()
     {
-        AccountType accountType = new AccountType( "SavingsAccount");
+        AccountType accountType = new AccountType( "SavingsAccount", "Savings Account");
 
         PositionType currentPosition = accountType.addPositionType( "Current");
         PositionType interestAccruedPosition = accountType.addPositionType( "InterestAccrued" );

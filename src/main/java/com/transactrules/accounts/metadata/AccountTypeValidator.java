@@ -32,8 +32,8 @@ public class AccountTypeValidator implements Validator {
     public void validate(Object target, Errors errors) {
         AccountType accountType = (AccountType) target;
 
-        if (!SourceVersion.isName(accountType.getName())){
-            errors.rejectValue("name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+        if (!SourceVersion.isName(accountType.getClassName())){
+            errors.rejectValue("className", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
         }
 
         HashSet<String> names = new HashSet<>();
@@ -67,10 +67,10 @@ public class AccountTypeValidator implements Validator {
     }
 
     private void validateIfAccountTypeExists(Errors errors, AccountType request) {
-        AccountType existingAccountType = accountTypeRepository.findOne(request.getName());
+        AccountType existingAccountType = accountTypeRepository.findOne(request.getClassName());
 
         if (existingAccountType!=null) {
-            errors.rejectValue("name", ApiErrorCode.ALREADY_EXISTS.getCode());
+            errors.rejectValue("propertyName", ApiErrorCode.ALREADY_EXISTS.getCode());
         }
     }
 
@@ -99,7 +99,7 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getScheduledTransactions().size(); i++){
             ScheduledTransaction scheduledTransaction = accountType.getScheduledTransactions().get(i);
 
-            if(accountType.getTransactionTypes().stream().noneMatch(tt-> tt.getName().equals(scheduledTransaction.getTransactionTypeName())))
+            if(accountType.getTransactionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(scheduledTransaction.getTransactionTypeName())))
             {
                 errors.rejectValue("scheduledTransactions[" + i + "].transactionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
@@ -109,12 +109,12 @@ public class AccountTypeValidator implements Validator {
             }
 
             if(!isEmpty(scheduledTransaction.getScheduleTypeName()) &&
-                    accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getName().equals(scheduledTransaction.getScheduleTypeName()))){
+                    accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(scheduledTransaction.getScheduleTypeName()))){
                 errors.rejectValue("scheduledTransactions[" + i + "].scheduleTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
             if(!isEmpty(scheduledTransaction.getDateTypeName()) &&
-                    accountType.getDateTypes().stream().noneMatch(tt-> tt.getName().equals(scheduledTransaction.getDateTypeName()))){
+                    accountType.getDateTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(scheduledTransaction.getDateTypeName()))){
                 errors.rejectValue("scheduledTransactions[" + i + "].dateTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
@@ -129,14 +129,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getPositionTypes().size(); i++){
             PositionType positionType = accountType.getPositionTypes().get(i);
 
-            String name = positionType.getName();
+            String name = positionType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("positionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("positionTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("positionTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("positionTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("positionTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
@@ -147,17 +152,22 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getTransactionTypes().size(); i++){
             TransactionType transactionType = accountType.getTransactionTypes().get(i);
 
-            String name = transactionType.getName();
+            String name = transactionType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("transactionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("transactionTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("transactionTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             for(int j=0; j < transactionType.getTransactionRules().size(); j++){
                 TransactionRuleType rule = transactionType.getTransactionRules().get(j);
 
                 if(!isEmpty(rule.getPositionTypeName()) &&
-                        accountType.getPositionTypes().stream().noneMatch(tt-> tt.getName().equals(rule.getPositionTypeName()))){
+                        accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(rule.getPositionTypeName()))){
                     errors.rejectValue("transactionTypes[" + i + "].transactionRules[" + j + "].positionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
                 }
 
@@ -175,14 +185,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getAmountTypes().size(); i++){
             AmountType amountType = accountType.getAmountTypes().get(i);
 
-            String name = amountType.getName();
+            String name = amountType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("amountTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("amountTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("amountTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("amountTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("amountTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
@@ -193,14 +208,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getDateTypes().size(); i++){
             DateType dateType = accountType.getDateTypes().get(i);
 
-            String name = dateType.getName();
+            String name = dateType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("dateTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("dateTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("dateTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("dateTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("dateTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
@@ -211,14 +231,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getRateTypes().size(); i++){
             RateType rateType = accountType.getRateTypes().get(i);
 
-            String name = rateType.getName();
+            String name = rateType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("rateTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("rateTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("rateTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("rateTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("rateTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
@@ -229,14 +254,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getOptionTypes().size(); i++){
             OptionType optionType = accountType.getOptionTypes().get(i);
 
-            String name = optionType.getName();
+            String name = optionType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("optionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("optionTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("optionTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("optionTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode() , ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("optionTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode() , ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
@@ -247,14 +277,19 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getScheduleTypes().size(); i++){
             ScheduleType scheduleType = accountType.getScheduleTypes().get(i);
 
-            String name = scheduleType.getName();
+            String name = scheduleType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("scheduleTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("scheduleTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("scheduleTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("scheduleTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("scheduleTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             if(BusinessDayCalculation.fromString(scheduleType.getBusinessDayCalculation())==null){
@@ -275,40 +310,45 @@ public class AccountTypeValidator implements Validator {
         for(int i=0; i < accountType.getInstalmentTypes().size(); i++){
             InstalmentType instalmentType = accountType.getInstalmentTypes().get(i);
 
-            String name = instalmentType.getName();
+            String name = instalmentType.getPropertyName();
+
+            if(isEmpty(name)){
+                errors.rejectValue("instalmentTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
+                continue;
+            }
 
             if(!SourceVersion.isName(name)){
-                errors.rejectValue("instalmentTypes["+ i +"].name", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
+                errors.rejectValue("instalmentTypes["+ i +"].propertyName", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
             }
 
             if(names.contains(name)){
-                errors.rejectValue("instalmentTypes["+ i +"].name", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
+                errors.rejectValue("instalmentTypes["+ i +"].propertyName", ApiErrorCode.ALREADY_EXISTS.getCode(), ApiErrorCode.ALREADY_EXISTS.getDescription());
             }
 
             names.add(name);
 
             if(!isEmpty(instalmentType.getScheduleTypeName()) &&
-                    accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getName().equals(instalmentType.getScheduleTypeName()))){
+                    accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getScheduleTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].scheduleTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
             if(!isEmpty(instalmentType.getTransactionTypeName()) &&
-                    accountType.getTransactionTypes().stream().noneMatch(tt-> tt.getName().equals(instalmentType.getTransactionTypeName()))){
+                    accountType.getTransactionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getTransactionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].transactionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
             if(!isEmpty(instalmentType.getPositionTypeName()) &&
-                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getName().equals(instalmentType.getPositionTypeName()))){
+                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].positionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
             if(!isEmpty(instalmentType.getInterestAccruedPositionTypeName()) &&
-                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getName().equals(instalmentType.getInterestAccruedPositionTypeName()))){
+                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getInterestAccruedPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].interestAccruedPositionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
             if(!isEmpty(instalmentType.getInterestCapitalizedPositionTypeName()) &&
-                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getName().equals(instalmentType.getInterestCapitalizedPositionTypeName()))){
+                    accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getInterestCapitalizedPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].interestCapitalizedPositionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 

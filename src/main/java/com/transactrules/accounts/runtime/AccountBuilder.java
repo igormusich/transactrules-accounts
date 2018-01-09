@@ -44,16 +44,16 @@ public class AccountBuilder {
 
         for(PositionType positionType: accountType.getPositionTypes()){
             Position position = new Position();
-            positions.put(positionType.getName(), position);
+            positions.put(positionType.getPropertyName(), position);
         }
     }
 
     public AccountBuilder addDateValue(String name, DateValue dateValue){
         DateType dateType = accountType.getDateTypes().stream().
-                filter(dt->dt.getName().
+                filter(dt->dt.getPropertyName().
                         equals(name)).
                 findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid date name for $s", name, accountType.getName()) ) );
+                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid date propertyName for $s", name, accountType.getClassName()) ) );
 
         dates.put(name,dateValue);
 
@@ -66,10 +66,10 @@ public class AccountBuilder {
 
     public AccountBuilder addAmountValue(String name,AmountValue amountValue){
         AmountType dateType = accountType.getAmountTypes().stream().
-                filter(dt->dt.getName().
+                filter(dt->dt.getPropertyName().
                         equals(name)).
                 findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid amount name for $s", name, accountType.getName()) ) );
+                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid amount propertyName for $s", name, accountType.getClassName()) ) );
 
         amounts.put(name,amountValue);
 
@@ -93,10 +93,10 @@ public class AccountBuilder {
 
     public AccountBuilder addOptionValue(String name, OptionValue optionValue){
         OptionType optionType = accountType.getOptionTypes().stream().
-                filter(dt->dt.getName().
+                filter(dt->dt.getPropertyName().
                         equals(name)).
                 findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid option name for $s", name, accountType.getName()) ) );
+                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid option propertyName for $s", name, accountType.getClassName()) ) );
 
         options.put(name,optionValue);
 
@@ -110,10 +110,10 @@ public class AccountBuilder {
 
     public AccountBuilder addSchedule(String name, Schedule schedule){
         ScheduleType optionType = accountType.getScheduleTypes().stream().
-                filter(dt->dt.getName().
+                filter(dt->dt.getPropertyName().
                         equals(name)).
                 findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid schedule name for $s", name, accountType.getName()) ) );
+                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid schedule propertyName for $s", name, accountType.getClassName()) ) );
 
         schedules.put(name,schedule);
 
@@ -122,10 +122,10 @@ public class AccountBuilder {
 
     public AccountBuilder addRateValue(String name, RateValue rateValue) {
         RateType optionType = accountType.getRateTypes().stream().
-                filter(dt->dt.getName().
+                filter(dt->dt.getPropertyName().
                         equals(name)).
                 findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid rate name for $s", name, accountType.getName()) ) );
+                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid rate propertyName for $s", name, accountType.getClassName()) ) );
 
         rates.put(name, rateValue);
 
@@ -157,7 +157,7 @@ public class AccountBuilder {
         }
 
         account.setAccountNumber(accountNumber);
-        account.setAccountTypeName(accountType.getName());
+        account.setAccountTypeName(accountType.getClassName());
         account.setPositions(positions);
         account.setDates(dates);
         account.setRates(rates);

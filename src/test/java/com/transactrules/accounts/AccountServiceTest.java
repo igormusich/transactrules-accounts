@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +43,7 @@ public class AccountServiceTest {
     public void setup() {
 
         accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName(accountTypeName);
+        accountType.setClassName(accountTypeName);
 
         accountTypeRepository.save(accountType);
 
@@ -63,7 +64,7 @@ public class AccountServiceTest {
 
         Account updatedAccount = accountService.findByAccountNumber(accountNumber);
 
-        assertThat(updatedAccount.getPositions().get("Principal").getAmount(), is(principal.add(BigDecimal.valueOf(100))));
+        assertThat(updatedAccount.getPositions().get("Principal").getAmount(), is(principal.add(BigDecimal.valueOf(100).setScale(2, RoundingMode.HALF_DOWN))));
 
     }
 }

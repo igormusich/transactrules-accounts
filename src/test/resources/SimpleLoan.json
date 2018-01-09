@@ -1,46 +1,55 @@
 {
-  "name": "SimpleLoan",
+  "className": "SimpleLoan",
+  "labelName": "Simple Loan",
   "amountTypes": [
     {
       "isValueDated": false,
-      "name": "LoanAmount"
+      "propertyName": "LoanAmount",
+      "labelName":"Loan Amount"
     }
   ],
   "dateTypes": [
     {
-      "name": "StartDate"
+      "propertyName": "StartDate",
+      "labelName":"Start Date"
     },
     {
-      "name": "EndDate"
+      "propertyName": "EndDate",
+      "labelName":"End Date"
     }
   ],
 
   "positionTypes": [
     {
-      "name": "Current"
+      "propertyName": "Current",
+      "labelName":"Current Balance"
     },
     {
-      "name": "InterestAccrued"
+      "propertyName": "InterestAccrued",
+      "labelName":"Interest Accrued Balance"
     }
   ],
 
   "transactionTypes": [
     {
-      "name": "Deposit",
+      "propertyName": "Deposit",
+      "labelName":"Deposit",
       "creditPositionNames": [
         "Current"
       ],
       "maximumPrecision": false
     },
     {
-      "name": "Withdrawal",
+      "propertyName": "Withdrawal",
+      "labelName":"Withdrawal",
       "debitPositionNames": [
         "Current"
       ],
       "maximumPrecision": false
     },
     {
-      "name": "InterestCapitalized",
+      "propertyName": "InterestCapitalized",
+      "labelName":"Interest Capitalization",
       "creditPositionNames": [
         "Current"
       ],

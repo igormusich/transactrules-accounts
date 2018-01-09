@@ -47,7 +47,7 @@ public class AccountTypeControllerTest {
 
         this.mvc.perform(post("/accountTypes").content(createAccountJson).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.name").value("SimpleLoan"));
+                .andExpect(jsonPath("$.className").value("SimpleLoan"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class AccountTypeControllerTest {
 
         this.mvc.perform(post("/accountTypes").content(createAccountTypeYml).contentType("text/yml")).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.name").value("LoanGiven"));
+                .andExpect(jsonPath("$.className").value("LoanGiven"));
     }
 
 }

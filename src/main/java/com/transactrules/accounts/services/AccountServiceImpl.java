@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -101,11 +104,24 @@ public class AccountServiceImpl implements AccountService {
             Account dbAccount = accountRepository.findOne(transaction.getAccountNumber());
             AccountType accountType = accountTypeRepository.findOne(dbAccount.getAccountTypeName());
 
-            //Class accountClass = codeGenService.getAccountClass(accountType);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            Class accountClass = null;
+            Account account = null;
+            try {
+                PrintWriter writer = new PrintWriter(os);
+                accountClass =  codeGenService.getAccountClass(accountType, writer);
+                account = (Account) accountClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                String aString = "";
 
-            //Account account = (Account) accountClass.newInstance();
-
-            Account account = new localLoanGiven();
+                try {
+                    aString = new String(os.toByteArray(),"UTF-8");
+                } catch (UnsupportedEncodingException e1) {
+                    logger.error("Error converting output byte array to string",e1);
+                }
+                logger.error(aString, e);
+            }
 
             account.initializeFromPrototype(dbAccount);
 

@@ -16,12 +16,12 @@ import java.time.LocalDate;
 import java.util.Map;
 
 
-public class InstalmentSetConverter implements DynamoDBTypeConverter<String, Map<LocalDate,InstalmentSet>> {
+public class InstalmentSetConverter implements DynamoDBTypeConverter<String, Map<String, InstalmentSet>> {
 
     Logger logger = LoggerFactory.getLogger(InstalmentSetConverter.class);
 
     @Override
-    public String convert(Map<LocalDate,InstalmentSet> objects) {
+    public String convert(Map<String, InstalmentSet> objects) {
         //Jackson object mapper
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
 
@@ -35,10 +35,10 @@ public class InstalmentSetConverter implements DynamoDBTypeConverter<String, Map
     }
 
     @Override
-    public Map<LocalDate,InstalmentSet> unconvert(String objectsString) {
+    public Map<String, InstalmentSet> unconvert(String objectsString) {
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
         try {
-            Map<LocalDate,InstalmentSet> objects = objectMapper.readValue(objectsString, new TypeReference<Map<LocalDate,InstalmentSet>>(){});
+            Map<String, InstalmentSet> objects = objectMapper.readValue(objectsString, new TypeReference<Map<String, InstalmentSet>>(){});
             return objects;
         } catch (JsonParseException e) {
             logger.error(e.toString());

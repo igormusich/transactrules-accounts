@@ -8,75 +8,75 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
-public class {{name}} extends Account {
+public class {{className}} extends Account {
 
 {{#positionTypes}}
-    private Position _{{name}};
+    private Position _{{propertyName}};
 {{/positionTypes}}
 
 {{#dateTypes}}
-    private DateValue _{{name}};
+    private DateValue _{{propertyName}};
 {{/dateTypes}}
 
 {{#amountTypes}}
-    private AmountValue _{{name}};
+    private AmountValue _{{propertyName}};
 {{/amountTypes}}
 
 {{#optionTypes}}
-    private OptionValue _{{name}};
+    private OptionValue _{{propertyName}};
 {{/optionTypes}}
 
 {{#rateTypes}}
-    private RateValue _{{name}};
+    private RateValue _{{propertyName}};
 {{/rateTypes}}
 
 {{#scheduleTypes}}
-    private Schedule _{{name}};
+    private Schedule _{{propertyName}};
 {{/scheduleTypes}}
 
 {{#instalmentTypes}}
-    private InstalmentSet _{{name}};
+    private InstalmentSet _{{propertyName}};
 {{/instalmentTypes}}
 
 {{#positionTypes}}
-    public BigDecimal {{name}}() {
-        return _{{name}}.getAmount();
+    public BigDecimal {{propertyName}}() {
+        return _{{propertyName}}.getAmount();
     }
 {{/positionTypes}}
 
 {{#dateTypes}}
-    public LocalDate {{name}}(){
-        return _{{name}}.getDate();
+    public LocalDate {{propertyName}}(){
+        return _{{propertyName}}.getDate();
     }
 {{/dateTypes}}
 
 {{#amountTypes}}
-    public BigDecimal {{name}}(){
-        return _{{name}}.getAmount();
+    public BigDecimal {{propertyName}}(){
+        return _{{propertyName}}.getAmount();
     }
 {{/amountTypes}}
 
 {{#optionTypes}}
-    public String {{name}}(){
-        return _{{name}}.getValue();
+    public String {{propertyName}}(){
+        return _{{propertyName}}.getValue();
     }
 {{/optionTypes}}
 
 {{#scheduleTypes}}
-    public Schedule {{name}}(){
-        return _{{name}};
+    public Schedule {{propertyName}}(){
+        return _{{propertyName}};
     }
 {{/scheduleTypes}}
 
 {{#instalmentTypes}}
-    public InstalmentSet {{name}}(){
-        return _{{name}};
+    public InstalmentSet {{propertyName}}(){
+        return _{{propertyName}};
     }
 {{/instalmentTypes}}
 
 {{#rateTypes}}
-    public BigDecimal {{name}}(){
-    return _{{name}}.getValue();
+    public BigDecimal {{propertyName}}(){
+    return _{{propertyName}}.getValue();
     }
 {{/rateTypes}}
 
@@ -88,76 +88,76 @@ public class {{name}} extends Account {
         //initialize dates
 
     {{#dateTypes}}
-        _{{name}}= this.getDates().get("{{name}}");
+        _{{propertyName}}= this.getDates().get("{{propertyName}}");
     {{/dateTypes}}
 
         //initialize positions
 
     {{#positionTypes}}
-        _{{name}} = new Position();
-        this.getPositions().put("{{name}}", _{{name}});
+        _{{propertyName}} = new Position();
+        this.getPositions().put("{{propertyName}}", _{{propertyName}});
     {{/positionTypes}}
 
         //initialize amounts
 
     {{#amountTypes}}
-        _{{name}}= this.getAmounts().get("{{name}}");
+        _{{propertyName}}= this.getAmounts().get("{{propertyName}}");
     {{/amountTypes}}
 
         //initialize options
 
     {{#optionTypes}}
-        _{{name}}= this.getOptions().get("{{name}}");
-        _{{name}}.setValues({{optionListExpression}});
+        _{{propertyName}}= this.getOptions().get("{{propertyName}}");
+        _{{propertyName}}.setValues({{optionListExpression}});
     {{/optionTypes}}
 
         //initialize rates
     {{#rateTypes}}
-        _{{name}}= this.getRates().get("{{name}}");
+        _{{propertyName}}= this.getRates().get("{{propertyName}}");
     {{/rateTypes}}
 
         //initialize schedules
 
     {{#scheduleTypes}}
-        if(!this.getSchedules().containsKey("{{name}}"))
+        if(!this.getSchedules().containsKey("{{propertyName}}"))
         {
             Schedule schedule = new Schedule();
-            this.getSchedules().put("{{name}}", schedule);
+            this.getSchedules().put("{{propertyName}}", schedule);
         }
-        _{{name}} = this.getSchedules().get("{{name}}");
-        _{{name}}.setBusinessDayCalculator(this.businessDayCalculator);
+        _{{propertyName}} = this.getSchedules().get("{{propertyName}}");
+        _{{propertyName}}.setBusinessDayCalculator(this.businessDayCalculator);
     {{#isCalculated}}
-        Set{{name}}CalculatedProperties(_{{name}});
+        Set{{propertyName}}CalculatedProperties(_{{propertyName}});
     {{/isCalculated}}
     {{^isCalculated}}
-        Set{{name}}DefaultProperties(_{{name}});
+        Set{{propertyName}}DefaultProperties(_{{propertyName}});
     {{/isCalculated}}
 
     {{/scheduleTypes}}
 
     {{#instalmentTypes}}
-        if(!this.getInstalmentSets().containsKey("{{name}}"))
+        if(!this.getInstalmentSets().containsKey("{{propertyName}}"))
         {
-            _{{name}} = new InstalmentSet();
-            this.getInstalmentSets().put("{{name}}", _{{name}});
+            _{{propertyName}} = new InstalmentSet();
+            this.getInstalmentSets().put("{{propertyName}}", _{{propertyName}});
         }
         else {
-            _{{name}} = this.getInstalmentSets().get("{{name}}");
+            _{{propertyName}} = this.getInstalmentSets().get("{{propertyName}}");
         }
     {{/instalmentTypes}}
     }
 
 {{#instalmentTypes}}
-    public void Initialize{{name}}(){
+    public void Initialize{{propertyName}}(){
         for(LocalDate date : _{{scheduleTypeName}}.GetAllDates()){
-            _{{name}}.getInstalments().put(date, new InstalmentValue( BigDecimal.ZERO, false));
+            _{{propertyName}}.getInstalments().put(date, new InstalmentValue( BigDecimal.ZERO, false));
         }
     }
 {{/instalmentTypes}}
 
 {{#scheduleTypes}}
     {{#isCalculated}}
-public void Set{{name}}CalculatedProperties(Schedule schedule)
+public void Set{{propertyName}}CalculatedProperties(Schedule schedule)
 {
     schedule.setStartDate({{startDateExpression}});
     schedule.setInterval({{intervalExpression}});
@@ -174,7 +174,7 @@ public void Set{{name}}CalculatedProperties(Schedule schedule)
 {{/isCalculated}}
 {{^isCalculated}}
 
-public void Set{{name}}DefaultProperties(Schedule schedule)
+public void Set{{propertyName}}DefaultProperties(Schedule schedule)
 {
     schedule.setBusinessDayCalculation("{{businessDayCalculation}}");
     schedule.setFrequency("{{scheduleFrequency}}");
@@ -200,7 +200,7 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 
         switch(transactionTypeName) {
 {{#transactionTypes}}
-            case "{{name}}":
+            case "{{propertyName}}":
     {{#transactionRules}}
         {{^maximumPrecision}}
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
@@ -240,8 +240,8 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 {{/scheduledTransactions}}
 {{#instalmentTypes}}
     {{#isStartOfDay}}
-        if({{name}}().getInstalments().containsKey(valueDate)){
-            InstalmentValue instalmentValue={{name}}().getInstalments().get(valueDate);
+        if({{propertyName}}().getInstalments().containsKey(valueDate)){
+            InstalmentValue instalmentValue={{propertyName}}().getInstalments().get(valueDate);
             createTransaction("{{transactionTypeName}}",instalmentValue.getAmount());
         }
     {{/isStartOfDay}}
@@ -270,8 +270,8 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 {{/scheduledTransactions}}
 {{#instalmentTypes}}
     {{#isEndOfDay}}
-            if(_{{name}}.getInstalments().containsKey(valueDate)){
-                InstalmentValue instalmentValue= _{{name}}.getInstalments().get(valueDate);
+            if(_{{propertyName}}.getInstalments().containsKey(valueDate)){
+                InstalmentValue instalmentValue= _{{propertyName}}.getInstalments().get(valueDate);
                 createTransaction("{{transactionTypeName}}",instalmentValue.getAmount());
             }
     {{/isEndOfDay}}
@@ -286,19 +286,19 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
     @Override
     public void calculateInstaments() {
     {{#instalmentTypes}}
-        if (_{{name}}.getInstalments().size()==0){
-            Initialize{{name}}();
+        if (_{{propertyName}}.getInstalments().size()==0){
+            Initialize{{propertyName}}();
         }
     {{/instalmentTypes}}
     {{#instalmentTypes}}
-        Calculate{{name}}Instalments();
+        Calculate{{propertyName}}Instalments();
     {{/instalmentTypes}}
     }
 
 {{#instalmentTypes}}
-    public BigDecimal GetClosingBalanceFor{{name}}(BigDecimal value) {
+    public BigDecimal GetClosingBalanceFor{{propertyName}}(BigDecimal value) {
 
-        this.setFutureInstalmentValue("{{name}}", ScheduledTransactionTiming.{{timingEnum}}, value);
+        this.setFutureInstalmentValue("{{propertyName}}", ScheduledTransactionTiming.{{timingEnum}}, value);
 
         List<LocalDate> dates = _{{scheduleTypeName}}.GetAllDates();
 
@@ -317,9 +317,9 @@ public void Set{{name}}DefaultProperties(Schedule schedule)
 {{/instalmentTypes}}
 
 {{#instalmentTypes}}
-    public void Calculate{{name}}Instalments() {
+    public void Calculate{{propertyName}}Instalments() {
         Solver solver = new Solver();
-        BigDecimal amount = solver.FindFunctionZero( this::GetClosingBalanceFor{{name}},  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
+        BigDecimal amount = solver.FindFunctionZero( this::GetClosingBalanceFor{{propertyName}},  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
     }
 {{/instalmentTypes}}
     @Override

@@ -43,8 +43,8 @@ public class AccountTypeController {
         final AccountType savedItem = service.create(item);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{name}")
-                .buildAndExpand(savedItem.getName()).toUri());
+                .fromCurrentRequest().path("/{propertyName}")
+                .buildAndExpand(savedItem.getClassName()).toUri());
 
         return new ResponseEntity<>(savedItem, httpHeaders, HttpStatus.CREATED);
     }

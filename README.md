@@ -21,7 +21,7 @@ mvn clean install dockerfile:build
 
 To run docker image:
 ```bash
-docker run --name trules-accounts \
+docker run --className trules-accounts \
            -p 8080:8080 \
            -e ACCESS_KEY=your_key \
            -e SECRET_KEY=your_secret \

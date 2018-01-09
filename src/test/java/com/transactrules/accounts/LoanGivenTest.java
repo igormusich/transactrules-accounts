@@ -42,7 +42,7 @@ public class LoanGivenTest {
     @Before
     public void Setup(){
         loanGivenAccountType = TestUtility.CreateLoanGivenAccountType();
-        loanGivenAccountType.setName("LoanGivenTestAccount");
+        loanGivenAccountType.setClassName("LoanGivenTestAccount");
 
         accountTypeService.create(loanGivenAccountType);
     }

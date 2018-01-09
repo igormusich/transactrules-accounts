@@ -21,7 +21,7 @@ public class UtilitiesTest {
 
         BigInteger checksum1 = Utilities.checksum(loanAccountType);
 
-        loanAccountType.setName(loanAccountType.getName()+"1");
+        loanAccountType.setClassName(loanAccountType.getClassName()+"1");
 
         BigInteger checksum2 = Utilities.checksum(loanAccountType);
 

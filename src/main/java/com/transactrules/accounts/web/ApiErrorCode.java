@@ -5,7 +5,8 @@ public enum ApiErrorCode {
     NO_SUCH_TYPE("item.missing","Item with this name does not exist"),
     INVALID_IDENTIFIER("name.invalid","Name must be valid identifier"),
     INVALID_ENUM("enum.invalid","Value must match one of the predefined values"),
-    EVALUATION_FAILED("evaluation.failed","Invalid expression");
+    EVALUATION_FAILED("evaluation.failed","Invalid expression"),
+    REQUIRED("name.required","Required property");
     //private final String invalidIdentifierCode = "name.invalid";
     //private final String invalidIdentifier = "Name must be valid identifier";
     //private final String invalidEnumCode = "enum.invalid";

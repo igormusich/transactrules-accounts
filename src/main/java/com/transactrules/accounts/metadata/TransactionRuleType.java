@@ -27,7 +27,7 @@ public class TransactionRuleType  {
     }
 
     public TransactionRuleType(PositionType posititonType, TransactionOperation operation) {
-        this.posititonTypeName = posititonType.getName();
+        this.posititonTypeName = posititonType.getPropertyName();
         this.transactionOperation = operation.value();
     }
 

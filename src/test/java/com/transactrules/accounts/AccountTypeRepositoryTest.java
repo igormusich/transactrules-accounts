@@ -23,18 +23,18 @@ public class AccountTypeRepositoryTest {
 
     @Test
     public void CreateReadUpdateDelete_simple_account_type(){
-        AccountType accountType = new AccountType("simple");
+        AccountType accountType = new AccountType("simple","simple");
 
         repository.save(accountType);
 
 
-        AccountType retrieved = repository.findOne(accountType.getName());
+        AccountType retrieved = repository.findOne(accountType.getClassName());
 
-        assertThat(retrieved.getName(),is("simple"));
+        assertThat(retrieved.getClassName(),is("simple"));
 
-        repository.delete(accountType.getName());
+        repository.delete(accountType.getClassName());
 
-        boolean exists =  repository.exists(accountType.getName());
+        boolean exists =  repository.exists(accountType.getClassName());
 
         assertThat(exists, is(false));
     }
@@ -45,7 +45,7 @@ public class AccountTypeRepositoryTest {
 
         repository.save(savingsAccount);
 
-        AccountType  readAccountType = repository.findOne(savingsAccount.getName());
+        AccountType  readAccountType = repository.findOne(savingsAccount.getClassName());
 
         assertThat( readAccountType.getPositionTypes().size(), is(2));
 

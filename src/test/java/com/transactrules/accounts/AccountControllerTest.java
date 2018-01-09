@@ -55,7 +55,7 @@ public class AccountControllerTest {
 
         String accountTypeYaml;
 
-        accountType.setName(accountTypeName);
+        accountType.setClassName(accountTypeName);
 
         accountTypeRepository.save(accountType);
 

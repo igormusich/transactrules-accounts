@@ -5,8 +5,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import io.swagger.annotations.ApiModel;
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.function.Function;
 
@@ -17,44 +19,66 @@ import java.util.function.Function;
 @ApiModel
 @DynamoDBTable(tableName = "AccountType")
 public class AccountType {
-    
 
-    private String name;
-    
+    @NotBlank
+    private String className;
+
+    @NotBlank
+    private String labelName;
+
+    @Valid
     private List<PositionType> positionTypes = new ArrayList<>();
-    
+
+    @Valid
     private List<DateType> dateTypes = new ArrayList<>();
-    
+
+    @Valid
     private List<AmountType> amountTypes = new ArrayList<>();
-    
+
+    @Valid
     private List<RateType> rateTypes = new ArrayList<>();
-    
+
+    @Valid
     private List<OptionType> optionTypes = new ArrayList<>();
-    
+
+    @Valid
     private List<ScheduledTransaction> scheduledTransactions = new ArrayList<>();
-    
+
+    @Valid
     private List<TransactionType> transactionTypes = new ArrayList<>();
 
+    @Valid
     private List<ScheduleType> scheduleTypes = new ArrayList<>();
 
+    @Valid
     private List<InstalmentType> instalmentTypes = new ArrayList<>();
 
     public AccountType() {
 
     }
 
-    public AccountType (String name) {
-        this.name = name;
+    public AccountType (String className, String labelName) {
+        this.className = className;
+        this.labelName = labelName;
     }
 
 
-    @DynamoDBHashKey(attributeName = "name")
-    public String getName(){
-        return this.name;
+    @DynamoDBHashKey(attributeName = "ClassName")
+    public String getClassName(){
+        return this.className;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    @DynamoDBAttribute(attributeName = "LabelName")
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
     }
 
     @DynamoDBAttribute(attributeName = "PositionTypes")
@@ -143,7 +167,7 @@ public class AccountType {
     public Optional<TransactionType> getTransactionType(String transactionTypeName){
 
         for(TransactionType transactionType : transactionTypes) {
-           if(transactionType.getName().equalsIgnoreCase(transactionTypeName)){
+           if(transactionType.getPropertyName().equalsIgnoreCase(transactionTypeName)){
                return Optional.of(transactionType);
            }
         }
@@ -225,23 +249,23 @@ public class AccountType {
 
 
     public Optional<PositionType> getPositionTypeByName(String name){
-        return positionTypes.stream().filter(pt -> pt.getName().equalsIgnoreCase(name)).findFirst();
+        return positionTypes.stream().filter(pt -> pt.getPropertyName().equalsIgnoreCase(name)).findFirst();
     }
 
     public Optional<DateType> getDateTypeByName(String name){
-        return dateTypes.stream().filter(dt -> dt.getName().equalsIgnoreCase(name)).findFirst();
+        return dateTypes.stream().filter(dt -> dt.getPropertyName().equalsIgnoreCase(name)).findFirst();
     }
 
     public Optional<TransactionType> getTransactionTypeByName(String name){
-        return transactionTypes.stream().filter(tt->tt.getName().equalsIgnoreCase(name)).findFirst();
+        return transactionTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
     }
 
     public Optional<AmountType> getAmountTypeByName(String name) {
-        return amountTypes.stream().filter(tt->tt.getName().equalsIgnoreCase(name)).findFirst();
+        return amountTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
     }
 
     public Optional<OptionType> getOptionTypeByName(String name) {
-        return optionTypes.stream().filter(tt->tt.getName().equalsIgnoreCase(name)).findFirst();
+        return optionTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
     }
 
 

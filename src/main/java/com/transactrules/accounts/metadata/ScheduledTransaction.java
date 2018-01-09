@@ -46,12 +46,12 @@ public class ScheduledTransaction extends NamedAbstractEntity {
         this.timing = timing.value();
 
         if(dateType!=null)
-            this.dateTypeName = dateType.getName();
+            this.dateTypeName = dateType.getPropertyName();
 
         if(scheduleType!=null)
-            this.scheduleTypeName = scheduleType.getName();
+            this.scheduleTypeName = scheduleType.getPropertyName();
 
-        this.transactionTypeName = transactionType.getName();
+        this.transactionTypeName = transactionType.getPropertyName();
         this.amountExpression = amountExpression;
         this.sequence = sequence;
    }

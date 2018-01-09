@@ -33,12 +33,12 @@ public class AccountTypeValidationTest {
     @Test
     public void testValidNameSuccess() {
 
-        // I'd name the test to something like
+        // I'd propertyName the test to something like
         // invalidEmailShouldFailValidation()
 
         AccountType accountType = new AccountType();
 
-        accountType.setName("testValidNameSuccess");
+        accountType.setClassName("testValidNameSuccess");
 
         Errors errors = new BeanPropertyBindingResult(accountType, "accountType");
         accountTypeCreateValidator.validate(accountType, errors);
@@ -49,11 +49,11 @@ public class AccountTypeValidationTest {
     @Test
     public void testLoanGivenSuccess() {
 
-        // I'd name the test to something like
+        // I'd propertyName the test to something like
         // invalidEmailShouldFailValidation()
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testLoanGivenSuccess");
+        accountType.setClassName("testLoanGivenSuccess");
 
 
         Errors errors = new BeanPropertyBindingResult(accountType, "accountType");
@@ -64,12 +64,12 @@ public class AccountTypeValidationTest {
 
     @Test
     public void testInvalidNameFail() {
-        // I'd name the test to something like
+        // I'd propertyName the test to something like
         // invalidEmailShouldFailValidation()
 
         AccountType accountType = new AccountType();
 
-        accountType.setName(" & some ^ text");
+        accountType.setClassName(" & some ^ text");
 
         accountType.addPositionType("valid_position_type");
         accountType.addTransactionType("valid_transaction_type");
@@ -105,7 +105,7 @@ public class AccountTypeValidationTest {
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
 
-        accountType.setName("testSingleExpressionFailsToCompile");
+        accountType.setClassName("testSingleExpressionFailsToCompile");
 
         ScheduleType scheduleType= accountType.getScheduleTypes().get(0);
 
@@ -123,7 +123,7 @@ public class AccountTypeValidationTest {
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
 
-        accountType.setName("testInvalidPositionTypeOnTransactionRule");
+        accountType.setClassName("testInvalidPositionTypeOnTransactionRule");
 
         TransactionType transactionType = accountType.getTransactionTypes().get(0);
 
@@ -141,7 +141,7 @@ public class AccountTypeValidationTest {
     public void testInvalidTransactionOperationOnTransactionRule(){
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testInvalidTransactionOperationOnTransactionRule");
+        accountType.setClassName("testInvalidTransactionOperationOnTransactionRule");
 
         TransactionType transactionType = accountType.getTransactionTypes().get(0);
 
@@ -161,7 +161,7 @@ public class AccountTypeValidationTest {
     public void testInvalidEnumOnInstalmentType(){
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testInvalidEnumOnInstalmentType");
+        accountType.setClassName("testInvalidEnumOnInstalmentType");
 
         InstalmentType instalmentType = accountType.getInstalmentTypes().get(0);
 
@@ -180,7 +180,7 @@ public class AccountTypeValidationTest {
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
 
-        accountType.setName("testInvalidEnumOnScheduledTransaction");
+        accountType.setClassName("testInvalidEnumOnScheduledTransaction");
 
         ScheduledTransaction scheduledTransaction = accountType.getScheduledTransactions().get(0);
 
@@ -198,7 +198,7 @@ public class AccountTypeValidationTest {
     public void testInvalidEnumsOnScheduleType(){
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testInvalidEnumsOnScheduleType");
+        accountType.setClassName("testInvalidEnumsOnScheduleType");
 
         ScheduleType scheduleType = accountType.getScheduleTypes().get(0);
 
@@ -221,7 +221,7 @@ public class AccountTypeValidationTest {
     public void testInvalidReferencesOnScheduledTransaction(){
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testInvalidReferencesOnScheduledTransaction");
+        accountType.setClassName("testInvalidReferencesOnScheduledTransaction");
 
         ScheduledTransaction item = accountType.getScheduledTransactions().get(0);
 
@@ -243,7 +243,7 @@ public class AccountTypeValidationTest {
     public void testInvalidReferencesOnInstalmentType(){
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setName("testInvalidReferencesOnInstalmentType");
+        accountType.setClassName("testInvalidReferencesOnInstalmentType");
 
         InstalmentType item = accountType.getInstalmentTypes().get(0);
 

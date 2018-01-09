@@ -199,13 +199,13 @@ public class Account {
 
         DateValue dateValue;
 
-        if(dates.containsKey(dateType.getName())){
-            dateValue = dates.get(dateType.getName());
+        if(dates.containsKey(dateType.getPropertyName())){
+            dateValue = dates.get(dateType.getPropertyName());
         }
         else
         {
             dateValue = new DateValue( date);
-            dates.put(dateType.getName(), dateValue);
+            dates.put(dateType.getPropertyName(), dateValue);
         }
 
         return dateValue;
@@ -214,7 +214,7 @@ public class Account {
 
     public Position initializePosition(PositionType positionType) {
         Position position = new Position();
-        positions.put(positionType.getName(), position);
+        positions.put(positionType.getPropertyName(), position);
         return position;
     }
 
@@ -223,7 +223,7 @@ public class Account {
 
         schedule.businessDayCalculator = this.businessDayCalculator;
 
-        schedules.put(scheduleType.getName(), schedule);
+        schedules.put(scheduleType.getPropertyName(), schedule);
 
         return schedule;
     }

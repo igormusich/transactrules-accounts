@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class TestUtility {
     public static AccountType CreateLoanGivenAccountType()
     {
-        AccountType loanGiven = new AccountType("LoanGiven");
+        AccountType loanGiven = new AccountType("LoanGiven", "LoanGiven");
 
         PositionType conversionInterestPosition = loanGiven.addPositionType("ConversionInterest");
         PositionType earlyRedemptionFeePosition = loanGiven.addPositionType("EarlyRedemptionFee");
@@ -126,7 +126,7 @@ public class TestUtility {
         loanGiven.addInstalmentType(
                 "Redemptions",
                 ScheduledTransactionTiming.StartOfDay,
-                redemptionSchedule.name,
+                redemptionSchedule.propertyName,
                 "Redemption","Principal",
                 "InterestAccrued",
                 "InterestCapitalized" );

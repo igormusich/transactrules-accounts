@@ -25,7 +25,7 @@ public class CodeGenService {
 
     private Logger logger = LoggerFactory.getLogger(StartupApplicationRunner.class);
 
-    @Cacheable(value = "accountClasses", key = "#accountType.name")
+    @Cacheable(value = "accountClasses", key = "#accountType.className")
     public Class getAccountClass(AccountType accountType, PrintWriter printWriter) throws ClassNotFoundException, IOException {
         StringWriter writer = new StringWriter();
 
@@ -34,7 +34,7 @@ public class CodeGenService {
 
         mustache.execute(writer,accountType).flush();
 
-        String className = "com.transactrules.accounts.runtime." + accountType.getName();
+        String className = "com.transactrules.accounts.runtime." + accountType.getClassName();
 
         String sourceCode = writer.toString();
 
@@ -49,9 +49,9 @@ public class CodeGenService {
         return aClass;
     }
 
-    @CacheEvict(value="accountClasses", key="#accountType.name")
+    @CacheEvict(value="accountClasses", key="#accountType.className")
     public String evictAccountType(AccountType accountType){
-        return accountType.getName();
+        return accountType.getClassName();
     }
 
     @CacheEvict(value="accountClasses",  allEntries=true)

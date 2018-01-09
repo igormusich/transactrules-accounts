@@ -8,7 +8,7 @@
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>accounts</name>
+	<className>accounts</className>
 	<description>Rule based transaction processing framework</description>
 
 	<parent>
@@ -200,7 +200,7 @@
 							<goal>start</goal>
 						</goals>
 						<configuration>
-							<name>dynamodb_local</name>
+							<className>dynamodb_local</className>
 							<!--
                             We need to let DynamoDB finish starting, but don't have
                             a good semamore.  It's pretty quick to start, so 1 second

@@ -19,7 +19,7 @@ public class AccountTypeFactory {
 
     public static AccountType createSavingsAccountType()
     {
-        AccountType accountType = new AccountType( "SavingsAccount");
+        AccountType accountType = new AccountType( "SavingsAccount", "Savings Account");
 
         PositionType currentPosition = accountType.addPositionType( "Current");
         PositionType interestAccruedPosition = accountType.addPositionType( "InterestAccrued" );
