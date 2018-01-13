@@ -33,7 +33,7 @@ public class AccountTypeValidator implements Validator {
     public void validate(Object target, Errors errors) {
         AccountType accountType = (AccountType) target;
 
-        if (!SourceVersion.isName(accountType.getClassName())){
+        if (!Utilities.isEmpty(accountType.getClassName()) && !SourceVersion.isName(accountType.getClassName())){
             errors.rejectValue("className", ApiErrorCode.INVALID_IDENTIFIER.getCode(), ApiErrorCode.INVALID_IDENTIFIER.getDescription());
         }
 
@@ -68,6 +68,13 @@ public class AccountTypeValidator implements Validator {
     }
 
     private void validateIfAccountTypeExists(Errors errors, AccountType request) {
+
+        if(Utilities.isEmpty(request.getClassName()))
+        {
+            //this should be caught by @NotBlank validation, however we can't search by blank name
+            return;
+        }
+
         AccountType existingAccountType = accountTypeRepository.findOne(request.getClassName());
 
         if (existingAccountType!=null) {
