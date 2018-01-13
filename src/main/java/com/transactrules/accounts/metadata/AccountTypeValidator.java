@@ -2,6 +2,7 @@ package com.transactrules.accounts.metadata;
 
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.CodeGenService;
+import com.transactrules.accounts.utilities.Utilities;
 import com.transactrules.accounts.web.ApiErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -104,16 +105,16 @@ public class AccountTypeValidator implements Validator {
                 errors.rejectValue("scheduledTransactions[" + i + "].transactionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(isEmpty(scheduledTransaction.getScheduleTypeName())&& isEmpty(scheduledTransaction.getDateTypeName())){
+            if(Utilities.isEmpty(scheduledTransaction.getScheduleTypeName())&& Utilities.isEmpty(scheduledTransaction.getDateTypeName())){
                 errors.rejectValue("scheduledTransactions[" + i + "].scheduleTypeName","missing", "Either schedule or date type need to be provided for ScheduledTransaction");
             }
 
-            if(!isEmpty(scheduledTransaction.getScheduleTypeName()) &&
+            if(!Utilities.isEmpty(scheduledTransaction.getScheduleTypeName()) &&
                     accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(scheduledTransaction.getScheduleTypeName()))){
                 errors.rejectValue("scheduledTransactions[" + i + "].scheduleTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(!isEmpty(scheduledTransaction.getDateTypeName()) &&
+            if(!Utilities.isEmpty(scheduledTransaction.getDateTypeName()) &&
                     accountType.getDateTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(scheduledTransaction.getDateTypeName()))){
                 errors.rejectValue("scheduledTransactions[" + i + "].dateTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
@@ -131,7 +132,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = positionType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("positionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -154,7 +155,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = transactionType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("transactionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -166,7 +167,7 @@ public class AccountTypeValidator implements Validator {
             for(int j=0; j < transactionType.getTransactionRules().size(); j++){
                 TransactionRuleType rule = transactionType.getTransactionRules().get(j);
 
-                if(!isEmpty(rule.getPositionTypeName()) &&
+                if(!Utilities.isEmpty(rule.getPositionTypeName()) &&
                         accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(rule.getPositionTypeName()))){
                     errors.rejectValue("transactionTypes[" + i + "].transactionRules[" + j + "].positionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
                 }
@@ -187,7 +188,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = amountType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("amountTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -210,7 +211,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = dateType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("dateTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -233,7 +234,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = rateType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("rateTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -256,7 +257,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = optionType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("optionTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -279,7 +280,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = scheduleType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("scheduleTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -312,7 +313,7 @@ public class AccountTypeValidator implements Validator {
 
             String name = instalmentType.getPropertyName();
 
-            if(isEmpty(name)){
+            if(Utilities.isEmpty(name)){
                 errors.rejectValue("instalmentTypes["+ i +"].propertyName", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
                 continue;
             }
@@ -327,27 +328,27 @@ public class AccountTypeValidator implements Validator {
 
             names.add(name);
 
-            if(!isEmpty(instalmentType.getScheduleTypeName()) &&
+            if(!Utilities.isEmpty(instalmentType.getScheduleTypeName()) &&
                     accountType.getScheduleTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getScheduleTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].scheduleTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(!isEmpty(instalmentType.getTransactionTypeName()) &&
+            if(!Utilities.isEmpty(instalmentType.getTransactionTypeName()) &&
                     accountType.getTransactionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getTransactionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].transactionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(!isEmpty(instalmentType.getPositionTypeName()) &&
+            if(!Utilities.isEmpty(instalmentType.getPositionTypeName()) &&
                     accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].positionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(!isEmpty(instalmentType.getInterestAccruedPositionTypeName()) &&
+            if(!Utilities.isEmpty(instalmentType.getInterestAccruedPositionTypeName()) &&
                     accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getInterestAccruedPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].interestAccruedPositionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
 
-            if(!isEmpty(instalmentType.getInterestCapitalizedPositionTypeName()) &&
+            if(!Utilities.isEmpty(instalmentType.getInterestCapitalizedPositionTypeName()) &&
                     accountType.getPositionTypes().stream().noneMatch(tt-> tt.getPropertyName().equals(instalmentType.getInterestCapitalizedPositionTypeName()))){
                 errors.rejectValue("instalmentTypes[" + i + "].interestCapitalizedPositionTypeName",ApiErrorCode.NO_SUCH_TYPE.getCode(), ApiErrorCode.NO_SUCH_TYPE.getDescription() );
             }
@@ -359,9 +360,7 @@ public class AccountTypeValidator implements Validator {
         }
     }
 
-    private boolean isEmpty(String input) {
-        return (input == null || input.isEmpty() );
-    }
+
 }
 
 

@@ -49,6 +49,10 @@ public class Utilities {
         return sb.toString();
     }
 
+    public static boolean isEmpty(String input) {
+        return (input == null || input.isEmpty() );
+    }
+
 
 
 }

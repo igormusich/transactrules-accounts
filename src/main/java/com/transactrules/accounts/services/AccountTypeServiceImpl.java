@@ -28,6 +28,13 @@ public class AccountTypeServiceImpl implements AccountTypeService {
     }
 
     @Override
+    public AccountType save(AccountType accountType) {
+        AccountType result = accountTypeRepository.save(accountType);
+
+        return result;
+    }
+
+    @Override
     public List<AccountType> findAll() {
         Iterable<AccountType> items = accountTypeRepository.findAll();
 
