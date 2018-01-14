@@ -78,7 +78,7 @@ public class AccountTypeValidator implements Validator {
         AccountType existingAccountType = accountTypeRepository.findOne(request.getClassName());
 
         if (existingAccountType!=null) {
-            errors.rejectValue("propertyName", ApiErrorCode.ALREADY_EXISTS.getCode());
+            errors.rejectValue("className", ApiErrorCode.ALREADY_EXISTS.getCode());
         }
     }
 

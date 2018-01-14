@@ -62,10 +62,18 @@ public class AccountTypeController {
 
     @RequestMapping(value = "/{className}", method= RequestMethod.GET)
     @ApiOperation(value = "Get AccountType by class Name", response = AccountType.class)
-    public ResponseEntity<?> findByAccountNumber( @PathVariable("className") String className){
+    public ResponseEntity<?> findByName( @PathVariable("className") String className){
         AccountType accountType = service.findByClassName(className);
 
         return new ResponseEntity<>(accountType, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{className}", method= RequestMethod.DELETE)
+    @ApiOperation(value = "Delete AccountType by class Name")
+    public ResponseEntity<?> deleteByName( @PathVariable("className") String className){
+        service.deleteByClassName(className);
+
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{className}/positionTypes", method= RequestMethod.GET)

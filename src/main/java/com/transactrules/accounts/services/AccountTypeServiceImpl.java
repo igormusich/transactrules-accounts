@@ -52,4 +52,9 @@ public class AccountTypeServiceImpl implements AccountTypeService {
 
         return result;
     }
+
+    @Override
+    public void deleteByClassName(String className) {
+        accountTypeRepository.delete(className);
+    }
 }
