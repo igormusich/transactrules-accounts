@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

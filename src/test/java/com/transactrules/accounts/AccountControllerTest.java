@@ -4,7 +4,7 @@ package com.transactrules.accounts;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.AccountTypeRepository;
+import com.transactrules.accounts.repository.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.CodeGenService;
 import org.junit.Before;

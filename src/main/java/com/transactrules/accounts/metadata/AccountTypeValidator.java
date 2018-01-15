@@ -1,5 +1,6 @@
 package com.transactrules.accounts.metadata;
 
+import com.transactrules.accounts.repository.AccountTypeRepository;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.CodeGenService;
 import com.transactrules.accounts.utilities.Utilities;

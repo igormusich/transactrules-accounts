@@ -54,13 +54,14 @@ public class AccountTypeControllerTest {
     public void givenLoanGivenYmlUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
 
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType.setClassName("LoanGiven_AccountTypeController");
         ObjectMapper objectMapper = ObjectMapperConfiguration.getYamlObjectMapper();
 
         String createAccountTypeYml = objectMapper.writeValueAsString(accountType);
 
         this.mvc.perform(post("/accountTypes").content(createAccountTypeYml).contentType("text/yml")).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.className").value("LoanGiven"));
+                .andExpect(jsonPath("$.className").value("LoanGiven_AccountTypeController"));
     }
 
 }

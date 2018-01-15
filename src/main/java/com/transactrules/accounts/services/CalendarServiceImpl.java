@@ -1,7 +1,7 @@
 package com.transactrules.accounts.services;
 
 import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.CalendarRepository;
+import com.transactrules.accounts.repository.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

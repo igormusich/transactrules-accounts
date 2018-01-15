@@ -2,7 +2,9 @@ package com.transactrules.accounts.services;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.AccountTypeRepository;
+import com.transactrules.accounts.repository.AccountRepository;
+import com.transactrules.accounts.repository.AccountTypeRepository;
+import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

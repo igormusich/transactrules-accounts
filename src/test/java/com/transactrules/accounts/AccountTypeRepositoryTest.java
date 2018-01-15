@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.AccountTypeRepository;
+import com.transactrules.accounts.repository.AccountTypeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
