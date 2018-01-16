@@ -1,6 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.metadata.*;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +104,8 @@ public class AccountBuilder {
         return this;
     }
 
-    public AccountBuilder addOptionValue(String name, String value){
+    public AccountBuilder  addOptionValue(String name, String value){
+
 
         return addOptionValue(name, new OptionValue(value));
     }
@@ -144,17 +146,7 @@ public class AccountBuilder {
 
     public Account getAccount(){
 
-        Account account = null;
-
-        try{
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            Class accountClass = codeGenService.getAccountClass(accountType, new PrintWriter(os));
-
-            account = (Account) accountClass.newInstance();
-
-        } catch (Exception ex){
-            logger.error(ex.toString());
-        }
+        Account account = getNewAccount();
 
         account.setAccountNumber(accountNumber);
         account.setAccountTypeName(accountType.getClassName());
@@ -167,9 +159,25 @@ public class AccountBuilder {
         account.businessDayCalculator = businessDayCalculator;
 
         account.setCalculated();
-
         return account;
 
+    }
+
+    @Nullable
+    //
+    public Account getNewAccount() {
+        Account account = null;
+
+        try{
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            Class accountClass = codeGenService.getAccountClass(accountType, new PrintWriter(os));
+
+            account = (Account) accountClass.newInstance();
+
+        } catch (Exception ex){
+            logger.error(ex.toString());
+        }
+        return account;
     }
 
 

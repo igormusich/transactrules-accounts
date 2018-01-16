@@ -80,6 +80,19 @@ public class {{className}} extends Account {
     }
 {{/rateTypes}}
 
+    public {{className}}() {
+
+    //initialize options
+
+    {{#optionTypes}}
+        _{{propertyName}} = new OptionValue();
+        this.getOptions().put("{{propertyName}}", _{{propertyName}} );
+        _{{propertyName}} = this.getOptions().get("{{propertyName}}");
+        _{{propertyName}}.setValues({{optionListExpression}});
+    {{/optionTypes}}
+
+    }
+
     @Override
     public void setCalculated() {
 
@@ -104,17 +117,14 @@ public class {{className}} extends Account {
         _{{propertyName}}= this.getAmounts().get("{{propertyName}}");
     {{/amountTypes}}
 
-        //initialize options
-
-    {{#optionTypes}}
-        _{{propertyName}}= this.getOptions().get("{{propertyName}}");
-        _{{propertyName}}.setValues({{optionListExpression}});
-    {{/optionTypes}}
-
         //initialize rates
     {{#rateTypes}}
         _{{propertyName}}= this.getRates().get("{{propertyName}}");
     {{/rateTypes}}
+
+    {{#optionTypes}}
+        _{{propertyName}} = this.getOptions().get("{{propertyName}}");
+    {{/optionTypes}}
 
         //initialize schedules
 

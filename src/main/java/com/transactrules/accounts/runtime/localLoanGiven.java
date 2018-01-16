@@ -96,6 +96,17 @@ public class localLoanGiven extends Account {
         return _InterestRate.getValue();
     }
 
+    public localLoanGiven() {
+
+        //initialize options
+
+        _AccrualOption = new OptionValue();
+        this.getOptions().put("AccrualOption", _AccrualOption );
+        _AccrualOption = this.getOptions().get("AccrualOption");
+        _AccrualOption.setValues(com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions());
+
+    }
+
     @Override
     public void setCalculated() {
 
@@ -126,11 +137,6 @@ public class localLoanGiven extends Account {
         _AdditionalAdvanceAmount= this.getAmounts().get("AdditionalAdvanceAmount");
         _ConversionInterestAmount= this.getAmounts().get("ConversionInterestAmount");
         _AdvanceAmount= this.getAmounts().get("AdvanceAmount");
-
-        //initialize options
-
-        _AccrualOption= this.getOptions().get("AccrualOption");
-        _AccrualOption.setValues(com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions());
 
         //initialize rates
         _InterestRate= this.getRates().get("InterestRate");
@@ -323,6 +329,6 @@ public class localLoanGiven extends Account {
     }
     @Override
     public String generatedAt(){
-        return "2018-01-08T21:31:38.783";
+        return "2018-01-16T04:07:09.038";
     }
 }

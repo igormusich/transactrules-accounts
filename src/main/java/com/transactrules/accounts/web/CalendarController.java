@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path="/calendars")
-public class CalednarController {
+public class CalendarController {
 
     @Autowired
     CalendarService service;
