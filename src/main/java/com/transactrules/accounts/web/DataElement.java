@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = OptionElement.class, name = "option"),
         @JsonSubTypes.Type(value = CalendarElement.class, name = "calendar"),
 })
-public abstract class DataElement {
+public class DataElement {
     public String propertyName;
     public String labelName;
     public boolean isRequired;

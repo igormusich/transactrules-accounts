@@ -57,56 +57,42 @@ public class ProcessFactory {
 
         Integer stepId = 1;
 
-        DataSet calendarSet = createCalendarEntryDataSet(stepId);
-
-        process.dataSets.add(calendarSet);
+        process.calendarSet = createCalendarEntryDataSet(stepId);
 
         stepId +=1;
 
-        DataSet dateSet = createDateEntryDataSet(stepId);
-
-        process.dataSets.add(dateSet);
-        
-        stepId +=1;
-        
-        DataSet amountSet = createAmountEntryDataSet(stepId);
-
-        process.dataSets.add(amountSet);
-
-        stepId +=1;
-
-        DataSet optionSet = createOptionEntryDataSet(stepId);
-
-        process.dataSets.add(optionSet);
-
-        stepId +=1;
-
-        DataSet rateSet = createRateEntryDataSet(stepId);
-
-        process.dataSets.add(rateSet);
+        process.dateSet = createDateEntryDataSet(stepId);
 
         stepId +=1;
         
-        Integer[] scheduleDependsOn = {calendarSet.dataSetId, dateSet.dataSetId};
-        
-        DataSet scheduleSet = createScheduleEntryDataSet(stepId, scheduleDependsOn);
-
-        process.dataSets.add(scheduleSet);
+        process.amountSet = createAmountEntryDataSet(stepId);
 
         stepId +=1;
 
-        Integer[] instalmentDependsOn = {calendarSet.dataSetId, dateSet.dataSetId, amountSet.dataSetId, optionSet.dataSetId, rateSet.dataSetId, scheduleSet.dataSetId };
+        process.optionSet = createOptionEntryDataSet(stepId);
 
-        DataSet instalmentSet = createInstalmentEntryDataSet(stepId, instalmentDependsOn);
+        stepId +=1;
 
-        process.dataSets.add(instalmentSet);
+        process.rateSet = createRateEntryDataSet(stepId);
+
+        stepId +=1;
+        
+        Integer[] scheduleDependsOn = {process.calendarSet.dataSetId, process.dateSet.dataSetId};
+        
+        process.scheduleSet = createScheduleEntryDataSet(stepId, scheduleDependsOn);
+
+        stepId +=1;
+
+        Integer[] instalmentDependsOn = {process.calendarSet.dataSetId, process.dateSet.dataSetId, process.amountSet.dataSetId, process.optionSet.dataSetId, process.rateSet.dataSetId, process.scheduleSet.dataSetId };
+
+        process.instalmentSet = createInstalmentEntryDataSet(stepId, instalmentDependsOn);
 
         return process;
 
     }
 
-    private DataSet createDateEntryDataSet(Integer stepId) {
-        DataSet dataSet = new DataSet();
+    private DateSet createDateEntryDataSet(Integer stepId) {
+        DateSet dataSet = new DateSet();
 
         dataSet.isValid = false;
 
@@ -133,8 +119,8 @@ public class ProcessFactory {
 
     }
 
-    private DataSet createCalendarEntryDataSet(Integer stepId) {
-        DataSet dataSet = new DataSet();
+    private CalendarSet createCalendarEntryDataSet(Integer stepId) {
+        CalendarSet dataSet = new CalendarSet();
 
         dataSet.isValid = false;
 
@@ -153,7 +139,7 @@ public class ProcessFactory {
 
         element.calendarNames = getCalendarNames();
 
-        dataSet.data.add(element);
+        dataSet.data = element;
 
         return dataSet;
 
@@ -174,8 +160,8 @@ public class ProcessFactory {
         return calendarNames;
     }
 
-    private DataSet createAmountEntryDataSet(Integer stepId) {
-        DataSet dataSet = new DataSet();
+    private AmountSet createAmountEntryDataSet(Integer stepId) {
+        AmountSet dataSet = new AmountSet();
 
         dataSet.isValid = false;
 
@@ -199,11 +185,10 @@ public class ProcessFactory {
         }
 
         return dataSet;
-
     }
 
-    private DataSet createRateEntryDataSet(Integer stepId) {
-        DataSet dataSet = new DataSet();
+    private RateSet createRateEntryDataSet(Integer stepId) {
+        RateSet dataSet = new RateSet();
 
         dataSet.isValid = false;
 
@@ -230,8 +215,8 @@ public class ProcessFactory {
 
     }
 
-    private DataSet createOptionEntryDataSet(Integer stepId) {
-        DataSet dataSet = new DataSet();
+    private OptionSet createOptionEntryDataSet(Integer stepId) {
+        OptionSet dataSet = new OptionSet();
 
         dataSet.isValid = false;
 
@@ -258,8 +243,8 @@ public class ProcessFactory {
 
     }
 
-    private DataSet createScheduleEntryDataSet(Integer stepId, Integer[] dependsOn) {
-        DataSet dataSet = new DataSet();
+    private ScheduleSet createScheduleEntryDataSet(Integer stepId, Integer[] dependsOn) {
+        ScheduleSet dataSet = new ScheduleSet();
 
         dataSet.isValid = false;
 
@@ -286,8 +271,8 @@ public class ProcessFactory {
         return dataSet;
     }
 
-    private DataSet createInstalmentEntryDataSet(Integer stepId, Integer[] dependsOn) {
-        DataSet dataSet = new DataSet();
+    private InstalmentSet createInstalmentEntryDataSet(Integer stepId, Integer[] dependsOn) {
+        InstalmentSet dataSet = new InstalmentSet();
 
         dataSet.isValid = false;
 
