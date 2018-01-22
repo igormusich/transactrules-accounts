@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ProcessFactory {
@@ -26,8 +27,8 @@ public class ProcessFactory {
     @Autowired
     CodeGenService codeGenService;
 
-    String stepUrlTemplate = "/accountOpen/%s/dataSets/%s";
-    String processId ;
+    //String stepUrlTemplate = "/accountOpen/%s/dataSets/%s";
+    String accountNumber;
     AccountType accountType;
     Account account;
 
@@ -50,55 +51,30 @@ public class ProcessFactory {
 
         Process process = new Process();
 
-        this.processId = "AO-" + request.accountNumber;
+        this.accountNumber =  request.accountNumber;
 
-        process.processId = "AO-" + request.accountNumber;
-        process.status = ProcessStatus.Pending;
+        process.accountNumber = request.accountNumber;
 
-        Integer stepId = 1;
+        process.calendar = createCalendarEntryDataSet();
 
-        process.calendarSet = createCalendarEntryDataSet(stepId);
+        process.dates = createDateEntryDataSet();
 
-        stepId +=1;
+        process.amounts = createAmountEntryDataSet();
 
-        process.dateSet = createDateEntryDataSet(stepId);
+        process.options = createOptionEntryDataSet();
 
-        stepId +=1;
-        
-        process.amountSet = createAmountEntryDataSet(stepId);
+        process.rates = createRateEntryDataSet();
 
-        stepId +=1;
+        process.schedules = createScheduleEntryDataSet();
 
-        process.optionSet = createOptionEntryDataSet(stepId);
-
-        stepId +=1;
-
-        process.rateSet = createRateEntryDataSet(stepId);
-
-        stepId +=1;
-        
-        Integer[] scheduleDependsOn = {process.calendarSet.dataSetId, process.dateSet.dataSetId};
-        
-        process.scheduleSet = createScheduleEntryDataSet(stepId, scheduleDependsOn);
-
-        stepId +=1;
-
-        Integer[] instalmentDependsOn = {process.calendarSet.dataSetId, process.dateSet.dataSetId, process.amountSet.dataSetId, process.optionSet.dataSetId, process.rateSet.dataSetId, process.scheduleSet.dataSetId };
-
-        process.instalmentSet = createInstalmentEntryDataSet(stepId, instalmentDependsOn);
+        process.instalments = createInstalmentEntryDataSet();
 
         return process;
 
     }
 
-    private DateSet createDateEntryDataSet(Integer stepId) {
-        DateSet dataSet = new DateSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Dates";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
+    private List<DateElement> createDateEntryDataSet() {
+        List<DateElement> dates = new ArrayList<>();
 
         Integer order = 1;
 
@@ -110,26 +86,17 @@ public class ProcessFactory {
             element.propertyName = dateType.getPropertyName();
             element.value = null;
 
-            dataSet.data.add(element);
+            dates.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return dates;
 
     }
 
-    private CalendarSet createCalendarEntryDataSet(Integer stepId) {
-        CalendarSet dataSet = new CalendarSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Calendars";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
-
+    private CalendarElement createCalendarEntryDataSet() {
         Integer order = 1;
-
         CalendarElement element = new CalendarElement();
         element.isRequired = true;
         element.labelName = "Calendar";
@@ -139,10 +106,7 @@ public class ProcessFactory {
 
         element.calendarNames = getCalendarNames();
 
-        dataSet.data = element;
-
-        return dataSet;
-
+        return element;
     }
 
     @NotNull
@@ -160,14 +124,8 @@ public class ProcessFactory {
         return calendarNames;
     }
 
-    private AmountSet createAmountEntryDataSet(Integer stepId) {
-        AmountSet dataSet = new AmountSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Amounts";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
+    private List<AmountElement> createAmountEntryDataSet() {
+        List<AmountElement> amounts = new ArrayList<>();
 
         Integer order = 1;
 
@@ -179,22 +137,16 @@ public class ProcessFactory {
             element.propertyName = amountType.getPropertyName();
             element.value = null;
 
-            dataSet.data.add(element);
+            amounts.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return amounts;
     }
 
-    private RateSet createRateEntryDataSet(Integer stepId) {
-        RateSet dataSet = new RateSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Rates";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
+    private List<RateElement> createRateEntryDataSet() {
+        List<RateElement>  rates = new ArrayList<>();
 
         Integer order = 1;
 
@@ -206,23 +158,17 @@ public class ProcessFactory {
             element.propertyName = rateType.getPropertyName();
             element.value = null;
 
-            dataSet.data.add(element);
+            rates.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return rates;
 
     }
 
-    private OptionSet createOptionEntryDataSet(Integer stepId) {
-        OptionSet dataSet = new OptionSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Options";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
+    private List<OptionElement> createOptionEntryDataSet() {
+        List<OptionElement>  options = new ArrayList<>();
 
         Integer order = 1;
 
@@ -234,24 +180,18 @@ public class ProcessFactory {
             element.propertyName = optionType.getPropertyName();
             element.value = this.account.getOptions().get(optionType.getPropertyName());
 
-            dataSet.data.add(element);
+            options.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return options;
 
     }
 
-    private ScheduleSet createScheduleEntryDataSet(Integer stepId, Integer[] dependsOn) {
-        ScheduleSet dataSet = new ScheduleSet();
+    private List<ScheduleElement> createScheduleEntryDataSet() {
 
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Schedules";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
-        dataSet.dependsOnDataSets = dependsOn;
+        List<ScheduleElement> schedules = new ArrayList<>();
 
         Integer order = 1;
 
@@ -263,23 +203,16 @@ public class ProcessFactory {
             element.propertyName = scheduleType.getPropertyName();
             element.value = new Schedule();
 
-            dataSet.data.add(element);
+            schedules.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return schedules;
     }
 
-    private InstalmentSet createInstalmentEntryDataSet(Integer stepId, Integer[] dependsOn) {
-        InstalmentSet dataSet = new InstalmentSet();
-
-        dataSet.isValid = false;
-
-        dataSet.dataSetId = stepId;
-        dataSet.dataSetName = "Instalments";
-        dataSet.url = String.format(this.stepUrlTemplate,this.processId, dataSet.dataSetName );
-        dataSet.dependsOnDataSets = dependsOn;
+    private List<InstalmentElement> createInstalmentEntryDataSet() {
+        List<InstalmentElement> instalmnts = new ArrayList<>();
 
         Integer order = 1;
 
@@ -291,12 +224,12 @@ public class ProcessFactory {
             element.propertyName = scheduleType.getPropertyName();
             element.value = new InstalmentSet();
 
-            dataSet.data.add(element);
+            instalmnts.add(element);
 
             order +=1;
         }
 
-        return dataSet;
+        return instalmnts;
     }
 
 }

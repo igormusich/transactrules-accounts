@@ -1,16 +1,17 @@
 package com.transactrules.accounts.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Process {
-    public String processId;
-    public ProcessStatus status;
+    public String accountNumber;
 
-    //public List<DataSet> dataSets = new ArrayList<>();
 
-    public AmountSet amountSet;
-    public CalendarSet calendarSet;
-    public DateSet dateSet;
-    public InstalmentSet instalmentSet;
-    public OptionSet optionSet;
-    public RateSet rateSet;
-    public ScheduleSet scheduleSet;
+    public List<AmountElement> amounts = new ArrayList<>();
+    public CalendarElement calendar;
+    public List<DateElement>  dates = new ArrayList<>();
+    public List<InstalmentElement> instalments = new ArrayList<>();
+    public List<OptionElement> options = new ArrayList<>();
+    public List<RateElement>  rates = new ArrayList<>();
+    public List<ScheduleElement> schedules = new ArrayList<>();
 }
