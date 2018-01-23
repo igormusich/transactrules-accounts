@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path="/accountOpen")
+@RequestMapping(path="/accountForm")
 public class AccountFormController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class AccountFormController {
     @Autowired
     AccountTypeService accountTypeService;
 
-    @RequestMapping(value="/{accountTypeName}/", method = RequestMethod.GET)
+    @RequestMapping(value="/{accountTypeName}", method = RequestMethod.GET)
     @ApiOperation(value = "Get Account Form", response = AccountForm.class)
     public ResponseEntity<?> create(@PathVariable(required = true) String accountTypeName ) {
         HttpHeaders httpHeaders = new HttpHeaders();
