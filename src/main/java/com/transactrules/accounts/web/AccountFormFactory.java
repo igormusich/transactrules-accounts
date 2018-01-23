@@ -11,9 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
-public class ProcessFactory {
+public class AccountFormFactory {
 
     @Autowired
     AccountTypeService accountTypeService;
@@ -27,59 +28,47 @@ public class ProcessFactory {
     @Autowired
     CodeGenService codeGenService;
 
-    //String stepUrlTemplate = "/accountOpen/%s/dataSets/%s";
-    String accountNumber;
+
     AccountType accountType;
     Account account;
 
-    public  Process  createAccountOpenProcess(AccountOpenCreateRequest request){
-        accountType = accountTypeService.findByClassName(request.accountTypeName);
+    public AccountForm createAccountForm(AccountType accountType){
 
-        if(accountType == null){
-            throw new IllegalArgumentException("AccountType " + request.accountTypeName + " does not exist" );
-        }
+        this.accountType = accountType;
 
-        Account existingAccount = accountService.findByAccountNumber(request.accountNumber);
+        String accountNumber = UUID.randomUUID().toString();
 
-        if(existingAccount != null){
-            throw new IllegalArgumentException("Account" + request.accountNumber + " already exists" );
-        }
-
-        AccountBuilder builder = new AccountBuilder(accountType, request.accountNumber, this.codeGenService);
+        AccountBuilder builder = new AccountBuilder(accountType, accountNumber, this.codeGenService);
 
         this.account = builder.getNewAccount();
 
-        Process process = new Process();
+        AccountForm accountForm = new AccountForm();
 
-        this.accountNumber =  request.accountNumber;
+        accountForm.calendar = createCalendarEntryDataSet();
 
-        process.accountNumber = request.accountNumber;
+        accountForm.dates = createDateEntryDataSet();
 
-        process.calendar = createCalendarEntryDataSet();
+        accountForm.amounts = createAmountEntryDataSet();
 
-        process.dates = createDateEntryDataSet();
+        accountForm.options = createOptionEntryDataSet();
 
-        process.amounts = createAmountEntryDataSet();
+        accountForm.rates = createRateEntryDataSet();
 
-        process.options = createOptionEntryDataSet();
+        accountForm.schedules = createScheduleEntryDataSet();
 
-        process.rates = createRateEntryDataSet();
+        accountForm.instalments = createInstalmentEntryDataSet();
 
-        process.schedules = createScheduleEntryDataSet();
-
-        process.instalments = createInstalmentEntryDataSet();
-
-        return process;
+        return accountForm;
 
     }
 
-    private List<DateElement> createDateEntryDataSet() {
-        List<DateElement> dates = new ArrayList<>();
+    private List<DateControl> createDateEntryDataSet() {
+        List<DateControl> dates = new ArrayList<>();
 
         Integer order = 1;
 
         for(DateType dateType: accountType.getDateTypes() ){
-            DateElement element = new DateElement();
+            DateControl element = new DateControl();
             element.isRequired = true;
             element.labelName = dateType.getLabelName();
             element.order = order;
@@ -95,9 +84,9 @@ public class ProcessFactory {
 
     }
 
-    private CalendarElement createCalendarEntryDataSet() {
+    private CalendarControl createCalendarEntryDataSet() {
         Integer order = 1;
-        CalendarElement element = new CalendarElement();
+        CalendarControl element = new CalendarControl();
         element.isRequired = true;
         element.labelName = "Calendar";
         element.order = order;
@@ -124,13 +113,13 @@ public class ProcessFactory {
         return calendarNames;
     }
 
-    private List<AmountElement> createAmountEntryDataSet() {
-        List<AmountElement> amounts = new ArrayList<>();
+    private List<AmountControl> createAmountEntryDataSet() {
+        List<AmountControl> amounts = new ArrayList<>();
 
         Integer order = 1;
 
         for(AmountType amountType: accountType.getAmountTypes() ){
-            AmountElement element = new AmountElement();
+            AmountControl element = new AmountControl();
             element.isRequired = true;
             element.labelName = amountType.getLabelName();
             element.order = order;
@@ -145,13 +134,13 @@ public class ProcessFactory {
         return amounts;
     }
 
-    private List<RateElement> createRateEntryDataSet() {
-        List<RateElement>  rates = new ArrayList<>();
+    private List<RateControl> createRateEntryDataSet() {
+        List<RateControl>  rates = new ArrayList<>();
 
         Integer order = 1;
 
         for(RateType rateType: accountType.getRateTypes() ){
-            RateElement element = new RateElement();
+            RateControl element = new RateControl();
             element.isRequired = true;
             element.labelName = rateType.getLabelName();
             element.order = order;
@@ -167,13 +156,13 @@ public class ProcessFactory {
 
     }
 
-    private List<OptionElement> createOptionEntryDataSet() {
-        List<OptionElement>  options = new ArrayList<>();
+    private List<OptionControl> createOptionEntryDataSet() {
+        List<OptionControl>  options = new ArrayList<>();
 
         Integer order = 1;
 
         for(OptionType optionType: accountType.getOptionTypes() ){
-            OptionElement element = new OptionElement();
+            OptionControl element = new OptionControl();
             element.isRequired = true;
             element.labelName = optionType.getLabelName();
             element.order = order;
@@ -189,14 +178,14 @@ public class ProcessFactory {
 
     }
 
-    private List<ScheduleElement> createScheduleEntryDataSet() {
+    private List<ScheduleControl> createScheduleEntryDataSet() {
 
-        List<ScheduleElement> schedules = new ArrayList<>();
+        List<ScheduleControl> schedules = new ArrayList<>();
 
         Integer order = 1;
 
         for(ScheduleType scheduleType: accountType.getScheduleTypes() ){
-            ScheduleElement element = new ScheduleElement();
+            ScheduleControl element = new ScheduleControl();
             element.isRequired = true;
             element.labelName = scheduleType.getLabelName();
             element.order = order;
@@ -211,13 +200,13 @@ public class ProcessFactory {
         return schedules;
     }
 
-    private List<InstalmentElement> createInstalmentEntryDataSet() {
-        List<InstalmentElement> instalmnts = new ArrayList<>();
+    private List<InstalmentControl> createInstalmentEntryDataSet() {
+        List<InstalmentControl> instalmnts = new ArrayList<>();
 
         Integer order = 1;
 
         for(InstalmentType scheduleType: accountType.getInstalmentTypes() ){
-            InstalmentElement element = new InstalmentElement();
+            InstalmentControl element = new InstalmentControl();
             element.isRequired = true;
             element.labelName = scheduleType.getLabelName();
             element.order = order;

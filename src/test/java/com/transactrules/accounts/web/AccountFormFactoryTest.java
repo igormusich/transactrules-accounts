@@ -14,18 +14,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProcessFactoryTest {
+public class AccountFormFactoryTest {
 
     @Autowired
-    ProcessFactory factory;
+    AccountFormFactory factory;
 
     @Test
     public void createAccountOpenProcess() throws JsonProcessingException {
         AccountType accountType = TestUtility.CreateLoanGivenAccountType();
 
-        AccountOpenCreateRequest request = new AccountOpenCreateRequest("AC-9837-343", accountType.getClassName());
-
-        Process process = factory.createAccountOpenProcess(request);
+         AccountForm accountForm = factory.createAccountForm(accountType);
 
         ObjectMapper mapper = ObjectMapperConfiguration.getYamlObjectMapper();
 
@@ -33,7 +31,7 @@ public class ProcessFactoryTest {
 
         ObjectWriter writer = mapper.writer();
 
-        String output = writer.writeValueAsString(process);
+        String output = writer.writeValueAsString(accountForm);
 
     }
 }

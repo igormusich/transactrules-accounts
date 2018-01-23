@@ -2,6 +2,6 @@ package com.transactrules.accounts.web;
 
 import java.time.LocalDate;
 
-public class DateElement extends DataElement {
+public class DateControl extends InputControl {
     public LocalDate value;
 }

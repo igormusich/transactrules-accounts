@@ -1,6 +1,6 @@
 package com.transactrules.accounts.web;
 
-public class CalendarElement extends DateElement {
+public class CalendarControl extends DateControl {
     public String value;
     public String[] calendarNames;
 }
