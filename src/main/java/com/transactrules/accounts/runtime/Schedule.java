@@ -43,6 +43,21 @@ public class Schedule  {
 
     }
 
+    public Schedule(Schedule prototype){
+        this.startDate = prototype.startDate;
+        this.endDate = prototype.endDate;
+        this.endType = prototype.endType;
+
+        this.frequency= prototype.frequency;
+        this.interval = prototype.interval;
+
+        this.numberOfRepeats = prototype.numberOfRepeats;
+        this.businessDayCalculation = prototype.businessDayCalculation;
+
+        this.includeDates = new ArrayList<>(prototype.includeDates);
+        this.excludeDates = new ArrayList<>(prototype.excludeDates);
+    }
+
     @DynamoDBAttribute
     @LocalDateFormat
     public LocalDate getStartDate() {

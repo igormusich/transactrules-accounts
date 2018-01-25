@@ -1,6 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.metadata.*;
+import com.transactrules.accounts.web.AccountFormFactory;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.*;
 
 public class AccountBuilder {
 
@@ -36,7 +36,20 @@ public class AccountBuilder {
 
     private Map<String,Schedule> schedules = new HashMap<>();
 
+    private Map<String,InstalmentSet> instalments = new HashMap<>();
+
     private List<String> calendarNames = new ArrayList<>();
+
+    public static final DateTimeFormatter DATE_FORMAT;
+    static {
+        DATE_FORMAT = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .append( DateTimeFormatter.ISO_LOCAL_DATE  )
+                .appendLiteral('T')
+                .append(DateTimeFormatter.ISO_LOCAL_TIME)
+                .appendLiteral('Z').toFormatter();
+        }
+
 
     public AccountBuilder(AccountType accountType, String accountNumber, CodeGenService codeGenService){
         this.accountType = accountType;
@@ -105,8 +118,6 @@ public class AccountBuilder {
     }
 
     public AccountBuilder  addOptionValue(String name, String value){
-
-
         return addOptionValue(name, new OptionValue(value));
     }
 
@@ -144,10 +155,123 @@ public class AccountBuilder {
         return this;
     }
 
+    public AccountBuilder setProperties(Account prototype) {
+        Account account = getNewAccount();
+
+
+        for(String calendarName: prototype.getCalendarNames()){
+            addCalendar(calendarName);
+        }
+
+
+        for(String key: prototype.getAmounts().keySet()){
+            addAmountValue(key, prototype.getAmounts().get(key));
+        }
+
+        for(String key: prototype.getDates().keySet()){
+            addDateValue(key, prototype.getDates().get(key));
+        }
+
+        for(String key: prototype.getOptions().keySet()){
+            addOptionValue(key, prototype.getOptions().get(key));
+        }
+
+        for(String key: prototype.getRates().keySet()){
+            addRateValue(key, prototype.getRates().get(key));
+        }
+
+        for(String key: prototype.getSchedules().keySet()){
+            addSchedule(key, prototype.getSchedules().get(key));
+        }
+
+        for(String key: prototype.getInstalmentSets().keySet()){
+            addInstalmentSet(key, prototype.getInstalmentSets().get(key));
+        }
+
+        return this;
+    }
+
+    public AccountBuilder setProperties(Map<String,Object> accountProperties){
+
+        Account account = getNewAccount();
+
+        String calendarName="";
+
+        if(accountProperties.containsKey(AccountFormFactory.CalendarPropertyName))
+        {
+            calendarName = (String) accountProperties.get(AccountFormFactory.CalendarPropertyName);
+        }
+
+        for(String key: accountProperties.keySet()){
+            Optional<AmountType> amountType = accountType.getAmountTypeByName(key);
+
+            if(amountType.isPresent()){
+                String value = accountProperties.get( key ).toString();
+                this.addAmountValue(key, new AmountValue (new BigDecimal(value) , LocalDate.now()));
+                continue;
+            }
+
+            Optional<DateType> dateType = accountType.getDateTypeByName(key);
+
+            if(dateType.isPresent()){
+                String value = (String) accountProperties.get(key);
+
+                value = value.replaceAll("\\s+","");
+
+                LocalDate date = LocalDate.parse(value, AccountBuilder.DATE_FORMAT);
+
+                this.addDateValue(key, new DateValue ( date));
+                continue;
+            }
+
+            Optional<OptionType> optionType = accountType.getOptionTypeByName(key);
+
+            if(optionType.isPresent()){
+                String value = (String) accountProperties.get(key);
+                this.addOptionValue(key, new OptionValue(value) );
+                continue;
+            }
+
+            Optional<ScheduleType> scheduleType = accountType.getScheduleTypeByName(key);
+
+            if(scheduleType.isPresent()){
+                Schedule schedule = (Schedule) accountProperties.get(key);
+                schedule.setBusinessDayCalculation(calendarName);
+                this.addSchedule(key, schedule);
+                continue;
+            }
+
+            Optional<RateType> rateType = accountType.getRateTypeByName(key);
+
+            if(rateType.isPresent()){
+                String value = accountProperties.get( key ).toString();
+                this.addRateValue(key, new RateValue(new BigDecimal(value),LocalDate.now()));
+                continue;
+            }
+
+            Optional<InstalmentType> instalmentType = accountType.getInstalmentTypeByName(key);
+
+            if(instalmentType.isPresent()){
+                this.addInstalmentSet(key, (InstalmentSet) accountProperties.get(key));
+                continue;
+            }
+        }
+
+        return this;
+    }
+
+    private AccountBuilder addInstalmentSet(String key, InstalmentSet instalmentSet) {
+        this.instalments.put(key, instalmentSet);
+
+        return this;
+    }
+
     public Account getAccount(){
 
         Account account = getNewAccount();
 
+
+        account.setCalendarNames(calendarNames);
         account.setAccountNumber(accountNumber);
         account.setAccountTypeName(accountType.getClassName());
         account.setPositions(positions);
@@ -156,6 +280,7 @@ public class AccountBuilder {
         account.setAmounts(amounts);
         account.setOptions(options);
         account.setSchedules(schedules);
+        account.setInstalmentSets(instalments);
         account.businessDayCalculator = businessDayCalculator;
 
         account.setCalculated();

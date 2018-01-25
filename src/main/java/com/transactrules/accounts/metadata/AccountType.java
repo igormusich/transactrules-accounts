@@ -307,4 +307,15 @@ public class AccountType {
         return (v)-> LocalDateTime.now().toString();
     }
 
+    public Optional<ScheduleType> getScheduleTypeByName(String name) {
+        return scheduleTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    public Optional<RateType> getRateTypeByName(String name) {
+        return rateTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    public Optional<InstalmentType> getInstalmentTypeByName(String name) {
+        return instalmentTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
+    }
 }

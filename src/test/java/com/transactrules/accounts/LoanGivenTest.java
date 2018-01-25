@@ -123,9 +123,15 @@ public class LoanGivenTest {
         LocalDate endDate = startDate.plusYears(25);
         Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-0982397", startDate, endDate,codeGenService);
+        Account prototype = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-0982397", startDate, endDate,codeGenService);
+
+        Account account = new localLoanGiven(prototype);
 
         account.valueDate = startDate;
+
+        account.businessDayCalculator = calendar;
+
+        account.setCalculated();
 
         account.calculateInstaments();
 
@@ -140,8 +146,11 @@ public class LoanGivenTest {
         BigDecimal firstAmount = instalments.getInstalments().get(dateList.get(0)).getAmount();
         BigDecimal lastAmount = instalments.getInstalments().get(dateList.get(dateList.size()-1)).getAmount();
 
-        assertThat(firstAmount.subtract(BigDecimal.valueOf( 2964.37)).compareTo(BigDecimal.valueOf(01)), is(-1));
-        assertThat(lastAmount.subtract(BigDecimal.valueOf( 2964.37)).compareTo(BigDecimal.valueOf(01)), is(-1));
+        BigDecimal difference1 = firstAmount.subtract(BigDecimal.valueOf( 2964.37)).abs();
+        BigDecimal difference2 = lastAmount.subtract(BigDecimal.valueOf( 2964.37)).abs();
+
+        assertThat(difference1.compareTo(BigDecimal.valueOf(0.01)), is(-1));
+        assertThat(difference2.compareTo(BigDecimal.valueOf(0.01)), is(-1));
 
     }
 

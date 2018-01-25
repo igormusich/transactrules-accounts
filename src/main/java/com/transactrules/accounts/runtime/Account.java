@@ -10,10 +10,7 @@ import com.transactrules.accounts.utilities.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @DynamoDBTable(tableName = "Account")
 public class Account {
@@ -24,7 +21,7 @@ public class Account {
 
     private String accountTypeName;
 
-    private String[] calendarNames;
+    private List<String> calendarNames = new ArrayList<>();
 
     private Map<String,Position> positions = new HashMap<>();
 
@@ -48,6 +45,41 @@ public class Account {
     public transient LocalDate valueDate;
 
 
+    public Account(Account prototype){
+
+        this.calendarNames = new ArrayList<>(prototype.calendarNames);
+
+
+        for(String key: prototype.amounts.keySet()){
+            AmountValue value = prototype.amounts.get(key);
+            this.amounts.put(key,new AmountValue(value.getAmount(), value.getValueDate()));
+        }
+
+        for(String key: prototype.dates.keySet()){
+            DateValue value = prototype.dates.get(key);
+            this.dates.put(key,new DateValue(value.getDate()));
+        }
+
+        for(String key: prototype.options.keySet()){
+            OptionValue value = prototype.options.get(key);
+            this.options.put(key, new OptionValue(value.getValue(),value.getValues()) );
+        }
+
+        for(String key: prototype.rates.keySet()){
+            RateValue value = prototype.rates.get(key);
+            this.rates.put(key, new RateValue(value.getValue(),value.getValueDate()));
+        }
+
+        for(String key: prototype.schedules.keySet()){
+            Schedule value = prototype.schedules.get(key);
+            this.schedules.put(key, new Schedule(value));
+        }
+
+        for(String key: prototype.instalmentSets.keySet()){
+            InstalmentSet value = prototype.instalmentSets.get(key);
+            this.instalmentSets.put(key,new InstalmentSet(value));
+        }
+    }
 
     public Account() {
 
@@ -175,11 +207,11 @@ public class Account {
     }
 
     @DynamoDBAttribute
-    public String[] getCalendarNames() {
+    public List<String> getCalendarNames() {
         return calendarNames;
     }
 
-    public void setCalendarNames(String[] calendarNames) {
+    public void setCalendarNames(List<String> calendarNames) {
         this.calendarNames = calendarNames;
     }
 
@@ -320,21 +352,33 @@ public class Account {
     }
 
     public void snapshot() {
-        snapshotPositions = positions;
-        snapshotTransactions =  transactions;
 
-        positions = new HashMap<>();
+        snapshotPositions = new HashMap<>();
 
-        for (String name:snapshotPositions.keySet())
+        for (String name:positions.keySet())
         {
-            positions.put(name, new Position());
+            Position snapshotPosition = new Position();
+            Position position = positions.get(name);
+
+            snapshotPosition.setAmount(position.getAmount());
+            snapshotPositions.put(name,snapshotPosition );
+
+            position.setAmount(BigDecimal.ZERO);
         }
 
         transactions = new ArrayList<>();
     }
 
     public void restoreSnapshot() {
-        positions = snapshotPositions;
+
+        for (String name:snapshotPositions.keySet())
+        {
+            Position position = positions.get(name);
+            Position snapshotPosition = snapshotPositions.get(name);
+
+            position.setAmount(snapshotPosition.getAmount());
+        }
+
         transactions = snapshotTransactions;
     }
 }

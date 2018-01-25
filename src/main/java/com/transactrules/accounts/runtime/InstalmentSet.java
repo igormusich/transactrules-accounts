@@ -5,6 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InstalmentSet  {
+
+    public InstalmentSet(){
+
+    }
+
+    public InstalmentSet(InstalmentSet prototype){
+        this.instalments = new HashMap<>(prototype.instalments);
+    }
+
     private Map<LocalDate, InstalmentValue> instalments = new HashMap<>();
 
     public Map<LocalDate, InstalmentValue> getInstalments() {

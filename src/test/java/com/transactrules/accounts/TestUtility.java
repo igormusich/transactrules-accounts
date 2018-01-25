@@ -161,7 +161,6 @@ public class TestUtility {
         BusinessDayCalculator calendar = CreateEuroZoneCalendar();
 
 
-
         builder.setBusinessDayCalculator(calendar)
                 .addDateValue("StartDate", startDate)
                 .addDateValue("AccrualStart",startDate)

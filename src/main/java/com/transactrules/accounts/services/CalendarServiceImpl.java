@@ -1,7 +1,7 @@
 package com.transactrules.accounts.services;
 
-import com.transactrules.accounts.runtime.Calendar;
 import com.transactrules.accounts.repository.CalendarRepository;
+import com.transactrules.accounts.runtime.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +24,11 @@ public class CalendarServiceImpl implements CalendarService {
 
         return list;
     }
+
+    @Override
+    public Calendar findByName(String name) {
+        return calendarRepository.findOne(name);
+    }
+
+
 }

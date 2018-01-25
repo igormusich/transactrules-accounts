@@ -32,6 +32,8 @@ public class AccountFormFactory {
     AccountType accountType;
     Account account;
 
+    public static String CalendarPropertyName = "businessDayCalculator";
+
     public AccountForm createAccountForm(AccountType accountType){
 
         this.accountType = accountType;
@@ -90,7 +92,7 @@ public class AccountFormFactory {
         element.isRequired = true;
         element.labelName = "Calendar";
         element.order = order;
-        element.propertyName = "businessDayCalculator";
+        element.propertyName = CalendarPropertyName;
         element.value = null;
 
         element.calendarNames = getCalendarNames();

@@ -22,6 +22,11 @@ public class OptionValue {
         this.value = value;
     }
 
+    public OptionValue(String value, List<String> values ){
+        this.value = value;
+        this.values = values;
+    }
+
     @DynamoDBAttribute
     public List<String> getValues() {
         return values;

@@ -1,6 +1,9 @@
 package com.transactrules.accounts.web;
 
 import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.AccountBuilder;
+import com.transactrules.accounts.runtime.CodeGenService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.utilities.Utilities;
 import io.swagger.annotations.ApiOperation;
@@ -9,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path="/accountForm")
@@ -22,6 +25,9 @@ public class AccountFormController {
 
     @Autowired
     AccountTypeService accountTypeService;
+
+    @Autowired
+    CodeGenService codeGenService;
 
     @RequestMapping(value="/{accountTypeName}", method = RequestMethod.GET)
     @ApiOperation(value = "Get Account Form", response = AccountForm.class)
@@ -40,10 +46,6 @@ public class AccountFormController {
         }
 
         AccountForm accountForm = processFactory.createAccountForm(accountType);
-
-        httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(accountForm).toUri());
 
         return new ResponseEntity<>(accountForm, httpHeaders, HttpStatus.CREATED);
     }
@@ -66,11 +68,17 @@ public class AccountFormController {
 
         AccountForm accountForm = processFactory.createAccountForm(accountType);
 
-        httpHeaders.setLocation(ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(accountForm).toUri());
+        String accountNumber = UUID.randomUUID().toString();
 
-        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+        AccountBuilder accountBuilder = new AccountBuilder(accountType, UUID.randomUUID().toString(), codeGenService);
+
+        accountBuilder.setProperties(accountProperties);
+
+        Account account = accountBuilder.getAccount();
+
+        accountForm.setValuesFromAccount(account);
+
+        return new ResponseEntity<>(accountForm, httpHeaders, HttpStatus.OK);
     }
 
 

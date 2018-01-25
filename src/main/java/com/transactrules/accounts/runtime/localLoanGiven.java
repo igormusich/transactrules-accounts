@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
+
 public class localLoanGiven extends Account {
 
     private Position _ConversionInterest;
@@ -96,6 +97,10 @@ public class localLoanGiven extends Account {
         return _InterestRate.getValue();
     }
 
+    public localLoanGiven(Account prototype){
+        super(prototype);
+    }
+
     public localLoanGiven() {
 
         //initialize options
@@ -140,6 +145,8 @@ public class localLoanGiven extends Account {
 
         //initialize rates
         _InterestRate= this.getRates().get("InterestRate");
+
+        _AccrualOption = this.getOptions().get("AccrualOption");
 
         //initialize schedules
 
@@ -329,6 +336,6 @@ public class localLoanGiven extends Account {
     }
     @Override
     public String generatedAt(){
-        return "2018-01-16T04:07:09.038";
+        return "2018-01-24T06:54:42.712";
     }
 }
