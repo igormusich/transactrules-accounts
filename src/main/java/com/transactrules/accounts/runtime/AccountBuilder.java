@@ -232,6 +232,7 @@ public class AccountBuilder {
             logger.error(ex.toString());
         }
 
+        account.setAccountNumber(accountNumber);
         account.setAccountTypeName(accountType.getClassName());
         return account;
     }

@@ -35,10 +35,16 @@ public class AccountValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Account request = (Account) target;
 
-        Account existingAccount = accountRepository.findOne(request.getAccountNumber());
+        if(request.getAccountNumber()!=null){
+            Account existingAccount = accountRepository.findOne(request.getAccountNumber());
 
-        if(existingAccount != null){
-            errors.rejectValue("accountNumber", ApiErrorCode.ALREADY_EXISTS.getCode(), null, String.format("Account number %s already exists", request.getAccountNumber()));
+            if(existingAccount != null){
+                errors.rejectValue("accountNumber", ApiErrorCode.ALREADY_EXISTS.getCode(), null, String.format("Account number %s already exists", request.getAccountNumber()));
+            }
+        }
+        else
+        {
+            errors.rejectValue("accountNumber", ApiErrorCode.REQUIRED.getCode(), ApiErrorCode.REQUIRED.getDescription());
         }
 
         AccountType accountType = accountTypeRepository.findOne(request.getAccountTypeName());

@@ -68,7 +68,7 @@ public class AccountValidationTest {
         account.getDates().put("AccrualStart", new DateValue(LocalDate.now()));
         account.getDates().put("EndDate", new DateValue(LocalDate.now().plusYears(10)));
 
-        account.getAmounts().put("Advance", new AmountValue(BigDecimal.valueOf(624000)));
+        account.getAmounts().put("AdvanceAmount", new AmountValue(BigDecimal.valueOf(624000)));
 
         Errors errors = new BeanPropertyBindingResult(account, "account");
         accountValidator.validate(account, errors);
