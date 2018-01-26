@@ -1,7 +1,6 @@
 package com.transactrules.accounts.web;
 
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.AccountTypeValidator;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.utilities.Utilities;
@@ -43,7 +42,7 @@ public class AccountTypeController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        final AccountType savedItem = service.create(item);
+        final AccountType savedItem = service.save(item);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{propertyName}")

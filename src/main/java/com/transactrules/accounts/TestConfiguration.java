@@ -74,9 +74,9 @@ public class TestConfiguration {
         PositionType interestCapitalizedPosition = loanGiven.addPositionType("InterestCapitalized");
         PositionType principalPosition = loanGiven.addPositionType( "Principal" );
 
-        DateType startDate = loanGiven.addDateType( "StartDate" );
-        DateType accrualStart = loanGiven.addDateType( "AccrualStart" );
-        DateType endDate = loanGiven.addDateType( "EndDate" );
+        DateType startDate = loanGiven.addDateType( "StartDate" , true, true);
+        DateType accrualStart = loanGiven.addDateType( "AccrualStart" , true,false);
+        DateType endDate = loanGiven.addDateType( "EndDate" ,true, false);
 
 
         ScheduleType accrualSchedule = loanGiven.addCalculatedScheduleType(
@@ -144,10 +144,10 @@ public class TestConfiguration {
         loanGiven.addTransactionType("InterestPayment")
                 .addRule(interestAccruedPosition, TransactionOperation.Subtract);
 
-        loanGiven.addAmountType("RedemptionAmount" , false);
-        loanGiven.addAmountType("AdditionalAdvanceAmount" , false);
-        loanGiven.addAmountType("ConversionInterestAmount" , false);
-        loanGiven.addAmountType("AdvanceAmount" , false);
+        loanGiven.addAmountType("RedemptionAmount" , false, false);
+        loanGiven.addAmountType("AdditionalAdvanceAmount" , false, false);
+        loanGiven.addAmountType("ConversionInterestAmount" , false, false);
+        loanGiven.addAmountType("AdvanceAmount" , false, true);
 
         loanGiven.addRateType("InterestRate");
 

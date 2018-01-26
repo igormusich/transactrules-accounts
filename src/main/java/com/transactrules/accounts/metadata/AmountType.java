@@ -10,12 +10,14 @@ import io.swagger.annotations.ApiModel;
 public class AmountType extends NamedAbstractEntity {
 
     private Boolean isValueDated;
+    private Boolean isRequired;
 
     public AmountType(){}
 
-    public AmountType(String name, Boolean isValueDated) {
+    public AmountType(String name, Boolean isValueDated,Boolean isRequired) {
         super(name);
         this.isValueDated = isValueDated;
+        this.isRequired = isRequired;
     }
 
     @DynamoDBAttribute
@@ -27,5 +29,12 @@ public class AmountType extends NamedAbstractEntity {
         isValueDated = valueDated;
     }
 
+    @DynamoDBAttribute
+    public Boolean getRequired() {
+        return isRequired;
+    }
 
+    public void setRequired(Boolean required) {
+        isRequired = required;
+    }
 }

@@ -6,6 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.CalendarRepository;
+import com.transactrules.accounts.repository.SystemPropertiesRepository;
+import com.transactrules.accounts.repository.UniqueIdRepository;
 import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +40,14 @@ public class StartupApplicationRunner implements ApplicationRunner {
     @Autowired
     SystemPropertiesRepository systemPropertiesRepository;
 
+    @Autowired
+    UniqueIdRepository uniqueIdRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-        String[] tableNames = {"AccountType","Account","Calendar","Transaction", "SystemProperties"};
+        String[] tableNames = {"AccountType","Account","Calendar","Transaction", "SystemProperties", "UniqueId"};
 
         List<String> listTablesResult = amazonDynamoDB.listTables().getTableNames();
 
@@ -76,10 +81,17 @@ public class StartupApplicationRunner implements ApplicationRunner {
             CreateTable(SystemProperties.class, dynamoDBMapper, amazonDynamoDB);
         }
 
+        if(!contains(listTablesResult,"UniqueId")) {
+            CreateTable(UniqueId.class, dynamoDBMapper, amazonDynamoDB);
+        }
+
+        UniqueId accountId = new UniqueId("Account", 201L,"ACC-002-" ,7);
+
+        uniqueIdRepository.save(accountId);
+
         systemPropertiesRepository.save(new SystemProperties("default", LocalDate.now()));
 
         calendarRepository.save(StartupApplicationRunner.CreateEuroZoneCalendar());
-
 
         testConfiguration.run();
     }

@@ -7,18 +7,24 @@ import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.metadata.ScheduleType;
 import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
 import com.transactrules.accounts.utilities.*;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @DynamoDBTable(tableName = "Account")
 public class Account {
 
+    @NotBlank
     private String accountNumber;
 
     private boolean isActive;
 
+    @NotBlank
     private String accountTypeName;
 
     private List<String> calendarNames = new ArrayList<>();

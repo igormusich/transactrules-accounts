@@ -175,8 +175,8 @@ public class AccountType {
         return Optional.empty();
     }
 
-    public DateType addDateType(String name){
-        DateType dateType = new DateType(name);
+    public DateType addDateType(String name, Boolean isRequired, Boolean isStartDate){
+        DateType dateType = new DateType(name, isRequired, isStartDate);
         dateTypes.add(dateType);
         return dateType;
     }
@@ -269,8 +269,8 @@ public class AccountType {
     }
 
 
-    public AmountType addAmountType(String name, Boolean isValueDated) {
-        AmountType amountType = new AmountType(name, isValueDated);
+    public AmountType addAmountType(String name, Boolean isValueDated, Boolean isRequered) {
+        AmountType amountType = new AmountType(name, isValueDated, isRequered);
         amountTypes.add(amountType);
         return amountType;
     }

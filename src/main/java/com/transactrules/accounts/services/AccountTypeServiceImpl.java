@@ -20,14 +20,6 @@ public class AccountTypeServiceImpl implements AccountTypeService {
     }
 
     @Override
-    public AccountType create(AccountType accountType)  {
-
-        AccountType result = accountTypeRepository.save(accountType);
-
-        return result;
-    }
-
-    @Override
     public AccountType save(AccountType accountType) {
         AccountType result = accountTypeRepository.save(accountType);
 

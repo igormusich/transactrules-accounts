@@ -1,6 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.*;
+import com.transactrules.accounts.web.AccountTypeValidator;
 import com.transactrules.accounts.web.ApiErrorCode;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,10 +77,10 @@ public class AccountTypeValidationTest {
         accountType.getScheduleTypes().add(new ScheduleType("valid_schedule_type", ScheduleFrequency.Daily, ScheduleEndType.NoEnd, BusinessDayCalculation.AnyDay, "LocalDate.now()", "LocalDate.now().plusYears(5)",null,"1",false));
 
         accountType.addPositionType(" more & errors");
-        accountType.addDateType(" * some more");
+        accountType.addDateType(" * some more", true, false);
         accountType.addInstalmentType(" &* fails", ScheduledTransactionTiming.StartOfDay,"valid_schedule_type","valid_transaction_type", "valid_position_type",null , null);
         accountType.addTransactionType(" *&@ fail");
-        accountType.addAmountType(" &!*( fail", false);
+        accountType.addAmountType(" &!*( fail", false,false);
         accountType.addRateType(" *&@# (#*");
         accountType.addOptionType(" 3@3#&@* ","[\"a\"]");
 
@@ -263,5 +264,24 @@ public class AccountTypeValidationTest {
         assertThat(errors.getFieldErrors().get(2).getDefaultMessage(), is(ApiErrorCode.NO_SUCH_TYPE.getDescription()));
         assertThat(errors.getFieldErrors().get(3).getDefaultMessage(), is(ApiErrorCode.NO_SUCH_TYPE.getDescription()));
         assertThat(errors.getFieldErrors().get(4).getDefaultMessage(), is(ApiErrorCode.NO_SUCH_TYPE.getDescription()));
+    }
+
+    @Test
+    public void testDuplicateStartDate(){
+
+        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType.setClassName("testDuplicateStartDate");
+
+        DateType accrualStart = accountType.getDateTypeByName("AccrualStart").get();
+
+        accrualStart.setIsStartDate(true);
+
+        Errors errors = new BeanPropertyBindingResult(accountType, "accountType");
+        accountTypeCreateValidator.validate(accountType, errors);
+
+        assertThat(errors.hasErrors(), is(true));
+        assertThat(errors.getFieldErrors().size(), is(1));
+        assertThat(errors.getFieldErrors().get(0).getDefaultMessage(), is(ApiErrorCode.HAS_DUPLICATE_START_DATE.getDescription()));
+
     }
 }

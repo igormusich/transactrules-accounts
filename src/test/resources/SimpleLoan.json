@@ -11,11 +11,15 @@
   "dateTypes": [
     {
       "propertyName": "StartDate",
-      "labelName":"Start Date"
+      "labelName":"Start Date",
+      "isRequired":true,
+      "isStartDate":true
     },
     {
       "propertyName": "EndDate",
-      "labelName":"End Date"
+      "labelName":"End Date",
+      "isRequired":true,
+      "isStartDate":false
     }
   ],
 

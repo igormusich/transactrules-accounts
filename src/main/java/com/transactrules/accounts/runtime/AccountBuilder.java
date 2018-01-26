@@ -1,7 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.web.AccountFormFactory;
+import com.transactrules.accounts.services.AccountTypeService;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AccountBuilder {
 
@@ -40,15 +41,13 @@ public class AccountBuilder {
 
     private List<String> calendarNames = new ArrayList<>();
 
-    public static final DateTimeFormatter DATE_FORMAT;
-    static {
-        DATE_FORMAT = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .append( DateTimeFormatter.ISO_LOCAL_DATE  )
-                .appendLiteral('T')
-                .append(DateTimeFormatter.ISO_LOCAL_TIME)
-                .appendLiteral('Z').toFormatter();
-        }
+
+    public AccountBuilder(Account prototype, AccountTypeService accountTypeService, CodeGenService codeGenService){
+        this.codeGenService = codeGenService;
+        this.accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
+        this.accountNumber = prototype.getAccountNumber();
+        this.setProperties(prototype);
+    }
 
 
     public AccountBuilder(AccountType accountType, String accountNumber, CodeGenService codeGenService){
@@ -191,75 +190,6 @@ public class AccountBuilder {
         return this;
     }
 
-    public AccountBuilder setProperties(Map<String,Object> accountProperties){
-
-        Account account = getNewAccount();
-
-        String calendarName="";
-
-        if(accountProperties.containsKey(AccountFormFactory.CalendarPropertyName))
-        {
-            calendarName = (String) accountProperties.get(AccountFormFactory.CalendarPropertyName);
-        }
-
-        for(String key: accountProperties.keySet()){
-            Optional<AmountType> amountType = accountType.getAmountTypeByName(key);
-
-            if(amountType.isPresent()){
-                String value = accountProperties.get( key ).toString();
-                this.addAmountValue(key, new AmountValue (new BigDecimal(value) , LocalDate.now()));
-                continue;
-            }
-
-            Optional<DateType> dateType = accountType.getDateTypeByName(key);
-
-            if(dateType.isPresent()){
-                String value = (String) accountProperties.get(key);
-
-                value = value.replaceAll("\\s+","");
-
-                LocalDate date = LocalDate.parse(value, AccountBuilder.DATE_FORMAT);
-
-                this.addDateValue(key, new DateValue ( date));
-                continue;
-            }
-
-            Optional<OptionType> optionType = accountType.getOptionTypeByName(key);
-
-            if(optionType.isPresent()){
-                String value = (String) accountProperties.get(key);
-                this.addOptionValue(key, new OptionValue(value) );
-                continue;
-            }
-
-            Optional<ScheduleType> scheduleType = accountType.getScheduleTypeByName(key);
-
-            if(scheduleType.isPresent()){
-                Schedule schedule = (Schedule) accountProperties.get(key);
-                schedule.setBusinessDayCalculation(calendarName);
-                this.addSchedule(key, schedule);
-                continue;
-            }
-
-            Optional<RateType> rateType = accountType.getRateTypeByName(key);
-
-            if(rateType.isPresent()){
-                String value = accountProperties.get( key ).toString();
-                this.addRateValue(key, new RateValue(new BigDecimal(value),LocalDate.now()));
-                continue;
-            }
-
-            Optional<InstalmentType> instalmentType = accountType.getInstalmentTypeByName(key);
-
-            if(instalmentType.isPresent()){
-                this.addInstalmentSet(key, (InstalmentSet) accountProperties.get(key));
-                continue;
-            }
-        }
-
-        return this;
-    }
-
     private AccountBuilder addInstalmentSet(String key, InstalmentSet instalmentSet) {
         this.instalments.put(key, instalmentSet);
 
@@ -269,7 +199,6 @@ public class AccountBuilder {
     public Account getAccount(){
 
         Account account = getNewAccount();
-
 
         account.setCalendarNames(calendarNames);
         account.setAccountNumber(accountNumber);
@@ -302,6 +231,8 @@ public class AccountBuilder {
         } catch (Exception ex){
             logger.error(ex.toString());
         }
+
+        account.setAccountTypeName(accountType.getClassName());
         return account;
     }
 

@@ -51,7 +51,7 @@ public class AccountServiceTest {
 
         account.setAccountTypeName(accountTypeName);
 
-        accountService.create(account);
+        accountService.save(account);
 
     }
 

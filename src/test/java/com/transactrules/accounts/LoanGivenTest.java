@@ -44,7 +44,7 @@ public class LoanGivenTest {
         loanGivenAccountType = TestUtility.CreateLoanGivenAccountType();
         loanGivenAccountType.setClassName("LoanGivenTestAccount");
 
-        accountTypeService.create(loanGivenAccountType);
+        accountTypeService.save(loanGivenAccountType);
     }
 
     @Test

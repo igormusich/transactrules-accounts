@@ -37,12 +37,15 @@ public class AccountServiceImpl implements AccountService {
     CodeGenService codeGenService;
 
     @Autowired
+    UniqueIdService uniqueIdService;
+
+    @Autowired
     private AmazonDynamoDB amazonDynamoDB;
 
     private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
-    public Account create(Account prototype)  {
+    public Account save(Account prototype)  {
 
         AccountType accountType = accountTypeRepository.findOne(prototype.getAccountTypeName());
 
@@ -74,6 +77,21 @@ public class AccountServiceImpl implements AccountService {
 
         return account;
     }
+
+    @Override
+    public Account create(AccountType accountType) {
+
+        AccountBuilder builder = new AccountBuilder(accountType, "", this.codeGenService);
+
+        Account account = builder.getNewAccount();
+
+        String accountNumber = uniqueIdService.getNextId("Account");
+
+        account.setAccountNumber(accountNumber);
+
+        return account;
+    }
+
 
     @Override
     public List<Account> findAll() {

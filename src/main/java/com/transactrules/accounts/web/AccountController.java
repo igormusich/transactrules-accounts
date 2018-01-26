@@ -8,6 +8,7 @@ import com.transactrules.accounts.runtime.CodeGenService;
 import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.services.CalendarService;
+import com.transactrules.accounts.services.UniqueIdService;
 import com.transactrules.accounts.utilities.Utilities;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,19 @@ public class AccountController {
     AccountTypeService accountTypeService;
 
     @Autowired
+    UniqueIdService uniqueIdService;
+
+    @Autowired
     CodeGenService codeGenService;
 
     @Autowired
     CalendarService calendarService;
 
+    @Autowired
+    AccountService accountService;
+
     @RequestMapping(value="/{accountTypeName}/new", method = RequestMethod.GET)
-    @ApiOperation(value = "Get default account data", response = AccountForm.class)
+    @ApiOperation(value = "Get default account data", response = Account.class)
     public ResponseEntity<?> create(@PathVariable(required = true) String accountTypeName ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -57,16 +64,14 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
         }
 
-        AccountBuilder builder = new AccountBuilder(accountType, "", this.codeGenService);
-
-        Account account = builder.getNewAccount();
+        Account account = accountService.create(accountType);
 
         return new ResponseEntity<>(account, httpHeaders, HttpStatus.OK);
     }
 
     @RequestMapping( path = "/calculateProperties", method = RequestMethod.POST)
     @ApiOperation(value = "Get calculated properties based on input prototype properties", response = Account.class)
-    public ResponseEntity<?> getCalculatedProperties(@RequestBody Account prototype) {
+    public ResponseEntity<?> getCalculatedProperties(@Valid @RequestBody Account prototype) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (prototype == null)
@@ -74,15 +79,7 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
-
-        if(accountType == null){
-            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
-        }
-
-        AccountBuilder accountBuilder = new AccountBuilder(accountType, prototype.getAccountNumber(), codeGenService);
-
-        accountBuilder.setProperties(prototype);
+        AccountBuilder accountBuilder = new AccountBuilder(prototype, accountTypeService, codeGenService);
 
         Account calculatedAccount = accountBuilder.getAccount();
 
@@ -91,7 +88,7 @@ public class AccountController {
 
     @RequestMapping( path = "/solveInstalments", method = RequestMethod.POST)
     @ApiOperation(value = "Solve instalments", response = Account.class)
-    public ResponseEntity<?> getSchedules(@RequestBody Account prototype) {
+    public ResponseEntity<?> getSchedules(@Valid @RequestBody Account prototype) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (prototype == null)
@@ -126,8 +123,8 @@ public class AccountController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    @ApiOperation(value = "Create new Account")
-    public ResponseEntity<?> create(@Valid @RequestBody Account account ) {
+    @ApiOperation(value = "Save new Account")
+    public ResponseEntity<?> save(@Valid @RequestBody Account account ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (account == null)
@@ -135,7 +132,7 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        Account savedItem = service.create(account);
+        Account savedItem = service.save(account);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")

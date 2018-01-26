@@ -6,16 +6,8 @@ public enum ApiErrorCode {
     INVALID_IDENTIFIER("name.invalid","Name must be valid identifier"),
     INVALID_ENUM("enum.invalid","Value must match one of the predefined values"),
     EVALUATION_FAILED("evaluation.failed","Invalid expression"),
-    REQUIRED("name.required","Required property");
-    //private final String invalidIdentifierCode = "name.invalid";
-    //private final String invalidIdentifier = "Name must be valid identifier";
-    //private final String invalidEnumCode = "enum.invalid";
-    //private final String invalidEnum = "Value must match one of the predefined values";
-    //private final String duplicateIdentifierCode = "name.duplicated";
-    //private final String duplicateIdentifier = "Name must be unique";
-    //private final String missingIdentifierCode = "item.missing";
-    //private final String missingIdentifier = "Item with this name does not exist";
-    //private final String evaluationErrorCode = "evaluation.failed";
+    REQUIRED("name.required","Required property"),
+    HAS_DUPLICATE_START_DATE("dateType.isStartDateDuplicated","Multiple dates defined as Start Date");
 
     private String code;
     private String description;
