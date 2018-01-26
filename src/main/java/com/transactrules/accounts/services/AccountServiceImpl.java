@@ -3,7 +3,6 @@ package com.transactrules.accounts.services;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.AccountRepository;
-import com.transactrules.accounts.repository.AccountTypeRepository;
 import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
 
     @Autowired
-    AccountTypeRepository accountTypeRepository;
+    AccountTypeService accountTypeService;
 
     @Autowired
     CalendarRepository calendarRepository;
@@ -47,29 +46,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account save(Account prototype)  {
 
-        AccountType accountType = accountTypeRepository.findOne(prototype.getAccountTypeName());
+        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
-        AccountBuilder builder = new AccountBuilder(accountType, prototype.getAccountNumber(), codeGenService );
-
-        for (String name: prototype.getDates().keySet()) {
-            builder.addDateValue(name, prototype.getDates().get(name));
-        }
-
-        for (String name: prototype.getAmounts().keySet()) {
-            builder.addAmountValue(name, prototype.getAmounts().get(name));
-        }
-
-        for (String name: prototype.getRates().keySet()) {
-            builder.addRateValue(name, prototype.getRates().get(name));
-        }
-
-        for (String name: prototype.getOptions().keySet()) {
-            builder.addOptionValue(name, prototype.getOptions().get(name));
-        }
-
-        for (String name: prototype.getSchedules().keySet()) {
-            builder.addSchedule(name, prototype.getSchedules().get(name));
-        }
+        AccountBuilder builder = new AccountBuilder(prototype, accountTypeService, codeGenService );
 
         Account account = builder.getAccount();
 
@@ -81,13 +60,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(AccountType accountType) {
 
-        AccountBuilder builder = new AccountBuilder(accountType, "", this.codeGenService);
+        String accountNumber = uniqueIdService.getNextId("Account");
+
+        AccountBuilder builder = new AccountBuilder(accountType, accountNumber, this.codeGenService);
 
         Account account = builder.getNewAccount();
 
-        String accountNumber = uniqueIdService.getNextId("Account");
+        return account;
+    }
 
-        account.setAccountNumber(accountNumber);
+    @Override
+    public Account calculateProperties(Account account) {
+        AccountBuilder accountBuilder = new AccountBuilder(account, accountTypeService, codeGenService);
+
+        Account calculatedAccount = accountBuilder.getAccount();
 
         return account;
     }
@@ -122,7 +108,7 @@ public class AccountServiceImpl implements AccountService {
         try {
 
             Account dbAccount = accountRepository.findOne(transaction.getAccountNumber());
-            AccountType accountType = accountTypeRepository.findOne(dbAccount.getAccountTypeName());
+            AccountType accountType = accountTypeService.findByClassName(dbAccount.getAccountTypeName());
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Class accountClass = null;

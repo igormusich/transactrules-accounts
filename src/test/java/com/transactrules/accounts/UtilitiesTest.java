@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.utilities.Utilities;
+import com.transactrules.accounts.utilities.Utility;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,11 +19,11 @@ public class UtilitiesTest {
     public void checksumTest() throws IOException, NoSuchAlgorithmException {
         AccountType loanAccountType = TestUtility.CreateLoanGivenAccountType();
 
-        BigInteger checksum1 = Utilities.checksum(loanAccountType);
+        BigInteger checksum1 = Utility.checksum(loanAccountType);
 
         loanAccountType.setClassName(loanAccountType.getClassName()+"1");
 
-        BigInteger checksum2 = Utilities.checksum(loanAccountType);
+        BigInteger checksum2 = Utility.checksum(loanAccountType);
 
         assertThat(checksum1, not(is(checksum2)));
 

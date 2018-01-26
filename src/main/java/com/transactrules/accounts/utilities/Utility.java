@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Utilities {
+public class Utility {
     public static BigInteger checksum(Object obj) throws IOException, NoSuchAlgorithmException {
 
         if (obj == null) {

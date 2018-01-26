@@ -1,5 +1,7 @@
 package com.transactrules.accounts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.services.AccountTypeService;
@@ -54,6 +56,8 @@ public class LoanGivenTest {
         LocalDate endDate = startDate.plusYears(25);
 
         Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-9827387",startDate, endDate,codeGenService);
+
+        ObjectMapper mapper = ObjectMapperConfiguration.getObjectMapper();
 
         account.processTransaction("Advance", BigDecimal.valueOf(100));
 

@@ -3,7 +3,7 @@ package com.transactrules.accounts.web;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.services.AccountTypeService;
-import com.transactrules.accounts.utilities.Utilities;
+import com.transactrules.accounts.utilities.Utility;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -110,7 +110,7 @@ public class AccountTypeController {
 
         PositionType positionType = optionalPositionType.get();
 
-        if(!Utilities.isEmpty(item.labelName)){
+        if(!Utility.isEmpty(item.labelName)){
             positionType.setLabelName(item.labelName);
         }
 

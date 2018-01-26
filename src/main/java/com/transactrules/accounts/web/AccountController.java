@@ -9,7 +9,7 @@ import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.services.CalendarService;
 import com.transactrules.accounts.services.UniqueIdService;
-import com.transactrules.accounts.utilities.Utilities;
+import com.transactrules.accounts.utilities.Utility;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -53,7 +53,7 @@ public class AccountController {
     public ResponseEntity<?> create(@PathVariable(required = true) String accountTypeName ) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
-        if (Utilities.isEmpty(accountTypeName))
+        if (Utility.isEmpty(accountTypeName))
         {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
@@ -79,9 +79,7 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        AccountBuilder accountBuilder = new AccountBuilder(prototype, accountTypeService, codeGenService);
-
-        Account calculatedAccount = accountBuilder.getAccount();
+        Account calculatedAccount = accountService.calculateProperties(prototype);
 
         return new ResponseEntity<>(calculatedAccount, httpHeaders, HttpStatus.OK);
     }

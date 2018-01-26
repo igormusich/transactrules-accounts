@@ -1,10 +1,14 @@
 package com.transactrules.accounts.runtime;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDate;
 
 
 public class DateValue{
+
+    @NotNull
     private LocalDate date;
 
     public DateValue(){

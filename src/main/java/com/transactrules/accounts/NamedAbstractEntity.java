@@ -3,7 +3,7 @@ package com.transactrules.accounts;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.transactrules.accounts.utilities.Utilities;
+import com.transactrules.accounts.utilities.Utility;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -27,7 +27,7 @@ public abstract class NamedAbstractEntity {
 
     public NamedAbstractEntity(String propertyName){
         this.propertyName = propertyName;
-        this.labelName = Utilities.splitCamelCase(this.propertyName);
+        this.labelName = Utility.splitCamelCase(this.propertyName);
     }
 
     public NamedAbstractEntity(String propertyName, String labelName) {

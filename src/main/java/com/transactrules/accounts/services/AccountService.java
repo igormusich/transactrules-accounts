@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AccountService {
     Account create(AccountType accountType);
+    Account calculateProperties(Account account);
     Account save(Account account);
     List<Account> findAll();
     Account findByAccountNumber(String accountNumber);

@@ -17,6 +17,10 @@ public class AmountValue {
 
     }
 
+    public AmountValue(BigDecimal value){
+        this.amount = value;
+    }
+
     public AmountValue(BigDecimal value, LocalDate valueDate) {
 
         this.amount = value;
