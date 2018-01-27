@@ -311,6 +311,11 @@ public class Account {
 
     }
 
+    @DynamoDBIgnore
+    public LocalDate retrieveStartDate(){
+        return  null;
+    }
+
     public void forecast(LocalDate futureDate)
     {
         LocalDate originalValueDate = valueDate;

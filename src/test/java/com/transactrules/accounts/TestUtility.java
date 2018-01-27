@@ -92,11 +92,11 @@ public class TestUtility {
         loanGiven.addAmountType("ConversionInterestAmount" , false,false);
         loanGiven.addAmountType("AdvanceAmount" , false,true);
 
-        loanGiven.addRateType("InterestRate");
+        loanGiven.addRateType("InterestRate", true);
 
         loanGiven.addOptionType(
                 "AccrualOption",
-                "com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions()");
+                "com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions()", true);
 
 
         loanGiven.addDayScheduledTransaction(

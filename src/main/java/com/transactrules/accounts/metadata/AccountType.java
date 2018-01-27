@@ -275,14 +275,14 @@ public class AccountType {
         return amountType;
     }
 
-    public RateType addRateType(String name){
-        RateType rateType = new RateType( name);
+    public RateType addRateType(String name, Boolean isRequired){
+        RateType rateType = new RateType( name, isRequired);
         rateTypes.add(rateType);
         return rateType;
     }
 
-    public OptionType addOptionType(String name, String optionListExpression){
-        OptionType optionType = new OptionType( name, optionListExpression);
+    public OptionType addOptionType(String name, String optionListExpression, Boolean isRequired){
+        OptionType optionType = new OptionType( name, optionListExpression, isRequired);
         optionTypes.add(optionType);
         return  optionType;
     }

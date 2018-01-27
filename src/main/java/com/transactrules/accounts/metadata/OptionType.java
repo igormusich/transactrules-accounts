@@ -10,13 +10,16 @@ public class OptionType extends NamedAbstractEntity {
 
     private String optionListExpression;
 
+    private Boolean isRequired;
+
     public OptionType(){
 
     }
 
-    public OptionType( String name, String optionListExpression) {
+    public OptionType( String name, String optionListExpression, Boolean isRequired) {
         super(name);
         this.optionListExpression = optionListExpression;
+        this.isRequired = isRequired;
     }
 
     @DynamoDBAttribute
@@ -27,5 +30,15 @@ public class OptionType extends NamedAbstractEntity {
     public void setOptionListExpression(String optionListExpression) {
         this.optionListExpression = optionListExpression;
     }
+
+    @DynamoDBAttribute
+    public Boolean getRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(Boolean required) {
+        isRequired = required;
+    }
+
 
 }

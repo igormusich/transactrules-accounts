@@ -1,10 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AmountValue;
-import com.transactrules.accounts.runtime.CodeGenService;
-import com.transactrules.accounts.runtime.DateValue;
+import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.web.AccountValidator;
@@ -70,6 +67,13 @@ public class AccountValidationTest {
 
         account.getAmounts().put("AdvanceAmount", new AmountValue(BigDecimal.valueOf(624000)));
 
+        account.getRates().put("InterestRate", new RateValue(BigDecimal.valueOf(0.0304),null));
+
+        account.getOptions().put("AccrualOption", new OptionValue("360"));
+
+        account.getCalendarNames().add("Euro Zone");
+
+
         Errors errors = new BeanPropertyBindingResult(account, "account");
         accountValidator.validate(account, errors);
 
@@ -91,11 +95,14 @@ public class AccountValidationTest {
 
         assertThat(errors.hasErrors(), is(true));
 
-        assertThat(errors.getFieldErrors().size(), is(4));
-        assertThat(errors.getFieldErrors().get(0).getDefaultMessage(), is("StartDate is required."));
-        assertThat(errors.getFieldErrors().get(1).getDefaultMessage(), is("AccrualStart is required."));
-        assertThat(errors.getFieldErrors().get(2).getDefaultMessage(), is("EndDate is required."));
-        assertThat(errors.getFieldErrors().get(3).getDefaultMessage(), is("AdvanceAmount is required."));
+        assertThat(errors.getFieldErrors().size(), is(7));
+        assertThat(errors.getFieldErrors().get(0).getDefaultMessage(), is("At least one calendar name is required."));
+        assertThat(errors.getFieldErrors().get(1).getDefaultMessage(), is("StartDate is required."));
+        assertThat(errors.getFieldErrors().get(2).getDefaultMessage(), is("AccrualStart is required."));
+        assertThat(errors.getFieldErrors().get(3).getDefaultMessage(), is("EndDate is required."));
+        assertThat(errors.getFieldErrors().get(4).getDefaultMessage(), is("AdvanceAmount is required."));
+        assertThat(errors.getFieldErrors().get(5).getDefaultMessage(), is("InterestRate is required."));
+        assertThat(errors.getFieldErrors().get(6).getDefaultMessage(), is("AccrualOption is required."));
 
     }
 }

@@ -2,8 +2,6 @@ package com.transactrules.accounts.web;
 
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountBuilder;
-import com.transactrules.accounts.runtime.Calendar;
 import com.transactrules.accounts.runtime.CodeGenService;
 import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -86,7 +83,7 @@ public class AccountController {
 
     @RequestMapping( path = "/solveInstalments", method = RequestMethod.POST)
     @ApiOperation(value = "Solve instalments", response = Account.class)
-    public ResponseEntity<?> getSchedules(@Valid @RequestBody Account prototype) {
+    public ResponseEntity<?> solveInstalments(@Valid @RequestBody Account prototype) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (prototype == null)
@@ -94,26 +91,8 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
-        if(accountType == null){
-            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
-        }
-
-        AccountBuilder accountBuilder = new AccountBuilder(accountType, "", codeGenService);
-
-        if(prototype.getCalendarNames().size()>0){
-            Calendar calendar = calendarService.findByName(prototype.getCalendarNames().get(0));
-            accountBuilder.setBusinessDayCalculator(calendar);
-        }
-
-        accountBuilder.setProperties(prototype);
-
-        Account calculatedAccount = accountBuilder.getAccount();
-
-        calculatedAccount.valueDate = LocalDate.now();
-
-        calculatedAccount.calculateInstaments();
+        Account calculatedAccount = accountService.calculateInstalments(prototype);
 
         return new ResponseEntity<>(calculatedAccount, httpHeaders, HttpStatus.OK);
     }

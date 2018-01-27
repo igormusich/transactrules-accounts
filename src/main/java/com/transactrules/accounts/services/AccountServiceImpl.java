@@ -3,7 +3,6 @@ package com.transactrules.accounts.services;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.AccountRepository;
-import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
     AccountTypeService accountTypeService;
 
     @Autowired
-    CalendarRepository calendarRepository;
+    CalendarService calendarService;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -74,6 +73,26 @@ public class AccountServiceImpl implements AccountService {
         AccountBuilder accountBuilder = new AccountBuilder(account, accountTypeService, codeGenService);
 
         Account calculatedAccount = accountBuilder.getAccount();
+
+        return calculatedAccount;
+    }
+
+    @Override
+    public Account calculateInstalments(Account prototype) {
+
+        AccountBuilder accountBuilder = new AccountBuilder(prototype, accountTypeService, codeGenService);
+
+        if(prototype.getCalendarNames().size()>0){
+            Calendar calendar = calendarService.findByName(prototype.getCalendarNames().get(0));
+            accountBuilder.setBusinessDayCalculator(calendar);
+        }
+
+
+        Account account = accountBuilder.getAccount();
+
+        account.valueDate = account.retrieveStartDate();
+
+        account.calculateInstaments();
 
         return account;
     }

@@ -1,13 +1,10 @@
 package com.transactrules.accounts.web;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.AmountType;
-import com.transactrules.accounts.metadata.DateType;
+import com.transactrules.accounts.metadata.*;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.repository.AccountTypeRepository;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AmountValue;
-import com.transactrules.accounts.runtime.DateValue;
+import com.transactrules.accounts.repository.CalendarRepository;
+import com.transactrules.accounts.runtime.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -17,13 +14,17 @@ import org.springframework.validation.Validator;
 public class AccountValidator implements Validator {
     private AccountTypeRepository accountTypeRepository;
     private AccountRepository accountRepository;
+    private CalendarRepository calendarRepository;
 
     @Autowired
     public AccountValidator(
             AccountTypeRepository accountTypeRepository,
-            AccountRepository accountRepository) {
+            AccountRepository accountRepository,
+            CalendarRepository calendarRepository) {
+
         this.accountTypeRepository = accountTypeRepository;
         this.accountRepository = accountRepository;
+        this.calendarRepository = calendarRepository;
     }
 
     @Override
@@ -53,8 +54,27 @@ public class AccountValidator implements Validator {
             errors.rejectValue("accountTypeName", ApiErrorCode.NO_SUCH_TYPE.getCode(), null, String.format("AccountType  %s does not exists", request.getAccountTypeName()));
         }
 
+        if(request.getCalendarNames().size()==0){
+            errors.rejectValue("calendarNames", ApiErrorCode.REQUIRED.getCode(), "At least one calendar name is required.");
+        }
+        else{
+            Integer i =0;
+            for(String calendarName:request.getCalendarNames()){
+                Calendar calendar = calendarRepository.findOne(calendarName);
+
+                if(calendar == null){
+                    errors.rejectValue("calendarNames[" + i + "]", ApiErrorCode.NO_SUCH_TYPE.getCode(), null, String.format("Calendar  %s does not exists", calendarName));
+                }
+
+                i++;
+            }
+        }
+
+
         validateDates(errors, request, accountType);
         validateAmounts(errors, request, accountType);
+        validateRates(errors, request, accountType);
+        validateOptions(errors, request, accountType);
 
     }
 
@@ -99,6 +119,54 @@ public class AccountValidator implements Validator {
 
             if(amountValue.getAmount() == null){
                 errors.rejectValue("amounts[" + i + "].amount", ApiErrorCode.REQUIRED.getCode(), key + " amount is required.");
+                continue;
+            }
+
+            i++;
+        }
+    }
+
+    private void validateRates(Errors errors, Account request, AccountType accountType) {
+        for(RateType rateType: accountType.getRateTypes()){
+            if(rateType.getRequired()){
+                if(!request.getRates().containsKey(rateType.getPropertyName())){
+                    errors.rejectValue("rates", ApiErrorCode.REQUIRED.getCode(), rateType.getPropertyName() + " is required.");
+                    continue;
+                }
+            }
+        }
+
+        Integer i =0;
+
+        for(String key:request.getRates().keySet()){
+            RateValue rateValue = request.getRates().get(key);
+
+            if(rateValue.getValue() == null){
+                errors.rejectValue("rates[" + i + "].rate", ApiErrorCode.REQUIRED.getCode(), key + " rate is required.");
+                continue;
+            }
+
+            i++;
+        }
+    }
+
+    private void validateOptions(Errors errors, Account request, AccountType accountType) {
+        for(OptionType optionType: accountType.getOptionTypes()){
+            if(optionType.getRequired()){
+                if(!request.getOptions().containsKey(optionType.getPropertyName())){
+                    errors.rejectValue("options", ApiErrorCode.REQUIRED.getCode(), optionType.getPropertyName() + " is required.");
+                    continue;
+                }
+            }
+        }
+
+        Integer i =0;
+
+        for(String key:request.getOptions().keySet()){
+            OptionValue optionValue = request.getOptions().get(key);
+
+            if(optionValue.getValue() == null){
+                errors.rejectValue("options[" + i + "].value", ApiErrorCode.REQUIRED.getCode(), key + " is required.");
                 continue;
             }
 

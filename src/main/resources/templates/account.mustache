@@ -340,4 +340,18 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
     public String generatedAt(){
         return "{{#currentTimestamp}}generate{{/currentTimestamp}}";
     }
+
+
+    @Override
+    public LocalDate retrieveStartDate(){
+        LocalDate startDate = null;
+
+{{#dateTypes}}
+    {{#isStartDate}}
+        startDate = _{{propertyName}}.getDate();
+    {{/isStartDate}}
+{{/dateTypes}}
+
+        return startDate;
+    }
 }

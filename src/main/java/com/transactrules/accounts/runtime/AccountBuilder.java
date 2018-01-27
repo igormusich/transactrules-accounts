@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -222,15 +223,23 @@ public class AccountBuilder {
     public Account getNewAccount() {
         Account account = null;
 
-        try{
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            Class accountClass = codeGenService.getAccountClass(accountType, new PrintWriter(os));
-
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            PrintWriter writer = new PrintWriter(os);
+            Class accountClass =  codeGenService.getAccountClass(accountType, writer);
             account = (Account) accountClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            String aString = "";
 
-        } catch (Exception ex){
-            logger.error(ex.toString());
+            try {
+                aString = new String(os.toByteArray(),"UTF-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+            logger.error(e.getMessage() + aString);
         }
+
 
         account.setAccountNumber(accountNumber);
         account.setAccountTypeName(accountType.getClassName());

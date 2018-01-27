@@ -1,5 +1,6 @@
 package com.transactrules.accounts.runtime;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
 import com.transactrules.accounts.utilities.Solver;
 
@@ -7,7 +8,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
-
 
 public class localLoanGiven extends Account {
 
@@ -336,6 +336,17 @@ public class localLoanGiven extends Account {
     }
     @Override
     public String generatedAt(){
-        return "2018-01-24T06:54:42.712";
+        return "2018-01-26T04:10:02.225";
+    }
+
+
+    @Override
+    @DynamoDBIgnore
+    public LocalDate retrieveStartDate(){
+        LocalDate startDate = null;
+
+        startDate = _StartDate.getDate();
+
+        return startDate;
     }
 }

@@ -81,8 +81,8 @@ public class AccountTypeValidationTest {
         accountType.addInstalmentType(" &* fails", ScheduledTransactionTiming.StartOfDay,"valid_schedule_type","valid_transaction_type", "valid_position_type",null , null);
         accountType.addTransactionType(" *&@ fail");
         accountType.addAmountType(" &!*( fail", false,false);
-        accountType.addRateType(" *&@# (#*");
-        accountType.addOptionType(" 3@3#&@* ","[\"a\"]");
+        accountType.addRateType(" *&@# (#*", false);
+        accountType.addOptionType(" 3@3#&@* ","[\"a\"]", false);
 
 
         Errors errors = new BeanPropertyBindingResult(accountType, "accountType");
