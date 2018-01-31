@@ -228,6 +228,14 @@ public class Account {
 
     }
 
+    public List<ScheduleDate> fromDates(LocalDate... list){
+        ArrayList<ScheduleDate> dates = new ArrayList<>();
+        for(LocalDate date:list){
+            dates.add(new ScheduleDate(date));
+        }
+        return  dates;
+    }
+
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);

@@ -138,13 +138,16 @@ public class TestUtility {
 
         AccountBuilder builder = new AccountBuilder( CreateLoanGivenAccountType(), accountNumber, codeGenService );
 
-        builder.setBusinessDayCalculator(CreateEuroZoneCalendar())
+        Calendar calendar= CreateEuroZoneCalendar();
+
+        builder.setBusinessDayCalculator(calendar)
                 .addDateValue("StartDate", startDate)
                 .addDateValue("AccrualStart",startDate)
                 .addDateValue("EndDate", endDate)
                 .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
                 .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
                 .addOptionValue("AccrualOption", "365")
+                .addCalendar(calendar.getName())
         ;
 
 

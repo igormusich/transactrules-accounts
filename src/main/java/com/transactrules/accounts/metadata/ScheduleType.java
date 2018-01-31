@@ -34,6 +34,10 @@ public class ScheduleType extends NamedAbstractEntity {
 
     private String intervalExpression;
 
+    private String includeDatesExpression;
+
+    private String excludeDatesExpression;
+
     @NotBlank
     @ApiModelProperty(dataType = "string", allowableValues ="ANY_DAY, NEXT_BUSINESS_DAY, PREVIOUS_BUSINESS_DAY , CLOSEST_BUSINESS_DAY_NEXT , NEXT_BUSINESS_DAY_THIS_MONTH_OR_PREVIOUS", value = "Define working day adjustment", notes ="In case when working day adjustments need to be applied determines how the adjustment needs to be applied")
     private String businessDayCalculation;
@@ -135,6 +139,24 @@ public class ScheduleType extends NamedAbstractEntity {
         this.businessDayCalculation = businessDayCalculation;
     }
 
+    @DynamoDBAttribute
+    public String getIncludeDatesExpression() {
+        return includeDatesExpression;
+    }
+
+    public void setIncludeDatesExpression(String includeDatesExpression) {
+        this.includeDatesExpression = includeDatesExpression;
+    }
+
+    @DynamoDBAttribute
+    public String getExcludeDatesExpression() {
+        return excludeDatesExpression;
+    }
+
+    public void setExcludeDatesExpression(String excludeDatesExpression) {
+        this.excludeDatesExpression = excludeDatesExpression;
+    }
+
     @JsonIgnore
     @DynamoDBIgnore
     public Boolean getHasEndDate() {
@@ -165,6 +187,17 @@ public class ScheduleType extends NamedAbstractEntity {
         return (numberOfRepeatsExpression!=null && !numberOfRepeatsExpression.isEmpty());
     }
 
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasIncludeDatesExpression(){
+        return (includeDatesExpression!=null && !includeDatesExpression.isEmpty());
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasExcludeDatesExpression(){
+        return (excludeDatesExpression!=null && !excludeDatesExpression.isEmpty());
+    }
 
 
 }

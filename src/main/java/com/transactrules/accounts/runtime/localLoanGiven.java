@@ -1,6 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
 import com.transactrules.accounts.utilities.Solver;
 
@@ -154,28 +153,34 @@ public class localLoanGiven extends Account {
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("AccrualSchedule", schedule);
+            //set default properties only when creating new schedule
         }
         _AccrualSchedule = this.getSchedules().get("AccrualSchedule");
         _AccrualSchedule.setBusinessDayCalculator(this.businessDayCalculator);
         SetAccrualScheduleCalculatedProperties(_AccrualSchedule);
 
+
         if(!this.getSchedules().containsKey("InterestSchedule"))
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("InterestSchedule", schedule);
+            //set default properties only when creating new schedule
+            SetInterestScheduleDefaultProperties(schedule);
         }
         _InterestSchedule = this.getSchedules().get("InterestSchedule");
         _InterestSchedule.setBusinessDayCalculator(this.businessDayCalculator);
-        SetInterestScheduleDefaultProperties(_InterestSchedule);
+
 
         if(!this.getSchedules().containsKey("RedemptionSchedule"))
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("RedemptionSchedule", schedule);
+            //set default properties only when creating new schedule
+            SetRedemptionScheduleDefaultProperties(schedule);
         }
         _RedemptionSchedule = this.getSchedules().get("RedemptionSchedule");
         _RedemptionSchedule.setBusinessDayCalculator(this.businessDayCalculator);
-        SetRedemptionScheduleDefaultProperties(_RedemptionSchedule);
+
 
 
         if(!this.getInstalmentSets().containsKey("Redemptions"))
@@ -208,7 +213,11 @@ public class localLoanGiven extends Account {
         schedule.setBusinessDayCalculation("ANY_DAY");
         schedule.setFrequency("MONTHLY");
         schedule.setEndType("END_DATE");
+        schedule.setStartDate(StartDate());
+        schedule.setStartDate(EndDate());
         schedule.setInterval(1);
+        schedule.setIncludeDates(fromDates(StartDate()));
+
     }
 
     public void SetRedemptionScheduleDefaultProperties(Schedule schedule)
@@ -216,7 +225,11 @@ public class localLoanGiven extends Account {
         schedule.setBusinessDayCalculation("ANY_DAY");
         schedule.setFrequency("MONTHLY");
         schedule.setEndType("END_DATE");
+        schedule.setStartDate(StartDate());
+        schedule.setStartDate(EndDate());
         schedule.setInterval(1);
+        schedule.setIncludeDates(fromDates(StartDate()));
+
     }
 
     @Override
@@ -336,12 +349,11 @@ public class localLoanGiven extends Account {
     }
     @Override
     public String generatedAt(){
-        return "2018-01-26T04:10:02.225";
+        return "2018-01-31T02:53:18.462";
     }
 
 
     @Override
-    @DynamoDBIgnore
     public LocalDate retrieveStartDate(){
         LocalDate startDate = null;
 

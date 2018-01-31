@@ -137,14 +137,16 @@ public class {{className}} extends Account {
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("{{propertyName}}", schedule);
+
+            {{^isCalculated}}
+                //set default properties only when creating new schedule
+                Set{{propertyName}}DefaultProperties(schedule);
+            {{/isCalculated}}
         }
         _{{propertyName}} = this.getSchedules().get("{{propertyName}}");
         _{{propertyName}}.setBusinessDayCalculator(this.businessDayCalculator);
     {{#isCalculated}}
         Set{{propertyName}}CalculatedProperties(_{{propertyName}});
-    {{/isCalculated}}
-    {{^isCalculated}}
-        Set{{propertyName}}DefaultProperties(_{{propertyName}});
     {{/isCalculated}}
 
     {{/scheduleTypes}}
@@ -184,6 +186,12 @@ public void Set{{propertyName}}CalculatedProperties(Schedule schedule)
 {{#hasNumberOfRepeatsExpression}}
     schedule.setNumberOfRepeats({{numberOfRepeatsExpression}});
 {{/hasNumberOfRepeatsExpression}}
+{{#hasIncludeDatesExpression}}
+    schedule.setIncludeDates({{includeDatesExpression}});
+{{/hasIncludeDatesExpression}}
+{{#hasExcludeDatesExpression}}
+    schedule.setExcludeDates({{excludeDatesExpression}});
+{{/hasExcludeDatesExpression}}
 }
 {{/isCalculated}}
 {{^isCalculated}}
@@ -205,6 +213,13 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
 {{#hasNumberOfRepeatsExpression}}
     schedule.setNumberOfRepeats({{numberOfRepeatsExpression}});
 {{/hasNumberOfRepeatsExpression}}
+{{#hasIncludeDatesExpression}}
+    schedule.setIncludeDates({{includeDatesExpression}});
+{{/hasIncludeDatesExpression}}
+{{#hasExcludeDatesExpression}}
+    schedule.setExcludeDates({{excludeDatesExpression}});
+{{/hasExcludeDatesExpression}}
+
 }
 {{/isCalculated}}
 {{/scheduleTypes}}

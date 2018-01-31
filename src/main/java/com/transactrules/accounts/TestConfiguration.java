@@ -95,21 +95,25 @@ public class TestConfiguration {
                 ScheduleFrequency.Monthly,
                 ScheduleEndType.EndDate,
                 BusinessDayCalculation.AnyDay,
-                null,
-                null,
+                "StartDate()",
+                "EndDate()",
                 null,
                 "1");
+
+        interestSchedule.setIncludeDatesExpression("fromDates(StartDate())");
 
         ScheduleType redemptionSchedule = loanGiven.addUserInputScheduleType(
                 "RedemptionSchedule",
                 ScheduleFrequency.Monthly,
                 ScheduleEndType.EndDate,
                 BusinessDayCalculation.AnyDay,
-                null,
-                null,
+                "StartDate()",
+                "EndDate()",
                 null,
                 "1"
         );
+
+        redemptionSchedule.setIncludeDatesExpression("fromDates(StartDate())");
 
         TransactionType interestAccrued=  loanGiven.addTransactionType("InterestAccrued", true)
                 .addRule(interestAccruedPosition, TransactionOperation.Add);
