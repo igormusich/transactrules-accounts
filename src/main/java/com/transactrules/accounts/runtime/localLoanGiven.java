@@ -225,7 +225,7 @@ public class localLoanGiven extends Account {
         schedule.setBusinessDayCalculation("ANY_DAY");
         schedule.setFrequency("MONTHLY");
         schedule.setEndType("END_DATE");
-        schedule.setStartDate(StartDate());
+        schedule.setStartDate(StartDate().plusMonths(1));
         schedule.setStartDate(EndDate());
         schedule.setInterval(1);
         schedule.setIncludeDates(fromDates(StartDate()));
@@ -346,6 +346,10 @@ public class localLoanGiven extends Account {
     public void CalculateRedemptionsInstalments() {
         Solver solver = new Solver();
         BigDecimal amount = solver.FindFunctionZero( this::GetClosingBalanceForRedemptions,  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
+
+        amount = amount.setScale(2, RoundingMode.HALF_UP);
+
+        this.setFutureInstalmentValue("Redemptions", ScheduledTransactionTiming.StartOfDay, amount);
     }
     @Override
     public String generatedAt(){

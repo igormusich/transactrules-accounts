@@ -224,13 +224,18 @@ public class Schedule  {
         }
 
         for(ScheduleDate includeDate: this.includeDates){
-            dates.add( includeDate.value);
+            if(!dates.contains(includeDate.value)){
+                dates.add( includeDate.value);
+            }
+
         }
 
 
         for(ScheduleDate excludeDate : this.excludeDates)
         {
-            dates.remove(excludeDate.value);
+            if(dates.contains(excludeDate.value)){
+                dates.remove(excludeDate.value);
+            }
         }
 
         List<LocalDate> sortedDates = dates.stream().sorted().collect(Collectors.toList());

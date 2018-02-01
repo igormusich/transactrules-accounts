@@ -205,7 +205,7 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
     schedule.setStartDate({{startDateExpression}});
 {{/hasStartDateExpression}}
 {{#hasEndDateExpression}}
-    schedule.setStartDate({{endDateExpression}});
+    schedule.setEndDate({{endDateExpression}});
 {{/hasEndDateExpression}}
 {{#hasIntervalExpression}}
     schedule.setInterval({{intervalExpression}});
@@ -349,7 +349,12 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
     public void Calculate{{propertyName}}Instalments() {
         Solver solver = new Solver();
         BigDecimal amount = solver.FindFunctionZero( this::GetClosingBalanceFor{{propertyName}},  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
-    }
+
+        amount = amount.setScale(2, RoundingMode.HALF_UP);
+
+        this.setFutureInstalmentValue("{{propertyName}}", ScheduledTransactionTiming.StartOfDay, amount);
+
+        }
 {{/instalmentTypes}}
     @Override
     public String generatedAt(){
