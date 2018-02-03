@@ -148,9 +148,9 @@ public class TestConfiguration {
         loanGiven.addTransactionType("InterestPayment")
                 .addRule(interestAccruedPosition, TransactionOperation.Subtract);
 
-        loanGiven.addAmountType("RedemptionAmount" , false, false);
-        loanGiven.addAmountType("AdditionalAdvanceAmount" , false, false);
-        loanGiven.addAmountType("ConversionInterestAmount" , false, false);
+        //loanGiven.addAmountType("RedemptionAmount" , false, false);
+        //loanGiven.addAmountType("AdditionalAdvanceAmount" , false, false);
+        //loanGiven.addAmountType("ConversionInterestAmount" , false, false);
         loanGiven.addAmountType("AdvanceAmount" , false, true);
 
         loanGiven.addRateType("InterestRate", true);

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -91,8 +92,19 @@ public class AccountController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
+        Account calculatedAccount;
 
-        Account calculatedAccount = accountService.calculateInstalments(prototype);
+        try{
+             calculatedAccount = accountService.calculateInstalments(prototype);
+        }
+        catch(ArithmeticException aex){
+            List<ApiGlobalError> apiGlobalErrors = new ArrayList<>();
+            apiGlobalErrors.add(new ApiGlobalError(ApiErrorCode.NO_SOLUTIONS_FOUND.getCode(), ApiErrorCode.NO_SOLUTIONS_FOUND.getDescription()));
+            ApiErrorsView apiErrorsView = new ApiErrorsView(null, apiGlobalErrors);
+
+            return new ResponseEntity<>(apiErrorsView, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
 
         return new ResponseEntity<>(calculatedAccount, httpHeaders, HttpStatus.OK);
     }

@@ -51,7 +51,7 @@ public class Solver
         if ((fa.compareTo(BigDecimal.ZERO) > 0 && fb.compareTo(BigDecimal.ZERO) > 0)
                 || (fa.compareTo(BigDecimal.ZERO) < 0 && fb.compareTo(BigDecimal.ZERO) < 0))
         {
-            throw new ArithmeticException("Root must be bracketed");
+            throw new ArithmeticException("No solutions found");
         }
 
         fc = fb;

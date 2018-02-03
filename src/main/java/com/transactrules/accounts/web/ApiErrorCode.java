@@ -7,7 +7,8 @@ public enum ApiErrorCode {
     INVALID_ENUM("enum.invalid","Value must match one of the predefined values"),
     EVALUATION_FAILED("evaluation.failed","Invalid expression"),
     REQUIRED("name.required","Required property"),
-    HAS_DUPLICATE_START_DATE("dateType.isStartDateDuplicated","Multiple dates defined as Start Date");
+    HAS_DUPLICATE_START_DATE("dateType.isStartDateDuplicated","Multiple dates defined as Start Date"),
+    NO_SOLUTIONS_FOUND("instalmentSets.noSolutions","No solutions found for instalments");
 
     private String code;
     private String description;
