@@ -74,7 +74,9 @@ public class ScheduleTest {
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-       AccountBuilder builder = new AccountBuilder(accountType,"10010", codeGenService);
+       Class accountClass = codeGenService.generateClass(accountType);
+
+       AccountBuilder builder = new AccountBuilder(accountType.getClassName(),"10010", accountClass);
 
        builder.setBusinessDayCalculator(businessDayCalculator)
                .addDateValue("StartDate", startDate)

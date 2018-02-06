@@ -146,6 +146,16 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{id}/activate", method= RequestMethod.GET)
+    @ApiOperation(value = "Activate account", response = Account.class)
+    public ResponseEntity<?> activate( @PathVariable("id") String accountNumber){
+        Account prototype = service.findByAccountNumber(accountNumber);
+
+        Account activatedAccount =  accountService.activate(prototype);
+
+        return new ResponseEntity<>(activatedAccount, HttpStatus.OK);
+    }
+
     @InitBinder("account")
     public void setupBinder(WebDataBinder binder) {
 

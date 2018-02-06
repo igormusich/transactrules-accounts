@@ -66,7 +66,7 @@ public class TestConfiguration {
 
     public static AccountType createLoanGivenAccountType()
     {
-        AccountType loanGiven = new AccountType("LoanGiven", "LoanGiven");
+        AccountType loanGiven = new AccountType("Loan", "Loan");
 
         PositionType conversionInterestPosition = loanGiven.addPositionType("ConversionInterest");
         PositionType earlyRedemptionFeePosition = loanGiven.addPositionType("EarlyRedemptionFee");

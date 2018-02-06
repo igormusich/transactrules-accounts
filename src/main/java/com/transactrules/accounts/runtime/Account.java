@@ -24,6 +24,8 @@ public class Account {
 
     private boolean isActive;
 
+    private LocalDate dateActivated;
+
     @NotBlank
     private String accountTypeName;
 
@@ -129,6 +131,16 @@ public class Account {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    @DynamoDBAttribute
+    @LocalDateFormat
+    public LocalDate getDateActivated() {
+        return dateActivated;
+    }
+
+    public void setDateActivated(LocalDate dateActivated) {
+        this.dateActivated = dateActivated;
     }
 
     @DynamoDBAttribute
@@ -277,7 +289,7 @@ public class Account {
 
     public Transaction createTransaction(String transactionTypeName, BigDecimal amount) {
 
-        Transaction transaction = new Transaction(this.getAccountNumber(), transactionTypeName,amount, actionDate, valueDate);
+        Transaction transaction = new Transaction( transactionTypeName,amount, actionDate, valueDate);
 
         processTransaction(transactionTypeName, amount);
 
@@ -399,5 +411,10 @@ public class Account {
         }
 
         transactions = snapshotTransactions;
+    }
+
+    public void activate(){
+        this.isActive = true;
+        this.dateActivated = this.actionDate;
     }
 }

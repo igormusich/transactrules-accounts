@@ -15,7 +15,6 @@ import java.util.*;
 @DynamoDBDocument
 public class TransactionType extends NamedAbstractEntity {
 
-
     private boolean maximumPrecision;
 
     private List<TransactionRuleType> transactionRules = new ArrayList<>();

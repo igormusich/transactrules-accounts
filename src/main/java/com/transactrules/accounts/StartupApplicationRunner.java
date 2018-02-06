@@ -73,8 +73,8 @@ public class StartupApplicationRunner implements ApplicationRunner {
             CreateTable(Calendar.class, dynamoDBMapper, amazonDynamoDB);
         }
 
-        if(!contains(listTablesResult,"Transaction")) {
-            CreateTable(Transaction.class, dynamoDBMapper, amazonDynamoDB);
+        if(!contains(listTablesResult,"TransactionSet")) {
+            CreateTable(TransactionSet.class, dynamoDBMapper, amazonDynamoDB);
         }
 
         if(!contains(listTablesResult,"SystemProperties")) {
@@ -104,7 +104,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
         CreateTableRequest tableRequest = dynamoDBMapper
                 .generateCreateTableRequest(clazz);
         tableRequest.setProvisionedThroughput(
-                new ProvisionedThroughput(1L, 1L));
+                new ProvisionedThroughput(1000L, 1000L));
 
         CreateTableResult result= amazonDynamoDB.createTable(tableRequest);
 

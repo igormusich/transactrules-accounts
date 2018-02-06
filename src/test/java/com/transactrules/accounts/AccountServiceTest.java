@@ -60,7 +60,7 @@ public class AccountServiceTest {
 
         BigDecimal principal =  account.getPositions().get("Principal").getAmount();
 
-        accountService.createTransaction(new Transaction(accountNumber,"AdditionalAdvance", BigDecimal.valueOf(100), LocalDate.now(),LocalDate.now()));
+        accountService.createTransaction(account.getAccountNumber(),  new Transaction("AdditionalAdvance", BigDecimal.valueOf(100), LocalDate.now(),LocalDate.now()));
 
         Account updatedAccount = accountService.findByAccountNumber(accountNumber);
 

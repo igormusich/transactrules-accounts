@@ -1,14 +1,9 @@
 package com.transactrules.accounts.runtime;
 
-import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.services.AccountTypeService;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,12 +13,15 @@ import java.util.Map;
 
 public class AccountBuilder {
 
-    private CodeGenService codeGenService;
+    //private CodeGenService codeGenService;
+
+    private Class accountClass;
 
     private Logger logger = LoggerFactory.getLogger(AccountBuilder.class);
 
-    private final AccountType accountType;
     private final String accountNumber;
+    private final String accountTypeName;
+
     private  BusinessDayCalculator businessDayCalculator;
 
     private Map<String,Position> positions = new HashMap<>();
@@ -42,32 +40,23 @@ public class AccountBuilder {
 
     private List<String> calendarNames = new ArrayList<>();
 
-
-    public AccountBuilder(Account prototype, AccountTypeService accountTypeService, CodeGenService codeGenService){
-        this.codeGenService = codeGenService;
-        this.accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
+    public AccountBuilder(Account prototype, Class accountClass){
+        this.accountClass = accountClass;
+        this.accountTypeName = prototype.getAccountTypeName();
         this.accountNumber = prototype.getAccountNumber();
         this.setProperties(prototype);
     }
 
 
-    public AccountBuilder(AccountType accountType, String accountNumber, CodeGenService codeGenService){
-        this.accountType = accountType;
-        this.accountNumber = accountNumber;
-        this.codeGenService = codeGenService;
 
-        for(PositionType positionType: accountType.getPositionTypes()){
-            Position position = new Position();
-            positions.put(positionType.getPropertyName(), position);
-        }
+    public AccountBuilder(String accountTypeName, String accountNumber, Class accountClass){
+        this.accountTypeName = accountTypeName;
+        this.accountNumber = accountNumber;
+        this.accountClass = accountClass;
+
     }
 
     public AccountBuilder addDateValue(String name, DateValue dateValue){
-        DateType dateType = accountType.getDateTypes().stream().
-                filter(dt->dt.getPropertyName().
-                        equals(name)).
-                findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid date propertyName for $s", name, accountType.getClassName()) ) );
 
         dates.put(name,dateValue);
 
@@ -79,11 +68,6 @@ public class AccountBuilder {
     }
 
     public AccountBuilder addAmountValue(String name,AmountValue amountValue){
-        AmountType dateType = accountType.getAmountTypes().stream().
-                filter(dt->dt.getPropertyName().
-                        equals(name)).
-                findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid amount propertyName for $s", name, accountType.getClassName()) ) );
 
         amounts.put(name,amountValue);
 
@@ -106,11 +90,6 @@ public class AccountBuilder {
 
 
     public AccountBuilder addOptionValue(String name, OptionValue optionValue){
-        OptionType optionType = accountType.getOptionTypes().stream().
-                filter(dt->dt.getPropertyName().
-                        equals(name)).
-                findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid option propertyName for $s", name, accountType.getClassName()) ) );
 
         options.put(name,optionValue);
 
@@ -122,11 +101,6 @@ public class AccountBuilder {
     }
 
     public AccountBuilder addSchedule(String name, Schedule schedule){
-        ScheduleType optionType = accountType.getScheduleTypes().stream().
-                filter(dt->dt.getPropertyName().
-                        equals(name)).
-                findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid schedule propertyName for $s", name, accountType.getClassName()) ) );
 
         schedules.put(name,schedule);
 
@@ -134,11 +108,6 @@ public class AccountBuilder {
     }
 
     public AccountBuilder addRateValue(String name, RateValue rateValue) {
-        RateType optionType = accountType.getRateTypes().stream().
-                filter(dt->dt.getPropertyName().
-                        equals(name)).
-                findFirst().
-                orElseThrow(() -> new IllegalArgumentException(String.format("%s is not valid rate propertyName for $s", name, accountType.getClassName()) ) );
 
         rates.put(name, rateValue);
 
@@ -203,7 +172,7 @@ public class AccountBuilder {
 
         account.setCalendarNames(calendarNames);
         account.setAccountNumber(accountNumber);
-        account.setAccountTypeName(accountType.getClassName());
+        account.setAccountTypeName(accountTypeName);
         account.setPositions(positions);
         account.setDates(dates);
         account.setRates(rates);
@@ -223,28 +192,21 @@ public class AccountBuilder {
     public Account getNewAccount() {
         Account account = null;
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            PrintWriter writer = new PrintWriter(os);
-            Class accountClass =  codeGenService.getAccountClass(accountType, writer);
             account = (Account) accountClass.newInstance();
-        } catch (Exception e) {
+        } catch (InstantiationException e) {
             e.printStackTrace();
-            String aString = "";
-
-            try {
-                aString = new String(os.toByteArray(),"UTF-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
-            logger.error(e.getMessage() + aString);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
 
 
         account.setAccountNumber(accountNumber);
-        account.setAccountTypeName(accountType.getClassName());
+        account.setAccountTypeName(accountTypeName);
         return account;
     }
+
+
 
 
 }

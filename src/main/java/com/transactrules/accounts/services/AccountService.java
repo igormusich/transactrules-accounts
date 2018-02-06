@@ -14,5 +14,10 @@ public interface AccountService {
     Account save(Account account);
     List<Account> findAll();
     Account findByAccountNumber(String accountNumber);
-    Transaction createTransaction(Transaction transaction) throws InterruptedException;
+    Transaction createTransaction(String accountNumber, Transaction transaction) throws InterruptedException;
+
+    Account activate(Account prototype);
+
+    void startOfDay();
+    void endOfDay();
 }

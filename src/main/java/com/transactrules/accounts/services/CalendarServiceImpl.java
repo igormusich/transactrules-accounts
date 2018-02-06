@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CalendarServiceImpl implements CalendarService {
 
@@ -28,6 +30,19 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public Calendar findByName(String name) {
         return calendarRepository.findOne(name);
+    }
+
+    @Override
+    public Calendar getDefault() {
+        List<Calendar> calendars = findAll();
+
+        Optional<Calendar> optionalCalendar = calendars.stream().filter(c-> c.getDefault()==true).findFirst();
+
+        if (!optionalCalendar.isPresent()){
+            return null;
+        }
+
+        return  optionalCalendar.get();
     }
 
 

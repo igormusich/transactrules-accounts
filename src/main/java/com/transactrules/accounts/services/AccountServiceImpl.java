@@ -4,17 +4,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.runtime.*;
+import com.transactrules.accounts.runtime.Calendar;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -29,13 +26,16 @@ public class AccountServiceImpl implements AccountService {
     CalendarService calendarService;
 
     @Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
     CodeGenService codeGenService;
 
     @Autowired
     UniqueIdService uniqueIdService;
+
+    @Autowired
+    SystemPropertyService properties;
+
+    @Autowired
+    TransactionService transactionService;
 
     @Autowired
     private AmazonDynamoDB amazonDynamoDB;
@@ -43,15 +43,16 @@ public class AccountServiceImpl implements AccountService {
     private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     @Override
-    public Account save(Account prototype)  {
+    public Account save(Account prototype) {
 
-        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
+        Account account;
 
-        AccountBuilder builder = new AccountBuilder(prototype, accountTypeService, codeGenService );
-
-        Account account = builder.getAccount();
-
-        account= accountRepository.save(account);
+        if (prototype.isActive()) {
+            account = this.activate(prototype);
+        } else {
+            account = getAccountFromPrototype(prototype, null);
+            account = accountRepository.save(account);
+        }
 
         return account;
     }
@@ -61,7 +62,9 @@ public class AccountServiceImpl implements AccountService {
 
         String accountNumber = uniqueIdService.getNextId("Account");
 
-        AccountBuilder builder = new AccountBuilder(accountType, accountNumber, this.codeGenService);
+        Class accountClass = codeGenService.generateClass(accountType);
+
+        AccountBuilder builder = new AccountBuilder(accountType.getClassName(), accountNumber, accountClass);
 
         Account account = builder.getNewAccount();
 
@@ -69,26 +72,30 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account calculateProperties(Account account) {
-        AccountBuilder accountBuilder = new AccountBuilder(account, accountTypeService, codeGenService);
+    public Account calculateProperties(Account prototype) {
+        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
-        Account calculatedAccount = accountBuilder.getAccount();
+        Class accountClass = codeGenService.generateClass(accountType);
 
-        return calculatedAccount;
+        AccountBuilder builder = new AccountBuilder(prototype, accountClass);
+
+        Account account = builder.getAccount();
+
+        return account;
     }
 
     @Override
     public Account calculateInstalments(Account prototype) {
 
-        AccountBuilder accountBuilder = new AccountBuilder(prototype, accountTypeService, codeGenService);
+        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
-        if(prototype.getCalendarNames().size()>0){
-            Calendar calendar = calendarService.findByName(prototype.getCalendarNames().get(0));
-            accountBuilder.setBusinessDayCalculator(calendar);
-        }
+        Class accountClass = codeGenService.generateClass(accountType);
 
+        AccountBuilder builder = new AccountBuilder(prototype, accountClass);
 
-        Account account = accountBuilder.getAccount();
+        builder.setBusinessDayCalculator(getCalendarForAccount(prototype));
+
+        Account account = builder.getAccount();
 
         account.valueDate = account.retrieveStartDate();
 
@@ -97,6 +104,18 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
+    private Calendar getCalendarForAccount(Account account) {
+
+        Calendar calendar;
+
+        if (account.getCalendarNames().size() > 0) {
+            calendar = calendarService.findByName(account.getCalendarNames().get(0));
+        } else {
+            calendar = calendarService.getDefault();
+        }
+
+        return calendar;
+    }
 
     @Override
     public List<Account> findAll() {
@@ -118,7 +137,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Transaction createTransaction(Transaction transaction) throws InterruptedException {
+    public Transaction createTransaction(String accountNumber, Transaction transaction) throws InterruptedException {
 
         //TransactionManager txManager = new TransactionManager(amazonDynamoDB, "Transaction", "Account");
 
@@ -126,48 +145,139 @@ public class AccountServiceImpl implements AccountService {
 
         try {
 
-            Account dbAccount = accountRepository.findOne(transaction.getAccountNumber());
-            AccountType accountType = accountTypeService.findByClassName(dbAccount.getAccountTypeName());
-
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            Class accountClass = null;
-            Account account = null;
-            try {
-                PrintWriter writer = new PrintWriter(os);
-                accountClass =  codeGenService.getAccountClass(accountType, writer);
-                account = (Account) accountClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-                String aString = "";
-
-                try {
-                    aString = new String(os.toByteArray(),"UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    logger.error("Error converting output byte array to string",e1);
-                }
-                logger.error(aString, e);
-            }
-
-            account.initializeFromPrototype(dbAccount);
-
-            account.setCalculated();
+            Account prototype = accountRepository.findOne(accountNumber);
+            Account account = getAccountFromPrototype(prototype, getCalendarForAccount(prototype));
+            AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
             //this should update the balances
             account.createTransaction(transaction);
 
             accountRepository.save(account);
 
-            transactionRepository.save(transaction);
+            transactionService.save(accountType, accountNumber, transaction);
 
             //tx.commit();
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             //tx.delete();
             logger.error(ex.toString());
         }
 
 
         return transaction;
+    }
+
+    @NotNull
+    private Account getAccountFromPrototype(Account prototype, Calendar calendar) {
+
+        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
+        Class accountClass = codeGenService.generateClass(accountType);
+
+        AccountBuilder builder = new AccountBuilder(prototype, accountClass);
+
+        builder.setBusinessDayCalculator(calendar);
+
+        Account account = builder.getAccount();
+
+        return account;
+    }
+
+
+    @Override
+    public Account activate(Account prototype) {
+
+
+        Account account = getAccountFromPrototype(prototype, getCalendarForAccount(prototype));
+        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
+
+        //for all dates between startDate and actionDate run start and end of day
+
+        if (account.retrieveStartDate().isBefore(properties.getActionDate())) {
+            account.actionDate = properties.getActionDate();
+            account.valueDate = account.retrieveStartDate();
+            account.forecast(properties.getActionDate());
+        }
+
+        account.activate();
+
+        accountRepository.save(account);
+
+        transactionService.save(accountType, account.getAccountNumber(), account.getTransactions());
+
+        return account;
+    }
+
+    @Override
+    public void startOfDay() {
+
+        Map<String, AccountType> accountTypeMap = getAccountTypeMap();
+        Map<String, Class> classMap = getClassMap();
+
+        for (Account prototype : accountRepository.findAll()) {
+            Class accountClass = classMap.get(prototype.getAccountTypeName());
+
+            AccountBuilder builder = new AccountBuilder(prototype, accountClass);
+
+            Account account = builder.getAccount();
+
+            account.valueDate = properties.getActionDate();
+            account.actionDate = properties.getActionDate();
+
+            account.startOfDay();
+
+            accountRepository.save(account);
+
+            AccountType accountType = accountTypeMap.get(account.getAccountTypeName());
+
+            transactionService.save(accountType, account.getAccountNumber(), account.getTransactions());
+        }
+
+    }
+
+    @Override
+    public void endOfDay() {
+
+        Map<String, AccountType> accountTypeMap = getAccountTypeMap();
+        Map<String, Class> classMap = getClassMap();
+
+        for (Account prototype : accountRepository.findAll()) {
+            Class accountClass = classMap.get(prototype.getAccountTypeName());
+
+            AccountBuilder builder = new AccountBuilder(prototype, accountClass);
+
+            Account account = builder.getAccount();
+
+            account.valueDate = properties.getActionDate();
+            account.actionDate = properties.getActionDate();
+
+            account.endOfOfDay();
+
+            accountRepository.save(account);
+
+            AccountType accountType = accountTypeMap.get(account.getAccountTypeName());
+            transactionService.save(accountType, account.getAccountNumber(), account.getTransactions());
+        }
+
+        properties.incrementActionDate();
+    }
+
+    private Map<String, AccountType> getAccountTypeMap() {
+        Map<String, AccountType> map = new HashMap<>();
+
+        for (AccountType accountType : accountTypeService.findAll()) {
+            map.put(accountType.getClassName(), accountType);
+        }
+
+        return map;
+    }
+
+    private Map<String, Class> getClassMap() {
+        Map<String, Class> map = new HashMap<>();
+
+        for (AccountType accountType : accountTypeService.findAll()) {
+            map.put(accountType.getClassName(), codeGenService.generateClass(accountType));
+        }
+
+        return map;
     }
 
 }

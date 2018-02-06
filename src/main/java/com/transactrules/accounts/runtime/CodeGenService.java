@@ -12,9 +12,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 
 @Component
 public class CodeGenService {
@@ -57,6 +55,28 @@ public class CodeGenService {
     @CacheEvict(value="accountClasses",  allEntries=true)
     public String evictAllAccountTypes(){
         return "evictAll";
+    }
+
+    public Class generateClass(AccountType accountType) {
+
+        Class accountClass = null;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            PrintWriter writer = new PrintWriter(os);
+            accountClass =  getAccountClass(accountType, writer);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String aString = "";
+
+            try {
+                aString = new String(os.toByteArray(),"UTF-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+            logger.error(e.getMessage() + aString);
+        }
+        return accountClass;
     }
 
 }

@@ -136,7 +136,10 @@ public class TestUtility {
 
     public static Account CreateLoanGivenAccount(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
 
-        AccountBuilder builder = new AccountBuilder( CreateLoanGivenAccountType(), accountNumber, codeGenService );
+        AccountType accountType = CreateLoanGivenAccountType();
+        Class accountClass = codeGenService.generateClass(accountType);
+
+        AccountBuilder builder = new AccountBuilder( accountType.getClassName(), accountNumber, accountClass );
 
         Calendar calendar= CreateEuroZoneCalendar();
 
@@ -160,7 +163,10 @@ public class TestUtility {
 
     public static Account CreateLoanGivenAccountWithSchedules(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
 
-        AccountBuilder builder = new AccountBuilder( CreateLoanGivenAccountType(), accountNumber, codeGenService );
+        AccountType accountType = CreateLoanGivenAccountType();
+        Class accountClass = codeGenService.generateClass(accountType);
+
+        AccountBuilder builder = new AccountBuilder( accountType.getClassName(), accountNumber, accountClass );
         BusinessDayCalculator calendar = CreateEuroZoneCalendar();
 
 

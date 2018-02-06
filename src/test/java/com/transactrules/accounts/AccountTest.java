@@ -44,7 +44,9 @@ public class AccountTest {
     @Test
     public void ProcessTransaction_deposit(){
 
-        AccountBuilder builder = new AccountBuilder(savingsAccountType, "ACC-002-98392", codeGenService);
+        Class accountClass = codeGenService.generateClass(savingsAccountType);
+
+        AccountBuilder builder = new AccountBuilder(savingsAccountType.getClassName(), "ACC-002-98392", accountClass);
 
         Account account = builder.getAccount();
 
