@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -204,6 +206,57 @@ public class AccountServiceImpl implements AccountService {
         transactionService.save(accountType, account.getAccountNumber(), account.getTransactions());
 
         return account;
+    }
+
+    @Override
+    public List<Transaction> findTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate) {
+        Account account = findByAccountNumber(accountNumber);
+
+        if(!account.isActive() || toDate.isBefore(fromDate)){
+            //inactive accounts have no transactions
+            return new ArrayList<>();
+        }
+
+        //start and end date define date range for which we have transaction sets
+        LocalDate startDate = account.getDateActivated();
+        LocalDate endDate = properties.getActionDate();
+
+        //narrow down transactionSet range
+
+        if(fromDate.isAfter(startDate)){
+            startDate = fromDate;
+        }
+
+        if(toDate.isBefore(endDate)){
+            endDate = toDate;
+        }
+
+        LocalDate iter = LocalDate.of(startDate.getYear(), startDate.getMonthValue(),1);
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        while(iter.isBefore(endDate)){
+            String transactionSetId = TransactionSet.generateId(accountNumber, iter, 1);
+
+            TransactionSet set = transactionService.getTransactionSet(transactionSetId);
+
+            transactions.addAll( set.getTransactions().stream().filter(t-> isBetween(t.getActionDate(), fromDate, toDate) ).collect(Collectors.toList()));
+
+            while(set.getNextId()!=null){
+                set = transactionService.getTransactionSet(set.getNextId());
+                transactions.addAll( set.getTransactions().stream().filter(t-> isBetween(t.getActionDate(), fromDate, toDate) ).collect(Collectors.toList()));
+            }
+
+            iter = iter.plusMonths(1);
+        }
+
+        transactions.sort(Comparator.comparing(Transaction::getActionDate));
+
+        return transactions;
+    }
+
+    private Boolean isBetween(LocalDate item, LocalDate from, LocalDate to){
+        return ( item.isAfter(from) || item.isEqual(from)) && (item.isBefore(to) || item.isEqual(to));
     }
 
     @Override

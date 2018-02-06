@@ -3,10 +3,8 @@ package com.transactrules.accounts.web;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.CodeGenService;
-import com.transactrules.accounts.services.AccountService;
-import com.transactrules.accounts.services.AccountTypeService;
-import com.transactrules.accounts.services.CalendarService;
-import com.transactrules.accounts.services.UniqueIdService;
+import com.transactrules.accounts.runtime.Transaction;
+import com.transactrules.accounts.services.*;
 import com.transactrules.accounts.utilities.Utility;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +44,9 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    SystemPropertyService properties;
 
     @RequestMapping(value="/{accountTypeName}/new", method = RequestMethod.GET)
     @ApiOperation(value = "Get default account data", response = Account.class)
@@ -144,6 +146,28 @@ public class AccountController {
         Account account = service.findByAccountNumber(accountNumber);
 
         return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/transactions", method= RequestMethod.GET)
+    @ApiOperation(value = "Get Transactions for account", response = Transaction.class, responseContainer = "List")
+    public ResponseEntity<?> findByAccountNumber( @PathVariable("id") String accountNumber,
+                                                  @RequestParam(value="from", defaultValue="today") String from,
+                                                  @RequestParam(value="to", defaultValue="today") String to ){
+
+        LocalDate fromDate = toDate(from);
+        LocalDate toDate = toDate(to);
+
+        List<Transaction> transactions=  service.findTransactions(accountNumber, fromDate, toDate);
+
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    private LocalDate toDate(String value){
+        if(value.equalsIgnoreCase("today")){
+            return  properties.getActionDate();
+        }
+
+        return LocalDate.parse(value);
     }
 
     @RequestMapping(value = "/{id}/activate", method= RequestMethod.GET)

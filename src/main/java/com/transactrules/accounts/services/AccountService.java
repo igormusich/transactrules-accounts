@@ -5,6 +5,7 @@ import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.Transaction;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AccountService {
@@ -17,6 +18,8 @@ public interface AccountService {
     Transaction createTransaction(String accountNumber, Transaction transaction) throws InterruptedException;
 
     Account activate(Account prototype);
+
+    List<Transaction> findTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate);
 
     void startOfDay();
     void endOfDay();

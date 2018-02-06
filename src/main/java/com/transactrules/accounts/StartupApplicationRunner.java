@@ -47,7 +47,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-        String[] tableNames = {"AccountType","Account","Calendar","Transaction", "SystemProperties", "UniqueId"};
+        String[] tableNames = {"AccountType","Account","Calendar","TransactionSet", "SystemProperties", "UniqueId"};
 
         List<String> listTablesResult = amazonDynamoDB.listTables().getTableNames();
 

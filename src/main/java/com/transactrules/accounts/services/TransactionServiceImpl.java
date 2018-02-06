@@ -57,6 +57,11 @@ public class TransactionServiceImpl implements TransactionService {
         return changedSets;
     }
 
+    @Override
+    public TransactionSet getTransactionSet(String transactionSetId) {
+        return transactionSetRepository.findOne(transactionSetId);
+    }
+
     public List<TransactionSet> appendTransactions( TransactionSet transactionSet, List<Transaction> transactions, AccountType accountType)
         {
             //sort once, otherwise expensive operation in recursive function
