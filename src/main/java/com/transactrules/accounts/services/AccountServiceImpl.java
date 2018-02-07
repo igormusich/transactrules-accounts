@@ -2,6 +2,8 @@ package com.transactrules.accounts.services;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.TransactionRuleType;
+import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.runtime.Calendar;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -231,6 +234,13 @@ public class AccountServiceImpl implements AccountService {
             endDate = toDate;
         }
 
+        List<Transaction> transactions = getTransactions(accountNumber, fromDate, toDate, startDate, endDate, t-> true );
+
+        return transactions;
+    }
+
+    @NotNull
+    private List<Transaction> getTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate, LocalDate startDate, LocalDate endDate, Predicate<Transaction> condition) {
         LocalDate iter = LocalDate.of(startDate.getYear(), startDate.getMonthValue(),1);
 
         List<Transaction> transactions = new ArrayList<>();
@@ -240,17 +250,78 @@ public class AccountServiceImpl implements AccountService {
 
             TransactionSet set = transactionService.getTransactionSet(transactionSetId);
 
-            transactions.addAll( set.getTransactions().stream().filter(t-> isBetween(t.getActionDate(), fromDate, toDate) ).collect(Collectors.toList()));
+            transactions.addAll( set.getTransactions().stream().filter( condition.and(t-> isBetween(t.getActionDate(), fromDate, toDate)) ).collect(Collectors.toList()));
 
             while(set.getNextId()!=null){
                 set = transactionService.getTransactionSet(set.getNextId());
-                transactions.addAll( set.getTransactions().stream().filter(t-> isBetween(t.getActionDate(), fromDate, toDate) ).collect(Collectors.toList()));
+                transactions.addAll( set.getTransactions().stream().filter( condition.and(t-> isBetween(t.getActionDate(), fromDate, toDate)) ).collect(Collectors.toList()));
             }
 
             iter = iter.plusMonths(1);
         }
 
         transactions.sort(Comparator.comparing(Transaction::getActionDate));
+        return transactions;
+    }
+
+    private List<String> getTransactionTypesAffectingPositionType(AccountType accountType, String positionType){
+        List<String> transactionTypes = new ArrayList<>();
+
+        for(TransactionType transactionType: accountType.getTransactionTypes()){
+            for(TransactionRuleType ruleType: transactionType.getTransactionRules()){
+                if(ruleType.getPositionTypeName().equalsIgnoreCase(positionType)){
+                    transactionTypes.add(transactionType.getPropertyName());
+                }
+            }
+        }
+
+        return transactionTypes;
+    }
+
+    @Override
+    public List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, String positionType1, String positionType2) {
+        Account account = findByAccountNumber(accountNumber);
+
+        if(!account.isActive() || toDate.isBefore(fromDate)){
+            //inactive accounts have no transactions
+            return new ArrayList<>();
+        }
+
+        AccountType accountType = accountTypeService.findByClassName(account.getAccountTypeName());
+
+        Predicate<Transaction> p = t-> true;
+
+        if(positionType1 !=null){
+            List<String> transactionTypes = getTransactionTypesAffectingPositionType(accountType,positionType1);
+
+            Predicate<Transaction> position1Predicate = t -> transactionTypes.contains(t.getTransactionTypeName());
+
+            p = p.and(position1Predicate);
+        }
+
+        if(positionType2 !=null){
+            List<String> transactionTypes = getTransactionTypesAffectingPositionType(accountType,positionType1);
+
+            Predicate<Transaction> position2Predicate = t -> transactionTypes.contains(t.getTransactionTypeName());
+
+            p = p.and(position2Predicate);
+        }
+
+        //start and end date define date range for which we have transaction sets
+        LocalDate startDate = account.getDateActivated();
+        LocalDate endDate = properties.getActionDate();
+
+        //narrow down transactionSet range
+
+        if(fromDate.isAfter(startDate)){
+            startDate = fromDate;
+        }
+
+        if(toDate.isBefore(endDate)){
+            endDate = toDate;
+        }
+
+        List<Transaction> transactions =  getTransactions(accountNumber, fromDate, toDate, startDate, endDate, p );
 
         return transactions;
     }

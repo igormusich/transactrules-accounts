@@ -291,7 +291,9 @@ public class Account {
 
         Transaction transaction = new Transaction( transactionTypeName,amount, actionDate, valueDate);
 
-        processTransaction(transactionTypeName, amount);
+        Map<String,BigDecimal> positions =  processTransaction(transactionTypeName, amount);
+
+        transaction.setPositions(positions);
 
         addTransaction(transaction);
 
@@ -310,8 +312,9 @@ public class Account {
     }
 
 
-    public void processTransaction(String transactionTypeName, BigDecimal amount){
+    public Map<String, BigDecimal> processTransaction(String transactionTypeName, BigDecimal amount){
 
+        return null;
     }
 
     public  void startOfDay(){

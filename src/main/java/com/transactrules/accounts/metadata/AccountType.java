@@ -3,7 +3,9 @@ package com.transactrules.accounts.metadata;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
@@ -317,5 +319,11 @@ public class AccountType {
 
     public Optional<InstalmentType> getInstalmentTypeByName(String name) {
         return instalmentTypes.stream().filter(tt->tt.getPropertyName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    @JsonIgnore
+    @DynamoDBIgnore
+    public Boolean getHasTransactionTypes(){
+        return transactionTypes.size()>0;
     }
 }

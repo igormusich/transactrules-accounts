@@ -6,7 +6,9 @@ import com.transactrules.accounts.utilities.Solver;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class {{className}} extends Account {
 
@@ -225,7 +227,12 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
 {{/scheduleTypes}}
 
     @Override
-    public void processTransaction(String transactionTypeName, BigDecimal amount){
+    public Map<String, BigDecimal> processTransaction(String transactionTypeName, BigDecimal amount){
+{{^hasTransactionTypes}}
+        return null;
+{{/hasTransactionTypes}}
+{{#hasTransactionTypes}}
+        Map<String,BigDecimal> positionMap = new HashMap<>();
 
         switch(transactionTypeName) {
 {{#transactionTypes}}
@@ -240,12 +247,17 @@ public void Set{{propertyName}}DefaultProperties(Schedule schedule)
         {{#subtract}}
                 _{{positionTypeName}}.subtract(amount);
         {{/subtract}}
+
+        positionMap.put("{{positionTypeName}}", _{{positionTypeName}}.getAmount());
     {{/transactionRules}}
                 break;
 {{/transactionTypes}}
             default:
                 throw new IllegalArgumentException("Invalid transactionTypeName : " + transactionTypeName);
         }
+
+        return positionMap;
+{{/hasTransactionTypes}}
     }
 
     @Override

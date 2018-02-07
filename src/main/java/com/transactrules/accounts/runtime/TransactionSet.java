@@ -102,7 +102,9 @@ public class TransactionSet {
 
 
         for (Transaction item : data.getList().getItems()) {
-            transactions.add(new Transaction(item.getTransactionTypeName(), item.getAmount(), item.getActionDate(), item.getValueDate()));
+            Transaction transaction= new Transaction(item.getTransactionTypeName(), item.getAmount(), item.getActionDate(), item.getValueDate());
+            transaction.setPositions(item.getPositions());
+            transactions.add(transaction);
         }
 
         for (RepeatableTransactionList list : data.getRepeatableLists()) {

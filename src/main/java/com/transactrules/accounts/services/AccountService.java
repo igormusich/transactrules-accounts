@@ -4,7 +4,6 @@ import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.runtime.Transaction;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,6 +19,8 @@ public interface AccountService {
     Account activate(Account prototype);
 
     List<Transaction> findTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate);
+
+    List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, String positionType1, String positionType2);
 
     void startOfDay();
     void endOfDay();

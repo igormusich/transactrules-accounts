@@ -6,7 +6,9 @@ import com.transactrules.accounts.utilities.Solver;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class localLoanGiven extends Account {
 
@@ -153,34 +155,33 @@ public class localLoanGiven extends Account {
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("AccrualSchedule", schedule);
-            //set default properties only when creating new schedule
+
         }
         _AccrualSchedule = this.getSchedules().get("AccrualSchedule");
         _AccrualSchedule.setBusinessDayCalculator(this.businessDayCalculator);
         SetAccrualScheduleCalculatedProperties(_AccrualSchedule);
 
-
         if(!this.getSchedules().containsKey("InterestSchedule"))
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("InterestSchedule", schedule);
+
             //set default properties only when creating new schedule
             SetInterestScheduleDefaultProperties(schedule);
         }
         _InterestSchedule = this.getSchedules().get("InterestSchedule");
         _InterestSchedule.setBusinessDayCalculator(this.businessDayCalculator);
 
-
         if(!this.getSchedules().containsKey("RedemptionSchedule"))
         {
             Schedule schedule = new Schedule();
             this.getSchedules().put("RedemptionSchedule", schedule);
+
             //set default properties only when creating new schedule
             SetRedemptionScheduleDefaultProperties(schedule);
         }
         _RedemptionSchedule = this.getSchedules().get("RedemptionSchedule");
         _RedemptionSchedule.setBusinessDayCalculator(this.businessDayCalculator);
-
 
 
         if(!this.getInstalmentSets().containsKey("Redemptions"))
@@ -213,10 +214,7 @@ public class localLoanGiven extends Account {
         schedule.setBusinessDayCalculation("ANY_DAY");
         schedule.setFrequency("MONTHLY");
         schedule.setEndType("END_DATE");
-        schedule.setStartDate(StartDate());
-        schedule.setStartDate(EndDate());
         schedule.setInterval(1);
-        schedule.setIncludeDates(fromDates(StartDate()));
 
     }
 
@@ -225,63 +223,88 @@ public class localLoanGiven extends Account {
         schedule.setBusinessDayCalculation("ANY_DAY");
         schedule.setFrequency("MONTHLY");
         schedule.setEndType("END_DATE");
-        schedule.setStartDate(StartDate().plusMonths(1));
-        schedule.setStartDate(EndDate());
         schedule.setInterval(1);
-        schedule.setIncludeDates(fromDates(StartDate()));
 
     }
 
     @Override
-    public void processTransaction(String transactionTypeName, BigDecimal amount){
+    public Map<String, BigDecimal> processTransaction(String transactionTypeName, BigDecimal amount){
+
+        Map<String,BigDecimal> positionMap = new HashMap<>();
 
         switch(transactionTypeName) {
             case "InterestAccrued":
                 _InterestAccrued.add(amount);
+
+                positionMap.put("InterestAccrued", _InterestAccrued.getAmount());
                 break;
             case "InterestCapitalized":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _Principal.add(amount);
+
+                positionMap.put("Principal", _Principal.getAmount());
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _InterestAccrued.subtract(amount);
+
+                positionMap.put("InterestAccrued", _InterestAccrued.getAmount());
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _InterestCapitalized.add(amount);
+
+                positionMap.put("InterestCapitalized", _InterestCapitalized.getAmount());
                 break;
             case "Redemption":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _Principal.subtract(amount);
+
+                positionMap.put("Principal", _Principal.getAmount());
                 break;
             case "Advance":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _Principal.add(amount);
+
+                positionMap.put("Principal", _Principal.getAmount());
                 break;
             case "AdditionalAdvance":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _Principal.add(amount);
+
+                positionMap.put("Principal", _Principal.getAmount());
                 break;
             case "ConversionInterest":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _ConversionInterest.add(amount);
+
+                positionMap.put("ConversionInterest", _ConversionInterest.getAmount());
                 break;
             case "EarlyRedemptionFee":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _EarlyRedemptionFee.add(amount);
+
+                positionMap.put("EarlyRedemptionFee", _EarlyRedemptionFee.getAmount());
                 break;
             case "FXResultInterest":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _InterestAccrued.add(amount);
+
+                positionMap.put("InterestAccrued", _InterestAccrued.getAmount());
                 break;
             case "FXResultPrincipal":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _Principal.add(amount);
+
+                positionMap.put("Principal", _Principal.getAmount());
                 break;
             case "InterestPayment":
                 amount = amount.setScale(2, RoundingMode.HALF_DOWN);
                 _InterestAccrued.subtract(amount);
+
+                positionMap.put("InterestAccrued", _InterestAccrued.getAmount());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid transactionTypeName : " + transactionTypeName);
         }
+
+        return positionMap;
     }
 
     @Override
@@ -350,10 +373,11 @@ public class localLoanGiven extends Account {
         amount = amount.setScale(2, RoundingMode.HALF_UP);
 
         this.setFutureInstalmentValue("Redemptions", ScheduledTransactionTiming.StartOfDay, amount);
+
     }
     @Override
     public String generatedAt(){
-        return "2018-01-31T02:53:18.462";
+        return "2018-02-07T06:29:24.578";
     }
 
 

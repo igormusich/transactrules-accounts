@@ -1,10 +1,13 @@
 package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.transactrules.accounts.utilities.LocalDateFormat;
+import com.transactrules.accounts.utilities.PositionMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Created by 313798977 on 2016/11/11.
@@ -17,6 +20,7 @@ public class Transaction  {
     private BigDecimal amount;
     private LocalDate actionDate;
     private LocalDate valueDate;
+    private Map<String,BigDecimal> positions;
 
     public Transaction(){
 
@@ -69,4 +73,12 @@ public class Transaction  {
         this.valueDate = valueDate;
     }
 
+    @DynamoDBTypeConverted(converter = PositionMapConverter.class)
+    public Map<String, BigDecimal> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(Map<String, BigDecimal> positions) {
+        this.positions = positions;
+    }
 }
