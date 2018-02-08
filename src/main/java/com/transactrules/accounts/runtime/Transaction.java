@@ -7,6 +7,7 @@ import com.transactrules.accounts.utilities.PositionMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +21,7 @@ public class Transaction  {
     private BigDecimal amount;
     private LocalDate actionDate;
     private LocalDate valueDate;
-    private Map<String,BigDecimal> positions;
+    private Map<String,BigDecimal> positions = new HashMap<>();
 
     public Transaction(){
 

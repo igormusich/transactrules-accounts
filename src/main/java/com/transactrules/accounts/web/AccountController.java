@@ -152,12 +152,24 @@ public class AccountController {
     @ApiOperation(value = "Get Transactions for account", response = Transaction.class, responseContainer = "List")
     public ResponseEntity<?> findByAccountNumber( @PathVariable("id") String accountNumber,
                                                   @RequestParam(value="from", defaultValue="today") String from,
-                                                  @RequestParam(value="to", defaultValue="today") String to ){
+                                                  @RequestParam(value="to", defaultValue="today") String to,
+                                                  @RequestParam(value="positionType1", defaultValue = "") String positionType1 ,
+                                                          @RequestParam(value="positionType2", defaultValue = "") String positionType2){
 
         LocalDate fromDate = toDate(from);
         LocalDate toDate = toDate(to);
 
-        List<Transaction> transactions=  service.findTransactions(accountNumber, fromDate, toDate);
+        List<String> postionTypes = new ArrayList<>();
+
+        if(!Utility.isEmpty(positionType1)){
+            postionTypes.add(positionType1);
+        }
+
+        if(!Utility.isEmpty(positionType2)){
+            postionTypes.add(positionType2);
+        }
+
+        List<Transaction> transactions=  service.getTransactionTrace(accountNumber, fromDate, toDate, postionTypes);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }

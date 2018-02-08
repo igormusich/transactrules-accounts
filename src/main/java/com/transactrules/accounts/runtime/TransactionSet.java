@@ -101,7 +101,8 @@ public class TransactionSet {
         List<Transaction> transactions = new ArrayList<>();
 
 
-        for (Transaction item : data.getList().getItems()) {
+        for (Transaction item : data.getTransactions()) {
+
             Transaction transaction= new Transaction(item.getTransactionTypeName(), item.getAmount(), item.getActionDate(), item.getValueDate());
             transaction.setPositions(item.getPositions());
             transactions.add(transaction);

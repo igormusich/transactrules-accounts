@@ -123,10 +123,9 @@ public class TransactionServiceImpl implements TransactionService {
                     transactionSet.getData().incrementCount();
                 }
             } else {
-                transactionSet.getData().getList().getItems().add(transaction);
+                transactionSet.getData().addTransaction(transaction);
                 transactionSet.getData().incrementCount();
             }
-
         }
 
         changedSets.add(transactionSet);

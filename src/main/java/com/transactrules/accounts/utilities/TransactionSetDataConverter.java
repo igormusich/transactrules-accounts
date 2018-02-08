@@ -67,6 +67,9 @@ public class TransactionSetDataConverter implements DynamoDBTypeConverter<String
         customMap.put("list","l");
         customMap.put("repeatableLists","rl");
         customMap.put("positions","p");
+        customMap.put("transactionTypeMap","ttm");
+        customMap.put("positionTypeMap","ptm");
+
 
         yamlMapper.setPropertyNamingStrategy(new CustomNamingStrategy(customMap));
         return yamlMapper;

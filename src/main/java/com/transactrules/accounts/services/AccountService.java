@@ -20,7 +20,7 @@ public interface AccountService {
 
     List<Transaction> findTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate);
 
-    List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, String positionType1, String positionType2);
+    List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, List<String> positionTypes);
 
     void startOfDay();
     void endOfDay();

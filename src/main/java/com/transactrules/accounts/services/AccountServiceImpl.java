@@ -2,8 +2,6 @@ package com.transactrules.accounts.services;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.TransactionRuleType;
-import com.transactrules.accounts.metadata.TransactionType;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.runtime.Calendar;
@@ -254,7 +252,9 @@ public class AccountServiceImpl implements AccountService {
 
             while(set.getNextId()!=null){
                 set = transactionService.getTransactionSet(set.getNextId());
-                transactions.addAll( set.getTransactions().stream().filter( condition.and(t-> isBetween(t.getActionDate(), fromDate, toDate)) ).collect(Collectors.toList()));
+                transactions.addAll( set.getTransactions().stream().filter(
+                        condition.and(
+                                t-> isBetween(t.getActionDate(), fromDate, toDate))).collect(Collectors.toList()));
             }
 
             iter = iter.plusMonths(1);
@@ -264,22 +264,9 @@ public class AccountServiceImpl implements AccountService {
         return transactions;
     }
 
-    private List<String> getTransactionTypesAffectingPositionType(AccountType accountType, String positionType){
-        List<String> transactionTypes = new ArrayList<>();
-
-        for(TransactionType transactionType: accountType.getTransactionTypes()){
-            for(TransactionRuleType ruleType: transactionType.getTransactionRules()){
-                if(ruleType.getPositionTypeName().equalsIgnoreCase(positionType)){
-                    transactionTypes.add(transactionType.getPropertyName());
-                }
-            }
-        }
-
-        return transactionTypes;
-    }
 
     @Override
-    public List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, String positionType1, String positionType2) {
+    public List<Transaction> getTransactionTrace(String accountNumber, LocalDate fromDate, LocalDate toDate, List<String> positionTypes) {
         Account account = findByAccountNumber(accountNumber);
 
         if(!account.isActive() || toDate.isBefore(fromDate)){
@@ -289,23 +276,24 @@ public class AccountServiceImpl implements AccountService {
 
         AccountType accountType = accountTypeService.findByClassName(account.getAccountTypeName());
 
-        Predicate<Transaction> p = t-> true;
+        Predicate<Transaction> p = null;
 
-        if(positionType1 !=null){
-            List<String> transactionTypes = getTransactionTypesAffectingPositionType(accountType,positionType1);
+        for(String positionType:positionTypes){
 
-            Predicate<Transaction> position1Predicate = t -> transactionTypes.contains(t.getTransactionTypeName());
+            Predicate<Transaction> positionPredicate= t -> t.getPositions().containsKey(positionType);
 
-            p = p.and(position1Predicate);
+            if(p==null){
+                p=positionPredicate;
+            }
+            else {
+                p.or(positionPredicate);
+            }
         }
 
-        if(positionType2 !=null){
-            List<String> transactionTypes = getTransactionTypesAffectingPositionType(accountType,positionType1);
-
-            Predicate<Transaction> position2Predicate = t -> transactionTypes.contains(t.getTransactionTypeName());
-
-            p = p.and(position2Predicate);
+        if(p==null){
+            p= t-> true;
         }
+
 
         //start and end date define date range for which we have transaction sets
         LocalDate startDate = account.getDateActivated();
@@ -322,6 +310,20 @@ public class AccountServiceImpl implements AccountService {
         }
 
         List<Transaction> transactions =  getTransactions(accountNumber, fromDate, toDate, startDate, endDate, p );
+
+        for(Transaction transaction: transactions){
+            List<String> removeKeys = new ArrayList<>();
+
+            for(String key:transaction.getPositions().keySet()){
+                if(!positionTypes.contains(key)){
+                    removeKeys.add(key);
+                }
+            }
+
+            for(String key:removeKeys){
+                transaction.getPositions().remove(key);
+            }
+        }
 
         return transactions;
     }
