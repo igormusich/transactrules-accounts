@@ -2,6 +2,7 @@ package com.transactrules.accounts.services;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.runtime.Calendar;
@@ -275,6 +276,15 @@ public class AccountServiceImpl implements AccountService {
         }
 
         AccountType accountType = accountTypeService.findByClassName(account.getAccountTypeName());
+
+        if(positionTypes.size()==0){
+            Optional<PositionType> principalPositionType;
+            principalPositionType = accountType.getPositionTypes().stream().filter(pt-> pt.getPrincipal()).findFirst();
+
+            if(principalPositionType.isPresent()){
+                positionTypes.add(principalPositionType.get().getPropertyName());
+            }
+        }
 
         Predicate<Transaction> p = null;
 

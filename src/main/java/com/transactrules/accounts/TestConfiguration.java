@@ -74,6 +74,8 @@ public class TestConfiguration {
         PositionType interestCapitalizedPosition = loanGiven.addPositionType("InterestCapitalized");
         PositionType principalPosition = loanGiven.addPositionType( "Principal" );
 
+        principalPosition.setPrincipal(true);
+
         DateType startDate = loanGiven.addDateType( "StartDate" , true, true);
         DateType accrualStart = loanGiven.addDateType( "AccrualStart" , true,false);
         DateType endDate = loanGiven.addDateType( "EndDate" ,true, false);
