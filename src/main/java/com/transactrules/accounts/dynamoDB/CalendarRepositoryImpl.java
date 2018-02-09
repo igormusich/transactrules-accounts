@@ -24,8 +24,8 @@ public class CalendarRepositoryImpl implements CalendarRepository {
 
         List<Calendar> calendars = new ArrayList<>();
 
-        for(CalendarDataObject  dataObject: dynamoRepository.findAll()){
-            calendars.add(dataObject.toCalendar());
+        for (CalendarDataObject dataObject : dynamoRepository.findAll()) {
+            calendars.add(dataObject.getCalendar());
         }
 
         return calendars;
@@ -34,6 +34,12 @@ public class CalendarRepositoryImpl implements CalendarRepository {
     @Override
     public Calendar findOne(String key) {
 
-        return dynamoRepository.findOne(key).toCalendar();
+        CalendarDataObject dataObject = dynamoRepository.findOne(key);
+
+        if (dataObject == null) {
+            return null;
+        }
+
+        return dataObject.getCalendar();
     }
 }
