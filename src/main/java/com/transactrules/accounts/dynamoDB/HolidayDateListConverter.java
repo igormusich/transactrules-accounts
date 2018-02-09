@@ -1,4 +1,4 @@
-package com.transactrules.accounts.utilities;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,12 +15,12 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class HolidayDateListConverter implements DynamoDBTypeConverter<String, List<HolidayDate>> {
+public class HolidayDateListConverter implements DynamoDBTypeConverter<String, List<HolidayDateDataObject>> {
 
     Logger logger = LoggerFactory.getLogger(HolidayDateListConverter.class);
 
     @Override
-    public String convert(List<HolidayDate>objects) {
+    public String convert(List<HolidayDateDataObject>objects) {
         //Jackson object mapper
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
 
@@ -34,10 +34,10 @@ public class HolidayDateListConverter implements DynamoDBTypeConverter<String, L
     }
 
     @Override
-    public List<HolidayDate>unconvert(String objectsString) {
+    public List<HolidayDateDataObject>unconvert(String objectsString) {
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
         try {
-            List<HolidayDate> objects = objectMapper.readValue(objectsString, new TypeReference<List<HolidayDate>>(){});
+            List<HolidayDateDataObject> objects = objectMapper.readValue(objectsString, new TypeReference<List<HolidayDateDataObject>>(){});
             return objects;
         } catch (JsonParseException e) {
             logger.error(e.toString());

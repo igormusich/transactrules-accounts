@@ -1,4 +1,4 @@
-package com.transactrules.accounts.utilities;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.runtime.TransactionSetData;
+import com.transactrules.accounts.utilities.CustomNamingStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

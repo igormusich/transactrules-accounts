@@ -3,7 +3,7 @@ package com.transactrules.accounts.runtime;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.utilities.TransactionSetDataConverter;
+import com.transactrules.accounts.dynamoDB.TransactionSetDataConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +18,12 @@ public class CalendarServiceImpl implements CalendarService {
     public List<Calendar> findAll() {
         Iterable<Calendar> items = calendarRepository.findAll();
 
-        Iterator<Calendar> iterator = items.iterator();
+        ArrayList<Calendar> list = new ArrayList<>();
 
-        List<Calendar> list = new ArrayList<>();
-        iterator.forEachRemaining(list::add);
+        for(Calendar calendar:items){
+            list.add(calendar);
+        }
+
 
         return list;
     }

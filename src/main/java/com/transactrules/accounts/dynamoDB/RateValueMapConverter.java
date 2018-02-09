@@ -1,4 +1,4 @@
-package com.transactrules.accounts.utilities;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonParseException;

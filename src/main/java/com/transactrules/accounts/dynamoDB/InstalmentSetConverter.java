@@ -1,4 +1,4 @@
-package com.transactrules.accounts.utilities;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.runtime.DateValue;
+import com.transactrules.accounts.runtime.InstalmentSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +15,12 @@ import java.io.IOException;
 import java.util.Map;
 
 
-public class DateValueMapConverter implements DynamoDBTypeConverter<String, Map<String,DateValue>> {
+public class InstalmentSetConverter implements DynamoDBTypeConverter<String, Map<String, InstalmentSet>> {
 
-    Logger logger = LoggerFactory.getLogger(DateValueMapConverter.class);
-
-
+    Logger logger = LoggerFactory.getLogger(InstalmentSetConverter.class);
 
     @Override
-    public String convert(Map<String,DateValue> objects) {
+    public String convert(Map<String, InstalmentSet> objects) {
         //Jackson object mapper
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
 
@@ -36,10 +34,10 @@ public class DateValueMapConverter implements DynamoDBTypeConverter<String, Map<
     }
 
     @Override
-    public Map<String,DateValue> unconvert(String objectsString) {
+    public Map<String, InstalmentSet> unconvert(String objectsString) {
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
         try {
-            Map<String,DateValue> objects = objectMapper.readValue(objectsString, new TypeReference<Map<String,DateValue>>(){});
+            Map<String, InstalmentSet> objects = objectMapper.readValue(objectsString, new TypeReference<Map<String, InstalmentSet>>(){});
             return objects;
         } catch (JsonParseException e) {
             logger.error(e.toString());

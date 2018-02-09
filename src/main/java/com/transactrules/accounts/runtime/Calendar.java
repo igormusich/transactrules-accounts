@@ -1,9 +1,7 @@
 package com.transactrules.accounts.runtime;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
-import com.transactrules.accounts.utilities.HolidayDateListConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -14,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@DynamoDBTable(tableName = "Calendar")
 public class Calendar  implements BusinessDayCalculator {
     transient private Map<LocalDate, HolidayDate> holidaysMap;
 
@@ -34,7 +31,6 @@ public class Calendar  implements BusinessDayCalculator {
         this.isDefault = isDefault;
     }
 
-    @DynamoDBHashKey
     public String getName() {
         return name;
     }
@@ -43,7 +39,6 @@ public class Calendar  implements BusinessDayCalculator {
         this.name = name;
     }
 
-    @DynamoDBAttribute
     public Boolean getDefault() {
         return isDefault;
     }
@@ -52,7 +47,6 @@ public class Calendar  implements BusinessDayCalculator {
         isDefault = aDefault;
     }
 
-    @DynamoDBTypeConverted(converter = HolidayDateListConverter.class)
     public List<HolidayDate> getHolidays() {
         return holidays;
     }
@@ -76,7 +70,6 @@ public class Calendar  implements BusinessDayCalculator {
         return (holidaysMap().containsKey(date)==false);
     }
 
-    @DynamoDBIgnore
     protected Map<LocalDate, HolidayDate> holidaysMap()
     {
 

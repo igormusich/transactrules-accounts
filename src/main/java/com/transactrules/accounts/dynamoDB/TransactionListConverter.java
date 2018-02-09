@@ -1,4 +1,4 @@
-package com.transactrules.accounts.utilities;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -7,20 +7,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
+import com.transactrules.accounts.runtime.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Map;
+import java.util.List;
 
 
-public class PositionMapConverter implements DynamoDBTypeConverter<String, Map<String,BigDecimal>> {
+public class TransactionListConverter implements DynamoDBTypeConverter<String, List<Transaction>> {
 
-    Logger logger = LoggerFactory.getLogger(PositionMapConverter.class);
+    Logger logger = LoggerFactory.getLogger(TransactionListConverter.class);
 
     @Override
-    public String convert(Map<String,BigDecimal>objects) {
+    public String convert(List<Transaction> objects) {
         //Jackson object mapper
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
 
@@ -34,10 +34,10 @@ public class PositionMapConverter implements DynamoDBTypeConverter<String, Map<S
     }
 
     @Override
-    public Map<String,BigDecimal>unconvert(String objectsString) {
+    public List<Transaction> unconvert(String objectsString) {
         ObjectMapper objectMapper = ObjectMapperConfiguration.getObjectMapper();
         try {
-            Map<String,BigDecimal> objects = objectMapper.readValue(objectsString, new TypeReference<Map<String,BigDecimal>>(){});
+            List<Transaction> objects = objectMapper.readValue(objectsString, new TypeReference<List<Transaction>>(){});
             return objects;
         } catch (JsonParseException e) {
             logger.error(e.toString());

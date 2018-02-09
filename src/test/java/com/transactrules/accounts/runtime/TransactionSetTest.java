@@ -6,7 +6,7 @@ import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.services.SystemPropertyService;
 import com.transactrules.accounts.services.TransactionService;
-import com.transactrules.accounts.utilities.TransactionSetDataConverter;
+import com.transactrules.accounts.dynamoDB.TransactionSetDataConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

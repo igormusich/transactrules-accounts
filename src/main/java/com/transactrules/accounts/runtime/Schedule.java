@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.metadata.ScheduleEndType;
 import com.transactrules.accounts.metadata.ScheduleFrequency;
-import com.transactrules.accounts.utilities.LocalDateFormat;
+import com.transactrules.accounts.dynamoDB.LocalDateFormat;
 
 import java.time.LocalDate;
 import java.util.*;

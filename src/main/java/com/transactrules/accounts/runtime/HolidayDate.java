@@ -1,11 +1,8 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 
-@DynamoDBDocument
+
 public class HolidayDate  {
 
     private String description;
@@ -20,7 +17,6 @@ public class HolidayDate  {
         this.value = value;
     }
 
-    @DynamoDBAttribute
     public LocalDate getValue(){
         return value;
     }
@@ -29,7 +25,6 @@ public class HolidayDate  {
         this.value = value;
     }
 
-    @DynamoDBAttribute
     public String getDescription() {
         return description;
     }

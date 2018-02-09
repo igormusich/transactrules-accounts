@@ -2,8 +2,8 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
-import com.transactrules.accounts.utilities.LocalDateFormat;
-import com.transactrules.accounts.utilities.PositionMapConverter;
+import com.transactrules.accounts.dynamoDB.LocalDateFormat;
+import com.transactrules.accounts.dynamoDB.PositionMapConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

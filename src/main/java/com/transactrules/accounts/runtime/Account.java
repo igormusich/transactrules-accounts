@@ -2,11 +2,11 @@ package com.transactrules.accounts.runtime;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.transactrules.accounts.dynamoDB.*;
 import com.transactrules.accounts.metadata.DateType;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.metadata.ScheduleType;
 import com.transactrules.accounts.metadata.ScheduledTransactionTiming;
-import com.transactrules.accounts.utilities.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.math.BigDecimal;
