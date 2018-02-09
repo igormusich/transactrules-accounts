@@ -1,11 +1,8 @@
 package com.transactrules.accounts.metadata;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.NamedAbstractEntity;
 
 
-@DynamoDBDocument
 public class OptionType extends NamedAbstractEntity {
 
     private String optionListExpression;
@@ -22,7 +19,6 @@ public class OptionType extends NamedAbstractEntity {
         this.isRequired = isRequired;
     }
 
-    @DynamoDBAttribute
     public String getOptionListExpression() {
         return optionListExpression;
     }
@@ -31,7 +27,6 @@ public class OptionType extends NamedAbstractEntity {
         this.optionListExpression = optionListExpression;
     }
 
-    @DynamoDBAttribute
     public Boolean getRequired() {
         return isRequired;
     }

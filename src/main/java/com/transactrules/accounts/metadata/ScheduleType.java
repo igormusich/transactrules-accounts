@@ -1,8 +1,5 @@
 package com.transactrules.accounts.metadata;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
 import io.swagger.annotations.ApiModel;
@@ -14,7 +11,6 @@ import org.hibernate.validator.constraints.NotBlank;
  * Created by Administrator on 11/27/2016.
  */
 @ApiModel()
-@DynamoDBDocument
 public class ScheduleType extends NamedAbstractEntity {
 
 
@@ -67,7 +63,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.isCalculated = isCalculated;
     }
 
-    @DynamoDBAttribute
     public String getScheduleFrequency() {
         return scheduleFrequency;
     }
@@ -76,7 +71,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.scheduleFrequency = scheduleFrequency;
     }
 
-    @DynamoDBAttribute
     public String getScheduleEndType() {
         return scheduleEndType;
     }
@@ -85,7 +79,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.scheduleEndType = scheduleEndType;
     }
 
-    @DynamoDBAttribute
     public String getStartDateExpression() {
         return startDateExpression;
     }
@@ -94,7 +87,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.startDateExpression = startDateExpression;
     }
 
-    @DynamoDBAttribute
     public String getEndDateExpression() {
         return endDateExpression;
     }
@@ -103,7 +95,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.endDateExpression = endDateExpression;
     }
 
-    @DynamoDBAttribute
     public String getNumberOfRepeatsExpression() {
         return numberOfRepeatsExpression;
     }
@@ -112,7 +103,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.numberOfRepeatsExpression = numberOfRepeatsExpression;
     }
 
-    @DynamoDBAttribute
     public String getIntervalExpression() {
         return intervalExpression;
     }
@@ -121,7 +111,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.intervalExpression = intervalExpression;
     }
 
-    @DynamoDBAttribute
     public Boolean getIsCalculated() {
         return isCalculated;
     }
@@ -130,7 +119,6 @@ public class ScheduleType extends NamedAbstractEntity {
         isCalculated = calculated;
     }
 
-    @DynamoDBAttribute
     public String getBusinessDayCalculation() {
         return businessDayCalculation;
     }
@@ -139,7 +127,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.businessDayCalculation = businessDayCalculation;
     }
 
-    @DynamoDBAttribute
     public String getIncludeDatesExpression() {
         return includeDatesExpression;
     }
@@ -148,7 +135,6 @@ public class ScheduleType extends NamedAbstractEntity {
         this.includeDatesExpression = includeDatesExpression;
     }
 
-    @DynamoDBAttribute
     public String getExcludeDatesExpression() {
         return excludeDatesExpression;
     }
@@ -158,43 +144,36 @@ public class ScheduleType extends NamedAbstractEntity {
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasEndDate() {
         return scheduleEndType.equalsIgnoreCase(ScheduleEndType.EndDate.value());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasStartDateExpression(){
         return (startDateExpression!=null && !startDateExpression.isEmpty());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasEndDateExpression(){
         return (endDateExpression!=null && !endDateExpression.isEmpty());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasIntervalExpression(){
         return (intervalExpression!=null && !intervalExpression.isEmpty());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasNumberOfRepeatsExpression(){
         return (numberOfRepeatsExpression!=null && !numberOfRepeatsExpression.isEmpty());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasIncludeDatesExpression(){
         return (includeDatesExpression!=null && !includeDatesExpression.isEmpty());
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasExcludeDatesExpression(){
         return (excludeDatesExpression!=null && !excludeDatesExpression.isEmpty());
     }

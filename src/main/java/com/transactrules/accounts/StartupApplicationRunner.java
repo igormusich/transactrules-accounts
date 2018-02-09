@@ -4,8 +4,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
+import com.transactrules.accounts.dynamoDB.AccountTypeDataObject;
 import com.transactrules.accounts.dynamoDB.CalendarDataObject;
-import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.repository.SystemPropertiesRepository;
 import com.transactrules.accounts.repository.UniqueIdRepository;
@@ -63,7 +63,7 @@ public class StartupApplicationRunner implements ApplicationRunner {
         }
 
         if(!contains(listTablesResult,"AccountType")) {
-            CreateTable(AccountType.class, dynamoDBMapper, amazonDynamoDB);
+            CreateTable(AccountTypeDataObject.class, dynamoDBMapper, amazonDynamoDB);
         }
 
         if(!contains(listTablesResult,"Account")) {

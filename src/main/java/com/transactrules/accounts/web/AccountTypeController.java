@@ -42,13 +42,13 @@ public class AccountTypeController {
             return new ResponseEntity<>(null, httpHeaders, HttpStatus.EXPECTATION_FAILED);
         }
 
-        final AccountType savedItem = service.save(item);
+        service.save(item);
 
         httpHeaders.setLocation(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{propertyName}")
-                .buildAndExpand(savedItem.getClassName()).toUri());
+                .buildAndExpand(item.getClassName()).toUri());
 
-        return new ResponseEntity<>(savedItem, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(item, httpHeaders, HttpStatus.CREATED);
     }
 
     @RequestMapping(method= RequestMethod.GET)

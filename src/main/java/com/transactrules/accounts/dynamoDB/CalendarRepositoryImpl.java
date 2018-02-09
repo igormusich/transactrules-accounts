@@ -33,6 +33,7 @@ public class CalendarRepositoryImpl implements CalendarRepository {
 
     @Override
     public Calendar findOne(String key) {
+
         return dynamoRepository.findOne(key).toCalendar();
     }
 }

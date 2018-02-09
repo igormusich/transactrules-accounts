@@ -1,11 +1,8 @@
 package com.transactrules.accounts.metadata;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.NamedAbstractEntity;
 import io.swagger.annotations.ApiModel;
 
-@DynamoDBDocument
 @ApiModel
 public class AmountType extends NamedAbstractEntity {
 
@@ -20,7 +17,6 @@ public class AmountType extends NamedAbstractEntity {
         this.isRequired = isRequired;
     }
 
-    @DynamoDBAttribute
     public Boolean getValueDated() {
         return isValueDated;
     }
@@ -29,7 +25,6 @@ public class AmountType extends NamedAbstractEntity {
         isValueDated = valueDated;
     }
 
-    @DynamoDBAttribute
     public Boolean getRequired() {
         return isRequired;
     }

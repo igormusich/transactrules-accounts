@@ -1,11 +1,7 @@
 package com.transactrules.accounts.metadata;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.NamedAbstractEntity;
 
-
-@DynamoDBDocument
 public class DateType extends NamedAbstractEntity {
 
     private Boolean isRequired;
@@ -20,7 +16,6 @@ public class DateType extends NamedAbstractEntity {
         this.isStartDate = isStartDate;
     }
 
-    @DynamoDBAttribute
     public Boolean getRequired() {
         return isRequired;
     }
@@ -29,7 +24,6 @@ public class DateType extends NamedAbstractEntity {
         isRequired = required;
     }
 
-    @DynamoDBAttribute
     public Boolean getIsStartDate() {
         return isStartDate;
     }

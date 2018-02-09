@@ -1,18 +1,16 @@
 package com.transactrules.accounts.metadata;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.NamedAbstractEntity;
 import io.swagger.annotations.ApiModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Define metadata for transaction type
  */
 
 @ApiModel
-@DynamoDBDocument
 public class TransactionType extends NamedAbstractEntity {
 
     private boolean maximumPrecision;
@@ -28,8 +26,6 @@ public class TransactionType extends NamedAbstractEntity {
 
     }
 
-
-    @DynamoDBAttribute
     public boolean getMaximumPrecision() {
         return maximumPrecision;
     }
@@ -38,7 +34,6 @@ public class TransactionType extends NamedAbstractEntity {
         this.maximumPrecision = maximumPrecision;
     }
 
-    @DynamoDBAttribute
     public List<TransactionRuleType> getTransactionRules() {
 
         return transactionRules;

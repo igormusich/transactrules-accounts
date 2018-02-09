@@ -1,12 +1,7 @@
 package com.transactrules.accounts.metadata;
 
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 
@@ -18,8 +13,6 @@ import java.util.function.Function;
  * Aggregate root for account metadata
  */
 
-@ApiModel
-@DynamoDBTable(tableName = "AccountType")
 public class AccountType {
 
     @NotBlank
@@ -64,8 +57,6 @@ public class AccountType {
         this.labelName = labelName;
     }
 
-
-    @DynamoDBHashKey(attributeName = "ClassName")
     public String getClassName(){
         return this.className;
     }
@@ -74,7 +65,6 @@ public class AccountType {
         this.className = className;
     }
 
-    @DynamoDBAttribute(attributeName = "LabelName")
     public String getLabelName() {
         return labelName;
     }
@@ -83,7 +73,6 @@ public class AccountType {
         this.labelName = labelName;
     }
 
-    @DynamoDBAttribute(attributeName = "PositionTypes")
     public List<PositionType> getPositionTypes() {
         return positionTypes;
     }
@@ -92,7 +81,6 @@ public class AccountType {
         this.positionTypes = positionTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "TransactionTypes")
     public List<TransactionType> getTransactionTypes() {
 
         return transactionTypes;
@@ -102,7 +90,6 @@ public class AccountType {
         this.transactionTypes = transactionTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "DateTypes")
     public List<DateType> getDateTypes(){
         return dateTypes;
     }
@@ -111,7 +98,6 @@ public class AccountType {
         this.dateTypes = dateTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "AmountTypes")
     public List<AmountType> getAmountTypes(){
         return amountTypes;
     }
@@ -120,7 +106,6 @@ public class AccountType {
         this.amountTypes = amountTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "OptionTypes")
     public List<OptionType> getOptionTypes(){
         return optionTypes;
     }
@@ -129,7 +114,6 @@ public class AccountType {
         this.optionTypes = optionTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "RateTypes")
     public List<RateType> getRateTypes() {
         return rateTypes;
     }
@@ -138,7 +122,6 @@ public class AccountType {
         this.rateTypes = rateTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "ScheduledTransactions")
     public List<ScheduledTransaction> getScheduledTransactions() {
         Collections.sort( scheduledTransactions, Comparator.comparing(ScheduledTransaction::getSequence));
         return scheduledTransactions;
@@ -148,7 +131,6 @@ public class AccountType {
         this.scheduledTransactions = scheduledTransactions;
     }
 
-    @DynamoDBAttribute(attributeName = "ScheduleTypes")
     public List<ScheduleType> getScheduleTypes() {
         return scheduleTypes;
     }
@@ -157,7 +139,6 @@ public class AccountType {
         this.scheduleTypes = scheduleTypes;
     }
 
-    @DynamoDBAttribute(attributeName = "InstalmentTypes")
     public List<InstalmentType> getInstalmentTypes() {
         return instalmentTypes;
     }
@@ -322,7 +303,6 @@ public class AccountType {
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public Boolean getHasTransactionTypes(){
         return transactionTypes.size()>0;
     }
