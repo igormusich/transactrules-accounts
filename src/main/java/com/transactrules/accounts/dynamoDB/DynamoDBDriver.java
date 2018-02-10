@@ -9,8 +9,8 @@ import com.transactrules.accounts.dynamoDB.account.AccountDataObject;
 import com.transactrules.accounts.dynamoDB.accountType.AccountTypeDataObject;
 import com.transactrules.accounts.dynamoDB.calendar.CalendarDataObject;
 import com.transactrules.accounts.dynamoDB.systemProperties.SystemPropertiesDataObject;
+import com.transactrules.accounts.dynamoDB.uniqueId.UniqueIdDataObject;
 import com.transactrules.accounts.runtime.TransactionSet;
-import com.transactrules.accounts.runtime.UniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class DynamoDBDriver implements DatabaseDriver {
         }
 
         if(!contains(listTablesResult,"UniqueId")) {
-            CreateTable(UniqueId.class, dynamoDBMapper, amazonDynamoDB);
+            CreateTable(UniqueIdDataObject.class, dynamoDBMapper, amazonDynamoDB);
         }
     }
 

@@ -1,10 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-
-@DynamoDBTable(tableName = "UniqueId")
 public class UniqueId {
     private String className;
     private Long nextId;
@@ -21,7 +16,6 @@ public class UniqueId {
         this.size = size;
     }
 
-    @DynamoDBHashKey
     public String getClassName() {
         return className;
     }
@@ -30,7 +24,6 @@ public class UniqueId {
         this.className = className;
     }
 
-    @DynamoDBAttribute
     public Long getNextId() {
         return nextId;
     }
@@ -39,7 +32,6 @@ public class UniqueId {
         this.nextId = nextId;
     }
 
-    @DynamoDBAttribute
     public String getPrefix() {
         return prefix;
     }
@@ -48,7 +40,6 @@ public class UniqueId {
         this.prefix = prefix;
     }
 
-    @DynamoDBAttribute
     public Integer getSize() {
         return size;
     }
