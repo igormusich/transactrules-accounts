@@ -1,16 +1,13 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.dynamoDB.TransactionSetDataConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@DynamoDBTable(tableName = "TransactionSet")
 public class TransactionSet {
     // {account number}-{action date yyyy-mm}-{set id}
     private String id;
@@ -32,7 +29,6 @@ public class TransactionSet {
        return String.format("%s-%04d-%02d-%03d", accountNumber, actionDate.getYear(),actionDate.getMonthValue(),setId);
     }
 
-    @DynamoDBHashKey
     public String getId() {
         return id;
     }
@@ -41,7 +37,6 @@ public class TransactionSet {
         this.id = id;
     }
 
-    @DynamoDBAttribute
     public String getNextId() {
         return nextId;
     }
@@ -50,7 +45,6 @@ public class TransactionSet {
         this.nextId = nextId;
     }
 
-    @DynamoDBAttribute
     public String getPreviousId() {
         return previousId;
     }
@@ -59,7 +53,6 @@ public class TransactionSet {
         this.previousId = previousId;
     }
 
-    @DynamoDBTypeConverted(converter = TransactionSetDataConverter.class)
     public TransactionSetData getData() {
         return data;
     }
@@ -96,7 +89,6 @@ public class TransactionSet {
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public List<Transaction> getTransactions() {
         List<Transaction> transactions = new ArrayList<>();
 

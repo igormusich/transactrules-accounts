@@ -1,12 +1,12 @@
 package com.transactrules.accounts.runtime;
 
 import com.transactrules.accounts.TestUtility;
+import com.transactrules.accounts.dynamoDB.transactionSet.TransactionSetDataConverter;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.services.AccountService;
 import com.transactrules.accounts.services.AccountTypeService;
 import com.transactrules.accounts.services.SystemPropertyService;
 import com.transactrules.accounts.services.TransactionService;
-import com.transactrules.accounts.dynamoDB.TransactionSetDataConverter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,7 +99,7 @@ public class TransactionSetTest {
 
         TransactionSetDataConverter converter = new TransactionSetDataConverter();
 
-        String yaml = converter.convert(set.getData());
+        String yaml = converter.convert(set);
     }
 
 
@@ -124,7 +124,7 @@ public class TransactionSetTest {
 
         TransactionSetDataConverter converter = new TransactionSetDataConverter();
 
-        String yaml = converter.convert(set.getData());
+        String yaml = converter.convert(set);
     }
 
 

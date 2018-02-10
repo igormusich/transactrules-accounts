@@ -1,21 +1,20 @@
-package com.transactrules.accounts.dynamoDB;
+package com.transactrules.accounts.dynamoDB.transactionSet;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.runtime.TransactionSetData;
-import com.transactrules.accounts.utilities.CustomNamingStrategy;
+import com.transactrules.accounts.runtime.TransactionSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TransactionSetDataConverter implements DynamoDBTypeConverter<String, TransactionSetData> {
+public class TransactionSetDataConverter implements DynamoDBTypeConverter<String, TransactionSet> {
     @Override
-    public String convert(TransactionSetData object) {
+    public String convert(TransactionSet object) {
         ObjectMapper yamlMapper = getObjectMapper();
 
         String yaml="";
@@ -29,15 +28,14 @@ public class TransactionSetDataConverter implements DynamoDBTypeConverter<String
     }
 
 
-
     @Override
-    public TransactionSetData unconvert(String value) {
+    public TransactionSet unconvert(String value) {
         ObjectMapper yamlMapper = getObjectMapper();
 
-        TransactionSetData data=null;
+        TransactionSet data=null;
 
         try {
-            data= yamlMapper.readValue(value, new TypeReference<TransactionSetData>(){});
+            data= yamlMapper.readValue(value, new TypeReference<TransactionSet>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,8 +69,6 @@ public class TransactionSetDataConverter implements DynamoDBTypeConverter<String
         customMap.put("transactionTypeMap","ttm");
         customMap.put("positionTypeMap","ptm");
 
-
-        yamlMapper.setPropertyNamingStrategy(new CustomNamingStrategy(customMap));
         return yamlMapper;
     }
 }

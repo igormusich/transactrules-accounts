@@ -1,18 +1,14 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.metadata.ScheduleEndType;
 import com.transactrules.accounts.metadata.ScheduleFrequency;
-import com.transactrules.accounts.dynamoDB.LocalDateFormat;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@DynamoDBDocument
 public class Schedule  {
 
     private LocalDate startDate;
@@ -58,8 +54,6 @@ public class Schedule  {
         this.excludeDates = new ArrayList<>(prototype.excludeDates);
     }
 
-    @DynamoDBAttribute
-    @LocalDateFormat
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -68,7 +62,6 @@ public class Schedule  {
         this.startDate = startDate;
     }
 
-    @DynamoDBAttribute
     public String getEndType() {
         return endType;
     }
@@ -77,7 +70,6 @@ public class Schedule  {
         this.endType = endType;
     }
 
-    @DynamoDBAttribute
     public String getFrequency() {
         return frequency;
     }
@@ -86,8 +78,6 @@ public class Schedule  {
         this.frequency = frequency;
     }
 
-    @DynamoDBAttribute
-    @LocalDateFormat
     public LocalDate getEndDate() {
         return endDate;
     }
@@ -96,7 +86,6 @@ public class Schedule  {
         this.endDate = endDate;
     }
 
-    @DynamoDBAttribute
     public int getInterval() {
         return interval;
     }
@@ -105,7 +94,6 @@ public class Schedule  {
         this.interval = interval;
     }
 
-    @DynamoDBAttribute
     public Integer getNumberOfRepeats() {
         return numberOfRepeats;
     }
@@ -114,7 +102,6 @@ public class Schedule  {
         this.numberOfRepeats = numberOfRepeats;
     }
 
-    @DynamoDBAttribute
     public String getBusinessDayCalculation() {
         return businessDayCalculation;
     }
@@ -123,7 +110,6 @@ public class Schedule  {
         this.businessDayCalculation = businessDayCalculation;
     }
 
-    @DynamoDBAttribute
     public List<ScheduleDate> getIncludeDates() {
         return includeDates;
     }
@@ -132,7 +118,6 @@ public class Schedule  {
         this.includeDates = includeDates;
     }
 
-    @DynamoDBAttribute
     public List<ScheduleDate> getExcludeDates() {
         return excludeDates;
     }

@@ -1,12 +1,8 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@DynamoDBDocument
 public class AmountValue {
 
     private BigDecimal amount;
@@ -27,7 +23,6 @@ public class AmountValue {
         this.valueDate = valueDate;
     }
 
-    @DynamoDBAttribute
     public BigDecimal getAmount() {
         return amount;
     }
@@ -36,7 +31,6 @@ public class AmountValue {
         this.amount = amount;
     }
 
-    @DynamoDBAttribute
     public LocalDate getValueDate() {
         return valueDate;
     }

@@ -17,6 +17,7 @@ public class SystemPropertiesRepositoryImpl implements SystemPropertiesRepositor
 
     @Override
     public SystemProperties findOne() {
+
         return dynamoRepository.findAll().iterator().next().getData();
     }
 }

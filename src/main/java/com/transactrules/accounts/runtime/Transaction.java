@@ -1,10 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
-import com.transactrules.accounts.dynamoDB.LocalDateFormat;
-import com.transactrules.accounts.dynamoDB.PositionMapConverter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -36,8 +31,6 @@ public class Transaction  {
     }
 
 
-    //@DynamoDBRangeKey(attributeName = "ActionDate")
-    @LocalDateFormat
     public LocalDate getActionDate() {
         return actionDate;
     }
@@ -46,7 +39,6 @@ public class Transaction  {
         this.actionDate = actionDate;
     }
 
-    @DynamoDBAttribute
     public String getTransactionTypeName() {
         return transactionTypeName;
     }
@@ -55,7 +47,6 @@ public class Transaction  {
         this.transactionTypeName = transactionTypeName;
     }
 
-    @DynamoDBAttribute
     public BigDecimal getAmount() {
         return amount;
     }
@@ -64,8 +55,6 @@ public class Transaction  {
         this.amount = amount;
     }
 
-    @DynamoDBAttribute
-    @LocalDateFormat
     public LocalDate getValueDate() {
         return valueDate;
     }
@@ -74,7 +63,6 @@ public class Transaction  {
         this.valueDate = valueDate;
     }
 
-    @DynamoDBTypeConverted(converter = PositionMapConverter.class)
     public Map<String, BigDecimal> getPositions() {
         return positions;
     }

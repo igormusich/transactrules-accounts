@@ -1,12 +1,10 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.transactrules.accounts.metadata.TransactionOperation;
 
 import java.math.BigDecimal;
 
-@DynamoDBDocument
+
 public class Position  {
 
     private BigDecimal amount;
@@ -45,7 +43,6 @@ public class Position  {
         return amount;
     }
 
-    @DynamoDBAttribute
     public BigDecimal getAmount() {
         return amount;
     }
