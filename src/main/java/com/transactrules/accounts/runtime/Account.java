@@ -1,8 +1,6 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.transactrules.accounts.dynamoDB.*;
 import com.transactrules.accounts.metadata.DateType;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.metadata.ScheduleType;
@@ -16,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@DynamoDBTable(tableName = "Account")
+
 public class Account {
 
     @NotBlank
@@ -115,7 +113,6 @@ public class Account {
     }
 
 
-    @DynamoDBHashKey
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -124,7 +121,6 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    @DynamoDBAttribute
     public boolean isActive() {
         return isActive;
     }
@@ -133,8 +129,6 @@ public class Account {
         isActive = active;
     }
 
-    @DynamoDBAttribute
-    @LocalDateFormat
     public LocalDate getDateActivated() {
         return dateActivated;
     }
@@ -143,7 +137,6 @@ public class Account {
         this.dateActivated = dateActivated;
     }
 
-    @DynamoDBAttribute
     public String getAccountTypeName() {
         return accountTypeName;
     }
@@ -152,7 +145,6 @@ public class Account {
         this.accountTypeName = accountTypeName;
     }
 
-    @DynamoDBAttribute
     public Map<String, Position> getPositions() {
         return positions;
     }
@@ -161,7 +153,6 @@ public class Account {
         this.positions = positions;
     }
 
-    @DynamoDBTypeConverted(converter = DateValueMapConverter.class)
     public Map<String, DateValue> getDates() {
         return dates;
     }
@@ -170,7 +161,6 @@ public class Account {
         this.dates = dates;
     }
 
-    @DynamoDBTypeConverted(converter = RateValueMapConverter.class)
     public Map<String, RateValue> getRates() {
         return rates;
     }
@@ -179,7 +169,6 @@ public class Account {
         this.rates = rates;
     }
 
-    @DynamoDBTypeConverted(converter = AmountValueMapConverter.class)
     public Map<String, AmountValue> getAmounts() {
         return amounts;
     }
@@ -188,7 +177,6 @@ public class Account {
         this.amounts = amounts;
     }
 
-    @DynamoDBAttribute
     public Map<String, OptionValue> getOptions() {
         return options;
     }
@@ -197,7 +185,6 @@ public class Account {
         this.options = options;
     }
 
-    @DynamoDBTypeConverted(converter = ScheduleMapConverter.class)
     public Map<String, Schedule> getSchedules() {
         return schedules;
     }
@@ -206,7 +193,7 @@ public class Account {
         this.schedules = schedules;
     }
 
-    @DynamoDBIgnore
+    @JsonIgnore
     public List<Transaction> getTransactions() {
         return transactions;
     }
@@ -215,7 +202,6 @@ public class Account {
         this.transactions = transactions;
     }
 
-    @DynamoDBTypeConverted(converter = InstalmentSetConverter.class)
     public Map<String, InstalmentSet> getInstalmentSets() {
         return instalmentSets;
     }
@@ -224,7 +210,6 @@ public class Account {
         this.instalmentSets = instalmentSets;
     }
 
-    @DynamoDBAttribute
     public List<String> getCalendarNames() {
         return calendarNames;
     }
@@ -334,7 +319,6 @@ public class Account {
 
     }
 
-    @DynamoDBIgnore
     public LocalDate retrieveStartDate(){
         return  null;
     }
@@ -362,7 +346,6 @@ public class Account {
     }
 
     @JsonIgnore
-    @DynamoDBIgnore
     public LocalDate ValueDate(){
         return valueDate;
     }

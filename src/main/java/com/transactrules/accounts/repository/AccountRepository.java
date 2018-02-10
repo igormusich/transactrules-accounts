@@ -1,11 +1,12 @@
 package com.transactrules.accounts.repository;
 
 import com.transactrules.accounts.runtime.Account;
-import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 
-@EnableScan
-public interface AccountRepository extends CrudRepository<Account,String> {
+public interface AccountRepository  {
+    void save(Account accountType);
+    List<Account> findAll();
+    Account findOne(String key);
 
 }

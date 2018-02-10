@@ -55,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
             account = this.activate(prototype);
         } else {
             account = getAccountFromPrototype(prototype, null);
-            account = accountRepository.save(account);
+            accountRepository.save(account);
         }
 
         return account;

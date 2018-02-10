@@ -1,4 +1,4 @@
-package com.transactrules.accounts.config;
+package com.transactrules.accounts.dynamoDB;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
