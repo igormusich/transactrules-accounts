@@ -5,7 +5,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.transactrules.accounts.DatabaseDriver;
-import com.transactrules.accounts.runtime.SystemProperties;
+import com.transactrules.accounts.dynamoDB.account.AccountDataObject;
+import com.transactrules.accounts.dynamoDB.accountType.AccountTypeDataObject;
+import com.transactrules.accounts.dynamoDB.calendar.CalendarDataObject;
+import com.transactrules.accounts.dynamoDB.systemProperties.SystemPropertiesDataObject;
 import com.transactrules.accounts.runtime.TransactionSet;
 import com.transactrules.accounts.runtime.UniqueId;
 import org.slf4j.Logger;
@@ -32,18 +35,18 @@ public class DynamoDBDriver implements DatabaseDriver {
     public void generateDataModel() {
         DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-        String[] tableNames = {"AccountType","Account","Calendar","TransactionSet", "SystemProperties", "UniqueId"};
+        String[] tableNames = {"AccountType","Account","Calendar","TransactionSet", "systemProperties", "UniqueId"};
 
         List<String> listTablesResult = amazonDynamoDB.listTables().getTableNames();
 
         if(resetTables){
             for (String tableName: tableNames) {
                 if(contains(listTablesResult, tableName)){
-                    amazonDynamoDB.deleteTable(tableName);
 
                     try {
+                        amazonDynamoDB.deleteTable(tableName);
                         waitForTableToBeDeleted(tableName,amazonDynamoDB);
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         logger.error(e.getMessage());
                     }
@@ -69,8 +72,8 @@ public class DynamoDBDriver implements DatabaseDriver {
             CreateTable(TransactionSet.class, dynamoDBMapper, amazonDynamoDB);
         }
 
-        if(!contains(listTablesResult,"SystemProperties")) {
-            CreateTable(SystemProperties.class, dynamoDBMapper, amazonDynamoDB);
+        if(!contains(listTablesResult,"systemProperties")) {
+            CreateTable(SystemPropertiesDataObject.class, dynamoDBMapper, amazonDynamoDB);
         }
 
         if(!contains(listTablesResult,"UniqueId")) {

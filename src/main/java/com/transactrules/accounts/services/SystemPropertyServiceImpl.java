@@ -32,7 +32,7 @@ public class SystemPropertyServiceImpl implements SystemPropertyService {
     synchronized private SystemProperties getProperties() {
 
         if (properties == null) {
-            properties = systemPropertiesRepository.findAll().iterator().next();
+            properties = systemPropertiesRepository.findOne();
         }
 
         return properties;

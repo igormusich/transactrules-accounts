@@ -1,13 +1,8 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.transactrules.accounts.dynamoDB.LocalDateFormat;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
-@DynamoDBTable(tableName = "SystemProperties")
 public class SystemProperties {
     private String id;
     private LocalDate actionDate;
@@ -22,7 +17,6 @@ public class SystemProperties {
         this.actionDate = actionDate;
     }
 
-    @DynamoDBHashKey
     public String getId() {
         return id;
     }
@@ -31,7 +25,6 @@ public class SystemProperties {
         this.id = id;
     }
 
-    @LocalDateFormat
     public LocalDate getActionDate() {
         return actionDate;
     }
