@@ -16,7 +16,7 @@ mvn clean package
 To build docker image:
 
 ```bash
-mvn clean install dockerfile:build
+mvn clean install -Dmaven.test.skip=true dockerfile:build
 ```
 
 To run docker image:
