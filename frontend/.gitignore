@@ -4,11 +4,15 @@
 /dist
 /tmp
 /out-tsc
+/ui-src
 
 # dependencies
 /node_modules
 
+node
+
 # IDEs and editors
+.DS_Store
 /.idea
 .project
 .classpath

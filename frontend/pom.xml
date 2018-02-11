@@ -5,26 +5,42 @@
     	<groupId>com.transactrules</groupId>
 	    <artifactId>app</artifactId>
 	    <version>1.0.0</version>
+      <relativePath/>
     </parent>
 
-    <artifactId>ui</artifactId>
+    <artifactId>frontend</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+
+
+  <properties>
+    <!-- Web -->
+    <main.basedir>${project.parent.basedir}</main.basedir>
+    <checkstyle.skip>true</checkstyle.skip>
+    <npm.version>4.6.1</npm.version>
+    <node.version>v8.6.0</node.version>
+    <yarn.version>v1.3.2</yarn.version>
+    <node.path>${user.home}/.node</node.path>
+    <typescript.path>./</typescript.path>
+  </properties>
 
   <build>
     <resources>
       <resource>
-        <directory>dist</directory>
+        <directory>ui-src</directory>
       </resource>
     </resources>
+
     <plugins>
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <version>1.6</version>
         <configuration>
-          <nodeVersion>v8.9.0</nodeVersion>
-          <yarnVersion>v1.3.2</yarnVersion>
+          <nodeVersion>${node.version}</nodeVersion>
+          <npmVersion>${npm.version}</npmVersion>
+          <workingDirectory>${typescript.path}</workingDirectory>
+          <installDirectory>${node.path}</installDirectory>
+          <yarnVersion>${yarn.version}</yarnVersion>
         </configuration>
         <executions>
           <execution>
@@ -43,7 +59,7 @@
               <arguments>install</arguments>
             </configuration>
           </execution>
-          <execution>
+<!--          <execution>
             <id>yarn lint</id>
             <goals>
               <goal>yarn</goal>
@@ -51,7 +67,7 @@
             <configuration>
               <arguments>lint</arguments>
             </configuration>
-          </execution>
+          </execution>-->
           <execution>
             <id>yarn build</id>
             <goals>
@@ -62,20 +78,21 @@
               <arguments>build</arguments>
             </configuration>
           </execution>
-          <execution>
+<!--          <execution>
             <id>yarn test</id>
             <goals>
               <goal>yarn</goal>
             </goals>
             <phase>test</phase>
             <configuration>
-              <arguments>test --watch false</arguments>
+              <arguments>test</arguments>
               <failOnError>true</failOnError>
             </configuration>
-          </execution>
+          </execution>-->
         </executions>
       </plugin>
     </plugins>
+
   </build>
 </project>
 

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<groupId>com.transactrules</groupId>
+		<artifactId>app</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.transactrules</groupId>
@@ -10,18 +17,13 @@
 	<name>api</name>
 	<description>Rule based transaction processing framework</description>
 
-    <parent>
-    	<groupId>com.transactrules</groupId>
-	    <artifactId>app</artifactId>
-	    <version>1.0.0</version>
-    </parent>
-
 	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-        <docker.image.prefix>transactrules</docker.image.prefix>
-		<aws.s3.region>us-west-2</aws.s3.region>
+		<start-class>com.transactrules.accounts.AccountsApplication</start-class>
+		<docker.image.prefix>transactrules</docker.image.prefix>
 	</properties>
 
 
@@ -38,6 +40,12 @@
     </dependencyManagement>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>com.transactrules</groupId>
+			<artifactId>frontend</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -115,6 +123,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>transactrules-app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -137,32 +146,32 @@
 				the cache is cleared.  The artifact is unpacked to the target
 				directory of the build.
 			  -->
-			<plugin>
-				<groupId>com.googlecode.maven-download-plugin</groupId>
-				<artifactId>download-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<id>install-dynamodb_local</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>wget</goal>
-						</goals>
-						<configuration>
-							<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>
-							<unpack>true</unpack>
-							<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			<!--<plugin>-->
+				<!--<groupId>com.googlecode.maven-download-plugin</groupId>-->
+				<!--<artifactId>download-maven-plugin</artifactId>-->
+				<!--<version>1.2.1</version>-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>install-dynamodb_local</id>-->
+						<!--<phase>initialize</phase>-->
+						<!--<goals>-->
+							<!--<goal>wget</goal>-->
+						<!--</goals>-->
+						<!--<configuration>-->
+							<!--<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>-->
+							<!--<unpack>true</unpack>-->
+							<!--<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>-->
+						<!--</configuration>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
 			<!--
       Step 2: Reserve a local port for Dynamo to start on.
         DynamoDB_Local normally runs on port 8000.  Rather than hoping
         that port is open, have this plugin reserve an available port
         and set it as a property in the Maven build.
       -->
-			<plugin>
+			<!--<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.9.1</version>
@@ -179,14 +188,14 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 			<!--
             Step 3: Start DynamoDB_Local just before integration tests are run.
               This plugin will also cleanup the process during the
               post-integration-test phase.
             -->
-			<plugin>
+			<!--<plugin>
 				<groupId>com.bazaarvoice.maven.plugins</groupId>
 				<artifactId>process-exec-maven-plugin</artifactId>
 				<version>0.7</version>
@@ -199,37 +208,26 @@
 						</goals>
 						<configuration>
 							<className>dynamodb_local</className>
-							<!--
-                            We need to let DynamoDB finish starting, but don't have
-                            a good semamore.  It's pretty quick to start, so 1 second
-                            should suffice.
-                            -->
 							<waitAfterLaunch>1</waitAfterLaunch>
 							<arguments>
 								<argument>java</argument>
 								<argument>-Djava.library.path=dynamodb/DynamoDBLocal_lib</argument>
 								<argument>-jar</argument>
 								<argument>dynamodb/DynamoDBLocal.jar</argument>
-								<!--
-                                Use the port that was reserved in step 2
-                                -->
+
+
 								<argument>-port</argument>
                                 <argument>8000</argument>
-                                <!--<argument>${dynamodblocal.port}</argument>-->
+                                &lt;!&ndash;<argument>${dynamodblocal.port}</argument>&ndash;&gt;
 
-								<!--
-                                You run your tests in parallel, right?
-                                -->
 								<argument>-sharedDb</argument>
-								<!--
-                                Remove this to keep data between restarts of the process.
-                                -->
+
 								<argument>-inMemory</argument>
 							</arguments>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 			<!--
             Step 4: Use the failsafe plugin to run integration tests.
@@ -250,7 +248,6 @@
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 

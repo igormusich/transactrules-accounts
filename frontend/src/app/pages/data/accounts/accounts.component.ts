@@ -14,8 +14,9 @@ import * as moment from 'moment';
 import { ROUTE_TRANSITION } from '../../../app.animation';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 
+import { MatTableDataSource } from "@angular/material";
 import { ApiClientService } from 'app/api-client-service';
-import { AccountType,Account } from 'app/models';
+import { AccountType, Account } from 'app/models';
 
 import { SelectAccountTypeComponent } from './select-account-type/select-account-type.component';
 import { AccountCreateService } from '../../../account-create.service';
@@ -33,61 +34,54 @@ export class AccountsComponent implements OnInit {
 
   scrollbar: any;
 
-  displayedColumns = ['accountTypeName','accountNumber','active'];
-  dataSource: AccountSource;
+  displayedColumns = ['accountTypeName', 'accountNumber', 'active'];
+  dataSource: MatTableDataSource<Account> | null;
+  items: Observable<Account[]>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private apiService: ApiClientService, 
+  constructor(private apiService: ApiClientService,
     public composeDialog: MatDialog,
     public accountOpen: AccountCreateService,
-    public router: Router ) {
+    public router: Router) {
+
+    this.dataSource = new MatTableDataSource<Account>([]);
+    this.dataSource.paginator = this.paginator;
 
   }
 
   ngOnInit() {
-    this.dataSource = new AccountSource(this.apiService);
+    this.items = this.apiService.findAllAccounts()
+    this.items.subscribe(accounts => {
+      this.dataSource = new MatTableDataSource<Account>(accounts);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.filter = "";
+    })
 
   }
 
   ngOnDestroy() {
   }
 
-  display(account:Account ){
-    this.router.navigate(['data/account-details/' + account.accountNumber]); 
+  display(account: Account) {
+    this.router.navigate(['data/account-details/' + account.accountNumber]);
   }
 
-  createAccount(){
+  createAccount() {
     const dialogRef = this.composeDialog.open(SelectAccountTypeComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var account:Account = result.account;
-        var calendarName:string = result.calendarName;
-        
+        var account: Account = result.account;
+        var calendarName: string = result.calendarName;
+
         account.calendarNames = [calendarName];
 
         this.accountOpen.setAccountType(result.accountType);
         this.accountOpen.setAccount(account);
-        this.router.navigate(['/data/create-account']);      
+        this.router.navigate(['/data/create-account']);
       }
-    }); 
+    });
   }
 }
 
-export class AccountSource extends DataSource<any> {
-  items: Observable<Account[]>;
-  constructor(private apiService: ApiClientService) {
-    super();
-  }
-  connect(): Observable<Account[]> {
-    this.items = this.apiService.findAllAccounts();
-
-    return this.items;
-  }
-  disconnect() { }
-
-  isLoadingResults() {
-    return false;
-  }
-}

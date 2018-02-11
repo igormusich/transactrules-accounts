@@ -16,6 +16,8 @@ import { ROUTE_TRANSITION } from '../../../app.animation';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Calendar } from 'app/models/calendar.model';
 import { ApiClientService } from 'app/api-client-service';
+import { MatTableDataSource } from "@angular/material";
+
 
 @Component({
   selector: 'vr-calendar',
@@ -28,17 +30,24 @@ export class CalendarComponent implements OnInit {
   scrollbar: any;
 
   displayedColumns = ['name'];
-  dataSource: CalendarSource;
+  dataSource: MatTableDataSource<Calendar> | null;
+  
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _apiService: ApiClientService) {
-
+  constructor(private apiService: ApiClientService) {
+    this.dataSource = new MatTableDataSource<Calendar>([]);
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit() {
-    this.dataSource = new CalendarSource(this._apiService);
+    var items = this.apiService.findAllCalendars();
+    items.subscribe(calendars => {
+      this.dataSource = new MatTableDataSource<Calendar>(calendars);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.filter = "";
+    })
 
   }
 
@@ -47,22 +56,5 @@ export class CalendarComponent implements OnInit {
 
   createCalendar(){
     
-  }
-}
-
-export class CalendarSource extends DataSource<any> {
-  items: Observable<Calendar[]>;
-  constructor(private apiService: ApiClientService) {
-    super();
-  }
-  connect(): Observable<Calendar[]> {
-    this.items = this.apiService.findAllCalendars();
-
-    return this.items;
-  }
-  disconnect() { }
-
-  isLoadingResults() {
-    return false;
   }
 }

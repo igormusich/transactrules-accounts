@@ -29,6 +29,7 @@ import {
   TransactionType
 } from './models';
 import { CalendarComponent } from 'app/pages/data/calendar/calendar.component';
+import { environment } from 'environments/environment';
 
 /**
 * Created with angular4-swagger-client-generator.
@@ -36,7 +37,7 @@ import { CalendarComponent } from 'app/pages/data/calendar/calendar.component';
 @Injectable()
 export class ApiClientService {
 
-  private domain = 'http://localhost:4200/api';
+  private domain = environment.apiurl;
 
   constructor(private http: HttpClient, @Optional() @Inject('domain') domain: string ) {
     if (domain) {

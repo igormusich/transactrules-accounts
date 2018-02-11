@@ -1,19 +1,16 @@
 {
-  "name": "elastic-ui",
-  "version": "5.1.0",
+  "name": "transactrules-ui",
+  "version": "1.0.0",
   "license": "NONE",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --prod --build-optimizer",
+    "build": "ng build -prod --env=prod --output-path ui-src/META-INF/resources",
     "bundle-report": "ng build --stats-json && webpack-bundle-analyzer dist/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:universal": "npm run build:client-and-server-bundles && npm run webpack:server",
-    "serve:universal": "node dist/server.js",
-    "build:client-and-server-bundles": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod --app 1 --output-hashing=false",
-    "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
+     "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
   },
   "private": true,
   "dependencies": {

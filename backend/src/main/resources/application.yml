@@ -18,7 +18,7 @@ endpoints:
     enabled: false
   health:
     enabled: true
-    path: /
+    path: /health
   info:
     enabled: false
   metrics:

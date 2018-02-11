@@ -107,15 +107,32 @@ export class AccountTypeDetailsComponent implements OnInit {
 
   }
 
-  createAmountType() {
-    /*const dialogRef = this.composeDialog.open(PositionTypeDetailsComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.snackBar.open(result, null, {
-          duration: 3000
-        });
-      }
-    });*/
+  createTransactionType(){
+
   }
 
+  createAmountType() {
+
+  }
+
+  createDateType(){
+
+  }
+
+  createScheduleType(){
+
+  }
+
+  createOptionType(){
+
+  }
+
+  createInstalmentType(){
+
+  }
+
+
+  createScheduledTransactions(){
+
+  }
 }
