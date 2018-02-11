@@ -1,0 +1,39 @@
+<div class="inbox-compose">
+    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
+      <span>Edit Instalment</span>
+      <button matDialogClose mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <form [formGroup]="form" novalidate>
+      <div class="content" mat-dialog-content fxLayout="column">
+        <div fxLayout="column" fxLayoutGap="24px">
+          <mat-form-field class="input-container" fxFlex>
+            <input formControlName="date" matInput placeholder="Date"  >
+          </mat-form-field>
+          <mat-form-field class="input-container" fxFlex>
+            <input formControlName="amount" matInput placeholder="Amount" required>
+            <mat-error *ngIf="form.controls['amount'].hasError('required')">
+              Amount is required.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="input-container" fxFlex>
+              <mat-select placeholder="Has Fixed Value" formControlName="hasFixedValue">
+                  <mat-option value="true">True</mat-option>
+                  <mat-option value="false">False</mat-option>
+              </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div mat-dialog-actions fxLayout="row">
+  
+      <span fxFlex>
+        <!-- fill space -->
+      </span>
+  
+      <button [disabled]="!form.valid" (click)="save()" class="save" fxFlexOffset="8px" mat-raised-button color="primary">
+        Save
+      </button>
+    </div>
+  </div>

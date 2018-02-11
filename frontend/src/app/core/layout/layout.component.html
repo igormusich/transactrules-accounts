@@ -1,0 +1,61 @@
+<mat-sidenav-container class="layout-container" [ngClass]="cardElevation$ | async">
+
+
+  <div class="layout" fxLayout="column"
+       [class.alpha]="layout === 'alpha'"
+       [class.beta]="layout === 'beta'"
+       [class.gamma]="layout === 'gamma'"
+       [class.boxed]="layoutBoxed$ | async">
+
+    <!-- Layout Beta -->
+    <vr-toolbar-beta *ngIf="layout === 'beta'"
+                     [quickpanelOpen]="quickpanelOpen$ | async"
+                     (toggledSidenav)="toggleSidenav()" (toggledQuickpanel)="toggleQuickpanel()"></vr-toolbar-beta>
+    <!-- /Layout: Beta -->
+
+    <!-- Layout Gamma -->
+    <vr-toolbar-gamma *ngIf="layout === 'gamma'"
+                      [quickpanelOpen]="quickpanelOpen$ | async"
+                      (toggledSidenav)="toggleSidenav()" (toggledQuickpanel)="toggleQuickpanel()"></vr-toolbar-gamma>
+    <!-- /Layout: Gamma -->
+
+    <vr-toolbar-navigation *ngIf="layout === 'gamma'"></vr-toolbar-navigation>
+
+    <mat-sidenav-container fxFlex>
+
+      <mat-sidenav class="quickpanel-container"
+                  (open)="openQuickpanel()" (close)="closeQuickpanel()"
+                  [opened]="quickpanelOpen$ | async" [align]="quickpanelAlign" [mode]="quickpanelMode">
+        <vr-quickpanel></vr-quickpanel>
+      </mat-sidenav>
+
+      <mat-sidenav class="sidenav-container"
+                  (open)="openSidenav()" (close)="closeSidenav()"
+                  [opened]="sidenavOpen$ | async" [align]="sidenavAlign$ | async"
+                  [mode]="sidenavMode$ | async" [disableClose]="sidenavDisableClose$ | async"
+                  [vrSidenavCollapse]="sidenavCollapsed$ | async">
+
+        <vr-sidenav [layout]="layout" [collapsed]="sidenavCollapsed$ | async"
+                    (toggledSidenavCollapse)="toggleSidenavCollapse()"></vr-sidenav>
+
+      </mat-sidenav>
+
+      <div class="toolbar-container" fxLayout="column">
+        <!-- Layout Alpha -->
+        <vr-toolbar-alpha *ngIf="layout === 'alpha'"
+                          [sidenavCollapsed]="sidenavCollapsed$ | async" [quickpanelOpen]="quickpanelOpen$ | async"
+                          (toggledSidenav)="toggleSidenav()" (toggledQuickpanel)="toggleQuickpanel()">
+        </vr-toolbar-alpha>
+        <!-- /Layout Alpha -->
+
+        <div class="content-container" fxFlex #scrollContainer>
+          <router-outlet (activate)="onActivate()"></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-container>
+
+  </div>
+
+
+</mat-sidenav-container>
+

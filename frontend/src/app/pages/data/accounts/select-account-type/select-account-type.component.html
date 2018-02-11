@@ -1,0 +1,42 @@
+<div class="inbox-compose">
+  <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
+    <span>Create Account</span>
+    <button matDialogClose mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form [formGroup]="form" novalidate>
+  <div class="content" mat-dialog-content fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="24px">
+      <mat-form-field class="input-container" fxFlex> 
+          <mat-select formControlName="accountTypeName" placeholder="Account Type" >
+            <mat-option *ngFor="let accountType of accountTypes" [value]="accountType.className">
+              {{accountType.labelName}}
+            </mat-option>  
+          </mat-select>
+        <mat-error *ngIf="form.controls['accountTypeName'].hasError('required')">
+          Account Type is required.
+        </mat-error> 
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-select fxFlex formControlName="calendarName" placeholder="Calendar">
+          <mat-option *ngFor="let calendar of calendars" [value]="calendar.name">
+            {{calendar.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls['calendarName'].hasError('required')">
+          Calendar is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+  <div mat-dialog-actions fxLayout="row">
+
+    <span fxFlex><!-- fill space --></span>
+
+    <button [disabled]="!form.valid" (click)="create()" class="save" fxFlexOffset="8px" mat-raised-button color="primary">
+      Save
+    </button>
+  </div>
+</div>

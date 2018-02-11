@@ -1,0 +1,25 @@
+<div class="toolbar" id="header">
+
+  <div class="container" fxLayout="row" fxLayoutAlign="space-between">
+
+    <div class="sidenav-header" fxLayout="row" fxLayoutAlign="start center">
+      <button fxShow fxHide.gt-sm class="menu-toggle-mobile" type="button" mat-icon-button (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <a fxHide fxShow.gt-xs [routerLink]="['/']">
+        <img class="logo" alt="logo" src="assets/img/logo2x.png">
+      </a>
+    </div>
+
+    <div class="search-bar" fxHide fxShow.gt-sm
+         fxLayout="row" fxLayoutAlign="start center" fxFlex="450px" fxFlexOffset.gt-sm="36px">
+      <vr-search-bar></vr-search-bar>
+    </div>
+
+    <div fxLayout="row" fxFlexOffset.gt-sm="24px">
+      
+    </div>
+  </div>
+</div>
+

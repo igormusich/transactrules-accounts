@@ -1,0 +1,492 @@
+<div class="form-elements">
+  <vr-page-header [height]="'180px'" background="url(/assets/img/demo/headers/mac-1.png)" [reverse]="true"></vr-page-header>
+
+  <div class="container">
+    <vr-breadcrumbs [currentPage]="'Account Type Details'" [names]="['Settings']" [header]="'primary'"></vr-breadcrumbs>
+    <div fxLayout="column" fxLayoutGap="24px">
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start" fxLayoutGap="36px">
+        <div class="basic-forms card alternative" fxFlex="100%" fxFlex.gt-sm fxLayout="column" fxLayoutGap="20px">
+
+          <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <div class="title">Account Type</div>
+              <div class="sub-title">Define data model and processing rules</div>
+            </div>
+          </div>
+          <form [formGroup]="form" novalidate>
+            <div class="result" fxLayout="column">
+              <div fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+
+                <mat-form-field fxFlex>
+                  <input formControlName="labelName" matInput placeholder="Label Name" type="text" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                  <input formControlName="className" matInput placeholder="Class Name" type="text" readonly>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </form>
+          <mat-tab-group>
+            <mat-tab label="Positions Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createPositionType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="positionDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>input</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updatePositionType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deletePositionType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="positionDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Transaction Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createTransactionType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="transactionDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>payment</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateTransactionType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteTransactionType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="transactionDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Amount Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createAmountType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="amountDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>attach_money</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateAmountType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteAmountType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="amountDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Date Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createDateType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="dateDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>today</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateDateType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteDateType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="dateDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Schedule Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createScheduleType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="scheduleDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>schedule</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateScheduleType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteScheduleType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="scheduleDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Option Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createOptionType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="optionsDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>format_list_bulleted</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateOptionType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteOptionType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="optionsDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Instalment Types">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createInstalmentType()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="instalmentsDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>local_atm</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateInstalmentType(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteInstalmentType(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="instalmentsDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+            <mat-tab label="Scheduled Transactions">
+              <vr-list name="">
+                <div class="actions" fxFlexAlign="center">
+                  <button (click)="createScheduledTransactions()" class="create" type="button" mat-mini-fab color="primary">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <mat-table #table [dataSource]="scheduledTransactionsDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container matColumnDef="image">
+                    <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="image-cell" *matCellDef="let row">
+                      <mat-icon>event_note</mat-icon>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Label Name Column -->
+                  <ng-container cdkColumnDef="labelName">
+                    <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.labelName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Class Name Column -->
+                  <ng-container cdkColumnDef="propertyName">
+                    <mat-header-cell *cdkHeaderCellDef> Property Name </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.propertyName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+
+                      <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                        <button (click)="updateScheduledTransaction(row)" mat-menu-item>
+                          <span>Modify</span>
+                        </button>
+                        <button (click)="deleteScheduledTransaction(row)" mat-menu-item>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [length]="scheduledTransactionsDataSource.data.length" [pageSize]="10">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

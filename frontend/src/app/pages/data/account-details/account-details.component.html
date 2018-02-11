@@ -1,0 +1,198 @@
+<div class="datatable">
+
+  <div class="container">
+    <div fxLayout="column" fxLayoutGap="24px">
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start" fxLayoutGap="36px">
+        <div class="basic-forms card alternative" fxFlex="100%" fxFlex.gt-sm fxLayout="column" fxLayoutGap="20px">
+
+          <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <div class="title">Account: {{accountNumber}} </div>
+            </div>
+          </div>
+          <mat-tab-group>
+            <mat-tab label="Details">
+              <div class="container">
+                <div class="account" fxLayout="row">
+                  <div class="card alternative" fxLayout="column" fxLayoutGap="16px" fxLayoutGap.gt-md="24px" fxFlex>
+                    <form [formGroup]="form" novalidate>
+                      <div class="result" fxLayout="column">
+                        <div fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                          <mat-form-field fxFlex>
+                            <input formControlName="accountNumber" matInput placeholder="Account Number" type="text" readonly>
+                          </mat-form-field>
+                          <mat-form-field fxFlex>
+                            <input formControlName="accountTypeName" matInput placeholder="Account Type" type="text" readonly>
+                          </mat-form-field>
+                        </div>
+                        <div fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                          <mat-form-field fxFlex>
+                            <input formControlName="active" matInput placeholder="Is Active" type="text" readonly>
+                          </mat-form-field>
+                          <mat-form-field fxFlex>
+                            <input formControlName="dateActivated" matInput placeholder="Date Activated" type="text" readonly>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Transactions">
+              <div class="container">
+                <div class="account" fxLayout="row">
+                  <div class="card alternative" fxLayout="column" fxLayoutGap="16px" fxLayoutGap.gt-md="24px" fxFlex>
+                    <form [formGroup]="transactionQueryForm" novalidate>
+                      <div class="result" fxLayout="column">
+                        <div fxLayout.gt-sm="row" fxLayoutGap.gt-sm="16px">
+                          <mat-form-field fxFlex="25%">
+                            <input matInput [matDatepicker]="fromDatepickerRef" placeholder="From Date" formControlName="fromDate">
+                            <mat-datepicker-toggle matSuffix [for]="fromDatepickerRef"></mat-datepicker-toggle>
+                            <mat-error>
+                              From date is required.
+                            </mat-error>
+                          </mat-form-field>
+                          <mat-datepicker #fromDatepickerRef></mat-datepicker>
+                          <mat-form-field fxFlex="25%">
+                            <input matInput [matDatepicker]="toDatepickerRef" placeholder="To Date" formControlName="toDate">
+                            <mat-datepicker-toggle matSuffix [for]="toDatepickerRef"></mat-datepicker-toggle>
+                            <mat-error>
+                              To date is required.
+                            </mat-error>
+                          </mat-form-field>
+                          <mat-datepicker #toDatepickerRef></mat-datepicker>
+                          <mat-form-field fxFlex="25%">
+                            <mat-select (change)="parseForm($event)" fxFlex formControlName="positionType1" placeholder="Position Type">
+                              <mat-option *ngFor="let positionType of positionTypes" [value]="positionType">
+                                {{positionType}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error>
+                              Position is required.
+                            </mat-error>
+                          </mat-form-field>
+                          <div class="actions" fxFlexAlign="center">
+                              <button (click)="searchTransactions()" type="button" mat-raised-button color="primary">
+                                <mat-icon>search</mat-icon> Search
+                              </button>
+                            </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <vr-list name="Transactions">
+                  <div class="actions" fxFlexAlign="center">
+                    <button (click)="createTransaction()" class="create" type="button" mat-mini-fab color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  <mat-table #table [dataSource]="transactionDataSource" class="example-table" matSort matSortActive="created" matSortDisableClear
+                    matSortDirection="asc">
+                    <ng-container matColumnDef="image">
+                      <mat-header-cell class="image-cell" *matHeaderCellDef></mat-header-cell>
+                      <mat-cell class="image-cell" *matCellDef="let row">
+                        <mat-icon>payment</mat-icon>
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container cdkColumnDef="actionDate">
+                      <mat-header-cell *cdkHeaderCellDef> Action Date </mat-header-cell>
+                      <mat-cell *cdkCellDef="let row"> {{row.actionDate}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container cdkColumnDef="valueDate">
+                      <mat-header-cell *cdkHeaderCellDef> Value Date </mat-header-cell>
+                      <mat-cell *cdkCellDef="let row"> {{row.valueDate}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container cdkColumnDef="transactionType">
+                      <mat-header-cell *cdkHeaderCellDef> Transaction Type </mat-header-cell>
+                      <mat-cell *cdkCellDef="let row"> {{row.transactionTypeName}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container cdkColumnDef="amount">
+                      <mat-header-cell *cdkHeaderCellDef> Amount </mat-header-cell>
+                      <mat-cell *cdkCellDef="let row"> {{row.amount | currency }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container cdkColumnDef="balance">
+                      <mat-header-cell *cdkHeaderCellDef> Principal </mat-header-cell>
+                      <mat-cell *cdkCellDef="let row"> {{row.positions.Principal | currency }} </mat-cell>
+                    </ng-container>
+
+                    <!-- actions Column -->
+                    <ng-container matColumnDef="actions">
+                      <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                      <mat-cell class="actions-cell" *matCellDef="let row">
+                        <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+                          <mat-icon>more_horiz</mat-icon>
+                        </button>
+
+                        <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+                          <button (click)="reverseTransaction(row)" mat-menu-item>
+                            <span>reverse</span>
+                          </button>
+                        </mat-menu>
+                      </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *cdkHeaderRowDef="transactionDisplayedColumns"></mat-header-row>
+                    <mat-row *cdkRowDef="let row; columns: transactionDisplayedColumns;"></mat-row>
+                  </mat-table>
+
+                  <mat-paginator #transactionPaginator [length]="transactionDataSource.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                  </mat-paginator>
+                </vr-list>
+              </div>
+            </mat-tab>
+            <mat-tab label="Instalments">
+              <vr-list name="Instalments">
+                <mat-table #table [dataSource]="instalmentDataSource" class="example-table" matSort matSortActive="date" matSortDisableClear
+                  matSortDirection="asc">
+
+                  <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+
+                  <ng-container cdkColumnDef="date">
+                    <mat-header-cell *cdkHeaderCellDef> Date </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.date}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container cdkColumnDef="amount">
+                    <mat-header-cell *cdkHeaderCellDef> Amount </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row"> {{row.amount | currency }} </mat-cell>
+                  </ng-container>
+
+                  <ng-container cdkColumnDef="hasFixedValue">
+                    <mat-header-cell *cdkHeaderCellDef> Fixed </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row">
+                      <mat-checkbox color="primary" [checked]="row.hasFixedValue" disabled (click)="$event.stopPropagation()"></mat-checkbox>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+                    <mat-cell class="actions-cell" *matCellDef="let row">
+                      <button type="button" mat-icon-button (click)="update(row)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *cdkHeaderRowDef="instalmentDisplayedColumns"></mat-header-row>
+                  <mat-row *cdkRowDef="let row; columns: instalmentDisplayedColumns;"></mat-row>
+
+                </mat-table>
+                <mat-paginator #instalmentPaginator [length]="instalmentDataSource.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                </mat-paginator>
+              </vr-list>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

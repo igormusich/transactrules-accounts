@@ -1,0 +1,19 @@
+@import "../../../../styles/_var.scss";
+
+.form-elements {
+
+  @include responsivePadding();
+
+  .container {
+
+    .content {
+      padding-top: 16px;
+
+      .source {
+        @include responsivePadding(left, true);
+        @include responsivePadding(right, true);
+        margin-bottom: 12px;
+      }
+    }
+  }
+}

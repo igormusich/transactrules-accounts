@@ -1,0 +1,10 @@
+<div class="list">
+  <div class="list-header" fxLayout="row" >
+    <div class="list-name" fxFlex fxFlexAlign="center" >{{ name }}</div>
+    <div fxflex class="filter-input" #filter ></div>
+    <ng-content select=".actions" fxFlex="nogrow" ></ng-content>
+  </div>
+
+
+  <ng-content></ng-content>
+</div>

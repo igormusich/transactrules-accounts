@@ -1,0 +1,63 @@
+<div fxFlex="25%">
+    <div>
+        <h3>{{placeholder}}</h3>
+    </div>
+
+    <div class="content" fxLayout="column">
+
+        <form [formGroup]="form" novalidate>
+            <mat-form-field class="input-container" style="width:40%;">
+                <mat-select (change)="parseForm($event)" placeholder="Frequency" formControlName="frequency">
+                    <mat-option value="MONTHLY">Monthly</mat-option>
+                    <mat-option value="DAILY">Daily</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="input-container" style="width:40%;">
+                <mat-select (change)="parseForm($event)" placeholder="End Type" formControlName="endType" (ngModel)="schedule.endType">
+                    <mat-option value="END_DATE">By end date</mat-option>
+                    <mat-option value="REPEATS">After repeats</mat-option>
+                    <mat-option value="NO_END">No end</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput [matDatepicker]="datepickerRef1" placeholder="Start Date" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="datepickerRef1"></mat-datepicker-toggle>
+                <mat-error>
+                    Start Date is required
+                </mat-error>
+                <mat-datepicker (selectedChanged)="parseStartDate($event)" #datepickerRef1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="schedule.endType=='END_DATE'" class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput [matDatepicker]="datepickerRef2" placeholder="End Date" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="datepickerRef2"></mat-datepicker-toggle>
+                <mat-error>
+                    End Date is required
+                </mat-error>
+                <mat-datepicker (selectedChanged)="parseEndDate($event)" #datepickerRef2></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="schedule.endType=='REPEATS'" class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput type="number" placeholder="Number of repeats" formControlName="numberOfRepeats">
+            </mat-form-field>
+
+            <mat-form-field class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput type="number" placeholder="Interval" formControlName="interval">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="false" class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput placeholder="Business Day Adjustment" formControlName="businessDayCalculation">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="false" class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput placeholder="Include Dates" formControlName="includeDates">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="false" class="input-container" style="width:40%;">
+                <input (change)="parseForm($event)" matInput placeholder="Exclude dates" formControlName="excludeDates">
+            </mat-form-field>
+        </form>
+    </div>
+</div>

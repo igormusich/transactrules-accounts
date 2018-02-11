@@ -1,0 +1,38 @@
+<!--suppress ALL -->
+<div class="datatable">
+
+  <vr-page-header [height]="'146px'" background="url(/assets/img/demo/headers/pattern-3.png)"
+                  [reverse]="true"></vr-page-header>
+
+  <div class="container">
+
+    <vr-breadcrumbs [currentPage]="'Calendars'" [names]="['Data']" [header]="'primary'"></vr-breadcrumbs>
+
+    <vr-list name="Calendars">
+      <div class="actions" fxFlexAlign="center">
+        <button class="create" (click)="createCalendar()" type="button" mat-mini-fab color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      
+      <mat-table #table [dataSource]="dataSource" class="example-table"
+                matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Name Column -->
+        <ng-container cdkColumnDef="name">
+          <mat-header-cell *cdkHeaderCellDef> Name </mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.name}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator [length]="dataSource.resultsLength"
+                    [pageSize]="10">
+      </mat-paginator>
+    </vr-list>
+  </div>
+</div>

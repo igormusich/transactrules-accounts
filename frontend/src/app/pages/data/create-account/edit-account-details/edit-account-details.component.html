@@ -1,0 +1,80 @@
+<vr-list name="Open Accont {{account.accountNumber}}">
+  <div class="actions" fxFlexAlign="center">
+    <button type="button" mat-raised-button color="primary" (click)="onDetailsNextStep($event)">
+      Next
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="account" fxLayout="row">
+      <div class="card alternative" fxLayout="column" fxLayoutGap="16px" fxLayoutGap.gt-md="24px" fxFlex>
+
+        <form [formGroup]="details_form" novalidate>
+          <div class="container" fxLayout fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="24px" fxLayoutGap.md="10">
+            <div fxFlex="50%">
+              <h3 >Amounts</h3>
+              <div *ngFor="let amountType of accountType.amountTypes; let i=index">
+                <mat-form-field fxFlex *ngIf="amountType.required">
+                  <input matInput type="number" placeholder="{{amountType.labelName}}" formControlName="{{amountType.propertyName}}" required
+                    class="input-right-align">
+                  <mat-error>
+                    {{amountType.labelName}} number is required.
+                  </mat-error>
+                  <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+                <mat-form-field fxFlex *ngIf="amountType.required==false">
+                  <input matInput type="number" placeholder="{{amountType.labelName}}" formControlName="{{amountType.propertyName}}" class="input-right-align">
+                  <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxFlex="50%">
+              <h3>Dates</h3>
+              <div *ngFor="let dateType of accountType.dateTypes; let i=index">
+                <mat-form-field fxFlex>
+                  <input matInput [matDatepicker]="datepickerRef" placeholder="{{dateType.labelName}}" formControlName="{{dateType.propertyName}}">
+                  <mat-datepicker-toggle matSuffix [for]="datepickerRef"></mat-datepicker-toggle>
+                  <mat-error>
+                    {{dateType.labelName}} is required.
+                  </mat-error>
+                </mat-form-field>
+                <mat-datepicker #datepickerRef></mat-datepicker>
+              </div>
+            </div>
+            <div fxFlex="50%">
+              <h3>Rates</h3>
+              <div *ngFor="let rateType of accountType.rateTypes; let i=index">
+                <mat-form-field fxFlex>
+                  <input matInput type="number" placeholder="{{rateType.labelName}}" formControlName="{{rateType.propertyName}}" required class="input-right-align">
+                  <mat-error>
+                    {{rateType.labelName}} number is required.
+                  </mat-error>
+                  <span matPrefix>%&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxFlex="50%">
+              <h3>Options</h3>
+              <div *ngFor="let optionType of accountType.optionTypes">
+                <mat-form-field fxFlex>
+                  <mat-select fxFlex formControlName="{{optionType.propertyName}}" placeholder="{{optionType.labelName}}">
+                    <mat-option *ngFor="let value of account.options | optionValues:optionType.propertyName" [value]="value">
+                      {{value}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>
+                    {{optionType.labelName}} is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</vr-list>

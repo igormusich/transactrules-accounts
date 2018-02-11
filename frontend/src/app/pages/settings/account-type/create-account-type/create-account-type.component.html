@@ -1,0 +1,45 @@
+<div class="inbox-compose">
+  <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
+    <span>Account Type</span>
+    <button matDialogClose mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form [formGroup]="form" novalidate>
+    <div class="content" mat-dialog-content fxLayout="column">
+      <div fxLayout="row" fxLayoutGap="24px">
+        <mat-form-field class="input-container" fxFlex>
+          <input formControlName="labelName" matInput placeholder="Label Name" required>
+          <mat-error *ngIf="form.controls['labelName'].hasError('required')">
+            Label is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls['labelName'].hasError('NotBlank')">
+            Label can't be blank.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="input-container" fxFlex>
+          <input formControlName="className" matInput placeholder="Class Name" required>
+          <mat-error *ngIf="form.controls['className'].hasError('required')">
+            Class name is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls['className'].hasError('NotBlank')">
+            Class name can't be blank.
+          </mat-error>
+          <mat-error *ngIf="form.controls['className'].hasError('name.invalid')">
+            Class name must be valid identifier.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div mat-dialog-actions fxLayout="row">
+
+    <span fxFlex>
+      <!-- fill space -->
+    </span>
+
+    <button [disabled]="!form.valid" (click)="send()" class="save" fxFlexOffset="8px" mat-raised-button color="primary">
+      Save
+    </button>
+  </div>
+</div>

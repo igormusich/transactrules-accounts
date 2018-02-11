@@ -1,0 +1,26 @@
+<div class="inbox-compose">
+    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
+      <span>Position Type</span>
+      <button matDialogClose mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="content" mat-dialog-content fxLayout="column">
+      <div fxLayout="row" fxLayoutGap="24px">
+        <mat-form-field class="input-container" fxFlex>
+          <input matInput placeholder="Label Name">
+        </mat-form-field>
+        <mat-form-field class="input-container" fxFlex>
+          <input matInput placeholder="Property Name" >
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions fxLayout="row">
+ 
+      <span fxFlex><!-- fill space --></span>
+
+      <button (click)="send()" class="save" fxFlexOffset="8px" mat-raised-button color="primary">
+        SAVE
+      </button>
+    </div>
+  </div>
