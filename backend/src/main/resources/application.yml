@@ -1,0 +1,49 @@
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000/
+  aws:
+    accesskey: test1
+    secretkey: test2
+reset-tables: true
+endpoints:
+  beans:
+    enabled: true
+  autoconfig:
+    enabled: false
+  configprops:
+    enabled: false
+  dump:
+    enabled: false
+  env:
+    enabled: false
+  health:
+    enabled: true
+    path: /
+  info:
+    enabled: false
+  metrics:
+    enabled: false
+  mappings:
+    enabled: false
+  shutdown:
+    enabled: false
+  trace:
+    enabled: false
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.transactrules: INFO
+  pattern:
+    console: "${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: ./application.log
+---
+spring:
+  profiles: container
+amazon:
+  dynamodb:
+    endpoint: https://dynamodb.ca-central-1.amazonaws.com
+  aws:
+    accesskey: ${ACCESS_KEY}
+    secretkey: ${SECRET_KEY}
+reset-tables: ${DROP_DB}
