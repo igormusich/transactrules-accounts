@@ -51,7 +51,7 @@ public class AccountControllerTest {
                 .webAppContextSetup(context)
                 .build();
 
-        accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType = TestConfiguration.createLoanGivenAccountType();
 
         String accountTypeYaml;
 

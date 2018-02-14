@@ -1,0 +1,415 @@
+package com.transactrules.accounts.runtime
+
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.transactrules.accounts.metadata.ScheduledTransactionTiming
+import com.transactrules.accounts.utilities.Solver
+
+import java.math.RoundingMode
+import java.time.LocalDate
+import java.util.function.Function
+
+
+class {{className}} extends Account {
+
+
+{{#positionTypes}}
+    @JsonIgnore()
+    Position _{{propertyName}}
+{{/positionTypes}}
+
+
+{{#dateTypes}}
+    @JsonIgnore()
+    DateValue _{{propertyName}}
+{{/dateTypes}}
+
+
+{{#amountTypes}}
+    @JsonIgnore()
+    AmountValue _{{propertyName}}
+{{/amountTypes}}
+
+
+{{#optionTypes}}
+    @JsonIgnore()
+    OptionValue _{{propertyName}}
+{{/optionTypes}}
+
+
+{{#rateTypes}}
+    @JsonIgnore()
+    RateValue _{{propertyName}}
+{{/rateTypes}}
+
+
+{{#scheduleTypes}}
+    @JsonIgnore()
+    Schedule {{propertyName}}
+{{/scheduleTypes}}
+
+
+{{#instalmentTypes}}
+    @JsonIgnore()
+    InstalmentSet {{propertyName}}
+{{/instalmentTypes}}
+
+
+{{#positionTypes}}
+    @JsonIgnore()
+    BigDecimal {{propertyName}}() {
+        return _{{propertyName}}.amount
+    }
+{{/positionTypes}}
+
+
+{{#dateTypes}}
+    @JsonIgnore()
+    LocalDate {{propertyName}}(){
+        return _{{propertyName}}.date
+    }
+{{/dateTypes}}
+
+
+{{#amountTypes}}
+    @JsonIgnore()
+    BigDecimal {{propertyName}}(){
+        return _{{propertyName}}.amount
+    }
+{{/amountTypes}}
+
+
+{{#optionTypes}}
+    @JsonIgnore()
+    String {{propertyName}}(){
+        return _{{propertyName}}.value
+    }
+{{/optionTypes}}
+
+
+{{#rateTypes}}
+    @JsonIgnore()
+    BigDecimal {{propertyName}}(){
+        return _{{propertyName}}.value
+    }
+{{/rateTypes}}
+
+
+    {{className}}(Account prototype){
+        super(prototype)
+    }
+
+    {{className}}() {
+
+    //initialize options
+
+    {{#optionTypes}}
+        _{{propertyName}} = new OptionValue()
+        options.put('{{propertyName}}', _{{propertyName}})
+        _{{propertyName}}.values={{optionListExpression}}
+    {{/optionTypes}}
+
+    }
+
+    @Override
+    void setCalculated() {
+
+        super.setCalculated()
+
+        //initialize dates
+
+    {{#dateTypes}}
+        _{{propertyName}}= dates.get('{{propertyName}}')
+    {{/dateTypes}}
+
+        //initialize positions
+
+    {{#positionTypes}}
+        if(!positions.containsKey ('{{propertyName}}')){
+            positions.put('{{propertyName}}', new Position())
+        }
+        _{{propertyName}} = positions.get('{{propertyName}}');
+    {{/positionTypes}}
+
+        //initialize amounts
+
+    {{#amountTypes}}
+        _{{propertyName}}= amounts.get('{{propertyName}}')
+    {{/amountTypes}}
+
+        //initialize rates
+    {{#rateTypes}}
+        _{{propertyName}}= rates.get('{{propertyName}}')
+    {{/rateTypes}}
+
+    {{#optionTypes}}
+        _{{propertyName}} = options.get('{{propertyName}}')
+    {{/optionTypes}}
+
+        //initialize schedules
+
+    {{#scheduleTypes}}
+        if(!schedules.containsKey('{{propertyName}}'))
+        {
+            Schedule schedule = new Schedule()
+            schedules.put('{{propertyName}}', schedule)
+
+            {{^isCalculated}}
+                //set default properties only when creating new schedule
+                Set{{propertyName}}DefaultProperties(schedule)
+            {{/isCalculated}}
+        }
+        {{propertyName}} = schedules.get('{{propertyName}}')
+        {{propertyName}}.setBusinessDayCalculator businessDayCalculator
+    {{#isCalculated}}
+        Set{{propertyName}}CalculatedProperties({{propertyName}})
+    {{/isCalculated}}
+
+    {{/scheduleTypes}}
+
+    {{#instalmentTypes}}
+        if(!this.instalmentSets.containsKey('{{propertyName}}'))
+        {
+            {{propertyName}} = new InstalmentSet()
+            instalmentSets.put('{{propertyName}}', {{propertyName}})
+        }
+        else {
+            {{propertyName}} = instalmentSets.get('{{propertyName}}')
+        }
+    {{/instalmentTypes}}
+    }
+
+{{#instalmentTypes}}
+    void Initialize{{propertyName}}(){
+        {{scheduleTypeName}}.GetAllDates().each {
+            LocalDate date ->
+                {{propertyName}}.instalments.put(date, new InstalmentValue( BigDecimal.ZERO, false))
+        }
+    }
+
+
+{{/instalmentTypes}}
+
+{{#scheduleTypes}}
+    {{#isCalculated}}
+    void Set{{propertyName}}CalculatedProperties(Schedule schedule)
+    {
+        schedule.startDate = {{startDateExpression}}
+        schedule.interval = {{intervalExpression}}
+        schedule.businessDayCalculation = '{{businessDayCalculation}}'
+        schedule.frequency ='{{scheduleFrequency}}'
+        schedule.endType = '{{scheduleEndType}}'
+    {{#hasEndDate}}
+        schedule.endDate = {{endDateExpression}}
+    {{/hasEndDate}}
+    {{#hasNumberOfRepeatsExpression}}
+        schedule.numberOfRepeats = {{numberOfRepeatsExpression}}
+    {{/hasNumberOfRepeatsExpression}}
+    {{#hasIncludeDatesExpression}}
+        schedule.includeDates = {{includeDatesExpression}}
+    {{/hasIncludeDatesExpression}}
+    {{#hasExcludeDatesExpression}}
+        schedule.setExcludeDates = {{excludeDatesExpression}}
+    {{/hasExcludeDatesExpression}}
+    }
+{{/isCalculated}}
+
+{{^isCalculated}}
+    void Set{{propertyName}}DefaultProperties(Schedule schedule)
+    {
+        schedule.businessDayCalculation ='{{businessDayCalculation}}'
+        schedule.frequency ='{{scheduleFrequency}}'
+        schedule.endType = '{{scheduleEndType}}'
+    {{#hasStartDateExpression}}
+        schedule.startDate = {{startDateExpression}}
+    {{/hasStartDateExpression}}
+    {{#hasEndDateExpression}}
+        schedule.endDate = {{endDateExpression}}
+    {{/hasEndDateExpression}}
+    {{#hasIntervalExpression}}
+        schedule.interval = {{intervalExpression}}
+    {{/hasIntervalExpression}}
+    {{#hasNumberOfRepeatsExpression}}
+        schedule.numberOfRepeats = {{numberOfRepeatsExpression}})
+    {{/hasNumberOfRepeatsExpression}}
+    {{#hasIncludeDatesExpression}}
+        schedule.includeDates = {{includeDatesExpression}}
+    {{/hasIncludeDatesExpression}}
+    {{#hasExcludeDatesExpression}}
+        schedule.excludeDates = {{excludeDatesExpression}})
+    {{/hasExcludeDatesExpression}}
+
+    }
+    {{/isCalculated}}
+    {{/scheduleTypes}}
+
+    @Override
+    Map<String, BigDecimal> processTransaction(String transactionTypeName, BigDecimal amount){
+{{^hasTransactionTypes}}
+        return null
+{{/hasTransactionTypes}}
+{{#hasTransactionTypes}}
+        Map<String,BigDecimal> positionMap = new HashMap<>()
+
+        switch(transactionTypeName) {
+{{#transactionTypes}}
+            case '{{propertyName}}':
+    {{#transactionRules}}
+        {{^maximumPrecision}}
+                amount = amount.setScale(2, RoundingMode.HALF_DOWN)
+        {{/maximumPrecision}}
+        {{#add}}
+                _{{positionTypeName}}.add(amount)
+        {{/add}}
+        {{#subtract}}
+                _{{positionTypeName}}.subtract(amount)
+        {{/subtract}}
+
+        positionMap.put('{{positionTypeName}}', _{{positionTypeName}}.amount)
+    {{/transactionRules}}
+                break
+{{/transactionTypes}}
+            default:
+                throw new IllegalArgumentException('Invalid transactionTypeName : ' + transactionTypeName)
+        }
+
+        return positionMap
+{{/hasTransactionTypes}}
+    }
+
+    @Override
+    void startOfDay() {
+
+{{#scheduledTransactions}}
+{{#isStartOfDay}}
+    {{#hasSchedule}}
+        if ({{scheduleTypeName}}.isDue(valueDate)){
+            BigDecimal amount = {{amountExpression}}
+            createTransaction('{{transactionTypeName}}', amount)
+        }
+    {{/hasSchedule}}
+    {{#hasDate}}
+        if (_{{dateTypeName}}.isDue(valueDate)){
+            BigDecimal amount = {{amountExpression}}
+            createTransaction('{{transactionTypeName}}', amount)
+        }
+    {{/hasDate}}
+{{/isStartOfDay}}
+{{/scheduledTransactions}}
+{{#instalmentTypes}}
+    {{#isStartOfDay}}
+        if({{propertyName}}.instalments.containsKey(valueDate)){
+            Map<LocalDate,InstalmentValue> instalments = {{propertyName}}.instalments
+            InstalmentValue instalmentValue=instalments.get(valueDate)
+            createTransaction('{{transactionTypeName}}',instalmentValue.amount)
+        }
+    {{/isStartOfDay}}
+{{/instalmentTypes}}
+    }
+
+    @Override
+    void endOfOfDay() {
+{{#scheduledTransactions}}
+    {{#isEndOfDay}}
+        {{#hasSchedule}}
+            if ({{scheduleTypeName}}.isDue(valueDate)){
+                BigDecimal amount = {{amountExpression}}
+                createTransaction('{{transactionTypeName}}', amount)
+            }
+        {{/hasSchedule}}
+        {{#hasDate}}
+            if ({{dateTypeName}}.isDue(valueDate)){
+                BigDecimal amount = {{amountExpression}}
+                createTransaction('{{transactionTypeName}}', amount)
+            }
+        {{/hasDate}}
+    {{/isEndOfDay}}
+{{/scheduledTransactions}}
+{{#instalmentTypes}}
+    {{#isEndOfDay}}
+            if({{propertyName}}.instalments.containsKey(valueDate)){
+                InstalmentValue instalmentValue= _{{propertyName}}.instalments.get(valueDate)
+                createTransaction('{{transactionTypeName}}',instalmentValue.amount)
+            }
+    {{/isEndOfDay}}
+{{/instalmentTypes}}
+    }
+
+    @Override
+    void onDataChanged() {
+
+    }
+
+    @Override
+    void calculateInstaments() {
+    {{#instalmentTypes}}
+        if ({{propertyName}}.instalments.size()==0){
+            Initialize{{propertyName}}()
+        }
+    {{/instalmentTypes}}
+    {{#instalmentTypes}}
+        Calculate{{propertyName}}Instalments()
+    {{/instalmentTypes}}
+    }
+
+{{#instalmentTypes}}
+    BigDecimal GetClosingBalanceFor{{propertyName}}(BigDecimal value) {
+
+        this.setFutureInstalmentValue('{{propertyName}}', ScheduledTransactionTiming.{{timingEnum}}, value)
+
+        List<LocalDate> dates = {{scheduleTypeName}}.GetAllDates()
+
+        LocalDate lastDate = dates.get(dates.size()-1)
+
+        this.snapshot()
+
+        this.forecast(lastDate)
+
+        BigDecimal result = Principal()
+
+        this.restoreSnapshot()
+
+        return result
+    }
+{{/instalmentTypes}}
+
+{{#instalmentTypes}}
+    class {{propertyName}}Calculation implements Calculation {
+        {{className}} account
+
+        {{propertyName}}Calculation({{className}} param){
+            account = param
+        }
+
+        BigDecimal calculate(BigDecimal amount) {
+            return account.GetClosingBalanceFor{{propertyName}}(amount)
+        }
+    }
+
+    void Calculate{{propertyName}}Instalments() {
+        Solver solver = new Solver()
+        BigDecimal amount = solver.FindFunctionZero( new {{propertyName}}Calculation(this),  BigDecimal.ZERO, BigDecimal.valueOf(1000000000000000L), BigDecimal.valueOf(0.01) );
+
+        amount = amount.setScale(2, RoundingMode.HALF_UP)
+
+        this.setFutureInstalmentValue('{{propertyName}}', ScheduledTransactionTiming.StartOfDay, amount)
+    }
+{{/instalmentTypes}}
+    @Override
+    String generatedAt(){
+        return '{{#currentTimestamp}}generate{{/currentTimestamp}}'
+    }
+
+
+    @Override
+    LocalDate retrieveStartDate(){
+        LocalDate startDate = null;
+
+{{#dateTypes}}
+    {{#isStartDate}}
+        startDate = {{propertyName}}()
+    {{/isStartDate}}
+{{/dateTypes}}
+
+        return startDate;
+    }
+}

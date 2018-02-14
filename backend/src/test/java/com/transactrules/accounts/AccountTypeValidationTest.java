@@ -53,8 +53,8 @@ public class AccountTypeValidationTest {
         // I'd propertyName the test to something like
         // invalidEmailShouldFailValidation()
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
-        accountType.setClassName("testLoanGivenSuccess");
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
+        accountType.setClassName("TestLoanGivenSuccess");
 
 
         Errors errors = new BeanPropertyBindingResult(accountType, "accountType");
@@ -104,7 +104,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testSingleExpressionFailsToCompile(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
 
         accountType.setClassName("testSingleExpressionFailsToCompile");
 
@@ -122,7 +122,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidPositionTypeOnTransactionRule(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
 
         accountType.setClassName("testInvalidPositionTypeOnTransactionRule");
 
@@ -141,7 +141,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidTransactionOperationOnTransactionRule(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testInvalidTransactionOperationOnTransactionRule");
 
         TransactionType transactionType = accountType.getTransactionTypes().get(0);
@@ -161,7 +161,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidEnumOnInstalmentType(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testInvalidEnumOnInstalmentType");
 
         InstalmentType instalmentType = accountType.getInstalmentTypes().get(0);
@@ -179,7 +179,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidEnumOnScheduledTransaction(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
 
         accountType.setClassName("testInvalidEnumOnScheduledTransaction");
 
@@ -198,7 +198,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidEnumsOnScheduleType(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testInvalidEnumsOnScheduleType");
 
         ScheduleType scheduleType = accountType.getScheduleTypes().get(0);
@@ -221,7 +221,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidReferencesOnScheduledTransaction(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testInvalidReferencesOnScheduledTransaction");
 
         ScheduledTransaction item = accountType.getScheduledTransactions().get(0);
@@ -243,7 +243,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testInvalidReferencesOnInstalmentType(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testInvalidReferencesOnInstalmentType");
 
         InstalmentType item = accountType.getInstalmentTypes().get(0);
@@ -269,7 +269,7 @@ public class AccountTypeValidationTest {
     @Test
     public void testDuplicateStartDate(){
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("testDuplicateStartDate");
 
         DateType accrualStart = accountType.getDateTypeByName("AccrualStart").get();

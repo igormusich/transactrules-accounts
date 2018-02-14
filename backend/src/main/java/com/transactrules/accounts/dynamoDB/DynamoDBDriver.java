@@ -28,6 +28,13 @@ public class DynamoDBDriver implements DatabaseDriver {
     @Value("${reset-tables}")
     private Boolean resetTables =false;
 
+    @Value("${read-capacity}")
+    private Long readCapacity = 1L;
+
+    @Value("${write-capacity}")
+    private Long writeCapacity = 1L;
+
+
     private Logger logger = LoggerFactory.getLogger(DynamoDBDriver.class);
 
 
@@ -89,7 +96,7 @@ public class DynamoDBDriver implements DatabaseDriver {
         CreateTableRequest tableRequest = dynamoDBMapper
                 .generateCreateTableRequest(clazz);
         tableRequest.setProvisionedThroughput(
-                new ProvisionedThroughput(1000L, 1000L));
+                new ProvisionedThroughput(5L, 5L));
 
         CreateTableResult result= amazonDynamoDB.createTable(tableRequest);
 

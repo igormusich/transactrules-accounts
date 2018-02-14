@@ -85,6 +85,12 @@ public class Account {
             InstalmentSet value = prototype.instalmentSets.get(key);
             this.instalmentSets.put(key,new InstalmentSet(value));
         }
+
+        for(String key: prototype.positions.keySet()){
+            Position value = prototype.positions.get(key);
+            this.positions.put(key,new Position(value));
+        }
+
     }
 
     public Account() {
@@ -217,6 +223,8 @@ public class Account {
     public void setCalendarNames(List<String> calendarNames) {
         this.calendarNames = calendarNames;
     }
+
+
 
     private List<Transaction> snapshotTransactions;
     private Map<String, Position> snapshotPositions;

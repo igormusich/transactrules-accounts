@@ -37,12 +37,12 @@ public class AccountServiceTest {
     private Account account;
 
     private final String accountTypeName = "AccountType_AccountServiceTest";
-    private final String accountNumber = "AC-account-service-test";
+    private final String accountNumber = "AC-account-service-test-2";
 
     @Before
     public void setup() {
 
-        accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName(accountTypeName);
 
         accountTypeRepository.save(accountType);

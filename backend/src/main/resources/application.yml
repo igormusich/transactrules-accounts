@@ -5,6 +5,8 @@ amazon:
     accesskey: test1
     secretkey: test2
 reset-tables: true
+read-capacity: 5
+write-capacity: 5
 endpoints:
   beans:
     enabled: true
@@ -47,3 +49,9 @@ amazon:
     accesskey: ${ACCESS_KEY}
     secretkey: ${SECRET_KEY}
 reset-tables: ${DROP_DB}
+read-capacity: ${READ_CAPACITY}
+write-capacity: ${WRITE_CAPACITY}
+endpoints:
+  health:
+    enabled: true
+    path: /health

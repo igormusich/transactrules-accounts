@@ -5,7 +5,6 @@ import com.transactrules.accounts.repository.TransactionSetRepository;
 import com.transactrules.accounts.runtime.RepeatableTransactionList;
 import com.transactrules.accounts.runtime.Transaction;
 import com.transactrules.accounts.runtime.TransactionSet;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -133,12 +132,10 @@ public class TransactionServiceImpl implements TransactionService {
         return;
     }
 
-    @NotNull
     private LocalDate getStartDate(TransactionSet transactionSet) {
         return LocalDate.of( transactionSet.getData().getYear(), transactionSet.getData().getMonth(),1);
     }
 
-    @NotNull
     private TransactionSet createNextSet(TransactionSet transactionSet, LocalDate actionDate) {
         TransactionSet newTransactionSet = new TransactionSet(transactionSet.getData().getAccountNumber(),actionDate, transactionSet.getData().getSetId()+1 );
         transactionSet.setNextId(newTransactionSet.getId());

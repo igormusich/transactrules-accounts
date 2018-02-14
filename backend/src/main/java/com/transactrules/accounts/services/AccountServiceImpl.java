@@ -6,7 +6,6 @@ import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.repository.AccountRepository;
 import com.transactrules.accounts.runtime.*;
 import com.transactrules.accounts.runtime.Calendar;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     TransactionService transactionService;
 
+
     @Autowired
     private AmazonDynamoDB amazonDynamoDB;
 
@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
         if (prototype.isActive()) {
             account = this.activate(prototype);
         } else {
-            account = getAccountFromPrototype(prototype, null);
+            account = toDataAccount(prototype);
             accountRepository.save(account);
         }
 
@@ -62,11 +62,41 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account toGeneratedAccount(Account account) {
+        AccountType accountType = accountTypeService.findByClassName(account.getAccountTypeName());
+
+        Class accountClass = codeGenService.getAccountClass(accountType);
+        AccountBuilder builder = new AccountBuilder(account, accountClass);
+
+        return  builder.getAccount();
+    }
+
+    @Override
+    public Account toGeneratedAccount(Account account, BusinessDayCalculator calculator) {
+        AccountType accountType = accountTypeService.findByClassName(account.getAccountTypeName());
+
+        Class accountClass = codeGenService.getAccountClass(accountType);
+        AccountBuilder builder = new AccountBuilder(account, accountClass);
+
+        builder.setBusinessDayCalculator(calculator);
+
+        return  builder.getAccount();
+    }
+
+    @Override
+    public Account toDataAccount(Account generatedAccount) {
+        Account baseAccount = new Account(generatedAccount);
+        baseAccount.setAccountNumber(generatedAccount.getAccountNumber());
+        baseAccount.setAccountTypeName(generatedAccount.getAccountTypeName());
+        return  baseAccount;
+    }
+
+    @Override
     public Account create(AccountType accountType) {
 
         String accountNumber = uniqueIdService.getNextId("Account");
 
-        Class accountClass = codeGenService.generateClass(accountType);
+        Class accountClass = codeGenService.getAccountClass(accountType);
 
         AccountBuilder builder = new AccountBuilder(accountType.getClassName(), accountNumber, accountClass);
 
@@ -77,13 +107,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account calculateProperties(Account prototype) {
-        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
-        Class accountClass = codeGenService.generateClass(accountType);
-
-        AccountBuilder builder = new AccountBuilder(prototype, accountClass);
-
-        Account account = builder.getAccount();
+        Account account = toGeneratedAccount(prototype);
 
         return account;
     }
@@ -91,15 +116,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account calculateInstalments(Account prototype) {
 
-        AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
-
-        Class accountClass = codeGenService.generateClass(accountType);
-
-        AccountBuilder builder = new AccountBuilder(prototype, accountClass);
-
-        builder.setBusinessDayCalculator(getCalendarForAccount(prototype));
-
-        Account account = builder.getAccount();
+        Account account = this.toGeneratedAccount(prototype, getCalendarForAccount(prototype));
 
         account.valueDate = account.retrieveStartDate();
 
@@ -137,7 +154,7 @@ public class AccountServiceImpl implements AccountService {
     public Account findByAccountNumber(String accountNumber) {
         Account account = accountRepository.findOne(accountNumber);
 
-        return account;
+        return  toGeneratedAccount(account);
     }
 
     @Override
@@ -150,13 +167,13 @@ public class AccountServiceImpl implements AccountService {
         try {
 
             Account prototype = accountRepository.findOne(accountNumber);
-            Account account = getAccountFromPrototype(prototype, getCalendarForAccount(prototype));
+            Account account = toGeneratedAccount(prototype, getCalendarForAccount(prototype));
             AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
             //this should update the balances
             account.createTransaction(transaction);
 
-            accountRepository.save(account);
+            accountRepository.save(toDataAccount(account));
 
             transactionService.save(accountType, accountNumber, transaction);
 
@@ -170,11 +187,10 @@ public class AccountServiceImpl implements AccountService {
         return transaction;
     }
 
-    @NotNull
-    private Account getAccountFromPrototype(Account prototype, Calendar calendar) {
+    private Account toGeneratedAccount(Account prototype, Calendar calendar) {
 
         AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
-        Class accountClass = codeGenService.generateClass(accountType);
+        Class accountClass = codeGenService.getAccountClass(accountType);
 
         AccountBuilder builder = new AccountBuilder(prototype, accountClass);
 
@@ -190,7 +206,7 @@ public class AccountServiceImpl implements AccountService {
     public Account activate(Account prototype) {
 
 
-        Account account = getAccountFromPrototype(prototype, getCalendarForAccount(prototype));
+        Account account = toGeneratedAccount(prototype, getCalendarForAccount(prototype));
         AccountType accountType = accountTypeService.findByClassName(prototype.getAccountTypeName());
 
         //for all dates between startDate and actionDate run start and end of day
@@ -238,7 +254,6 @@ public class AccountServiceImpl implements AccountService {
         return transactions;
     }
 
-    @NotNull
     private List<Transaction> getTransactions(String accountNumber, LocalDate fromDate, LocalDate toDate, LocalDate startDate, LocalDate endDate, Predicate<Transaction> condition) {
         LocalDate iter = LocalDate.of(startDate.getYear(), startDate.getMonthValue(),1);
 
@@ -349,11 +364,8 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Class> classMap = getClassMap();
 
         for (Account prototype : accountRepository.findAll()) {
-            Class accountClass = classMap.get(prototype.getAccountTypeName());
 
-            AccountBuilder builder = new AccountBuilder(prototype, accountClass);
-
-            Account account = builder.getAccount();
+            Account account = toGeneratedAccount(prototype);
 
             account.valueDate = properties.getActionDate();
             account.actionDate = properties.getActionDate();
@@ -376,11 +388,8 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Class> classMap = getClassMap();
 
         for (Account prototype : accountRepository.findAll()) {
-            Class accountClass = classMap.get(prototype.getAccountTypeName());
 
-            AccountBuilder builder = new AccountBuilder(prototype, accountClass);
-
-            Account account = builder.getAccount();
+            Account account = toGeneratedAccount(prototype);
 
             account.valueDate = properties.getActionDate();
             account.actionDate = properties.getActionDate();
@@ -410,7 +419,7 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Class> map = new HashMap<>();
 
         for (AccountType accountType : accountTypeService.findAll()) {
-            map.put(accountType.getClassName(), codeGenService.generateClass(accountType));
+            map.put(accountType.getClassName(), codeGenService.getAccountClass(accountType));
         }
 
         return map;

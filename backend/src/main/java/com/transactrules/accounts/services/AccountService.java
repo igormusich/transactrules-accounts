@@ -1,17 +1,22 @@
 package com.transactrules.accounts.services;
 
 import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.BusinessDayCalculation;
 import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.BusinessDayCalculator;
 import com.transactrules.accounts.runtime.Transaction;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface AccountService {
+    Account toGeneratedAccount(Account account);
+    Account toGeneratedAccount(Account account, BusinessDayCalculator calculator);
+    Account toDataAccount(Account account);
     Account create(AccountType accountType);
     Account calculateProperties(Account account);
     Account calculateInstalments(Account account);
-    Account save(Account account);
+    Account  save(Account account);
     List<Account> findAll();
     Account findByAccountNumber(String accountNumber);
     Transaction createTransaction(String accountNumber, Transaction transaction) throws InterruptedException;

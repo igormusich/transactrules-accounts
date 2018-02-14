@@ -17,7 +17,7 @@ public class UtilitiesTest {
 
     @Test
     public void checksumTest() throws IOException, NoSuchAlgorithmException {
-        AccountType loanAccountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType loanAccountType = TestConfiguration.createLoanGivenAccountType();
 
         BigInteger checksum1 = Utility.checksum(loanAccountType);
 

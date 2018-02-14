@@ -85,20 +85,15 @@ public class AccountTypeValidator implements Validator {
 
 
     private void evaluateCompiledClass(Errors errors, AccountType accountType) {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
         try {
-            PrintWriter writer = new PrintWriter(os);
-            Class accountClass =  codeGenService.getAccountClass(accountType, writer);
+
+            Class accountClass =  codeGenService.getAccountClass(accountType);
             Account account = (Account) accountClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
             String aString = "";
-
-            try {
-                aString = new String(os.toByteArray(),"UTF-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
+            
             errors.reject(ApiErrorCode.EVALUATION_FAILED.getCode(), e.getMessage() + aString);
         }
     }

@@ -14,6 +14,10 @@ public class Position  {
         this.amount = BigDecimal.ZERO;
     }
 
+    public Position(Position prototype){
+        this.amount = prototype.amount;
+    }
+
     public void applyOperation(TransactionOperation operation, BigDecimal value){
         switch (operation) {
             case Subtract:

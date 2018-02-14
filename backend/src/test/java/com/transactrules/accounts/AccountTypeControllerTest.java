@@ -41,11 +41,76 @@ public class AccountTypeControllerTest {
     @Test
     public void givenSimpleLoanUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
 
-        java.net.URL url = getClass().getResource("/SimpleLoan.json");
-        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
-        String createAccountJson = new String(java.nio.file.Files.readAllBytes(resPath));
 
-        this.mvc.perform(post("/accountTypes").content(createAccountJson).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated())
+        String json = "{\n" +
+                "  \"className\": \"SimpleLoan\",\n" +
+                "  \"labelName\": \"Simple Loan\",\n" +
+                "  \"amountTypes\": [\n" +
+                "    {\n" +
+                "      \"isValueDated\": false,\n" +
+                "      \"propertyName\": \"LoanAmount\",\n" +
+                "      \"labelName\":\"Loan Amount\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"dateTypes\": [\n" +
+                "    {\n" +
+                "      \"propertyName\": \"StartDate\",\n" +
+                "      \"labelName\":\"Start Date\",\n" +
+                "      \"isRequired\":true,\n" +
+                "      \"isStartDate\":true\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"propertyName\": \"EndDate\",\n" +
+                "      \"labelName\":\"End Date\",\n" +
+                "      \"isRequired\":true,\n" +
+                "      \"isStartDate\":false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "\n" +
+                "  \"positionTypes\": [\n" +
+                "    {\n" +
+                "      \"propertyName\": \"Current\",\n" +
+                "      \"labelName\":\"Current Balance\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"propertyName\": \"InterestAccrued\",\n" +
+                "      \"labelName\":\"Interest Accrued Balance\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "\n" +
+                "  \"transactionTypes\": [\n" +
+                "    {\n" +
+                "      \"propertyName\": \"Deposit\",\n" +
+                "      \"labelName\":\"Deposit\",\n" +
+                "      \"creditPositionNames\": [\n" +
+                "        \"Current\"\n" +
+                "      ],\n" +
+                "      \"maximumPrecision\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"propertyName\": \"Withdrawal\",\n" +
+                "      \"labelName\":\"Withdrawal\",\n" +
+                "      \"debitPositionNames\": [\n" +
+                "        \"Current\"\n" +
+                "      ],\n" +
+                "      \"maximumPrecision\": false\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"propertyName\": \"InterestCapitalized\",\n" +
+                "      \"labelName\":\"Interest Capitalization\",\n" +
+                "      \"creditPositionNames\": [\n" +
+                "        \"Current\"\n" +
+                "      ],\n" +
+                "      \"debitPositionNames\": [\n" +
+                "        \"InterestAccrued\"\n" +
+                "      ],\n" +
+                "      \"maximumPrecision\": false\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+
+
+        this.mvc.perform(post("/accountTypes").content(json).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.className").value("SimpleLoan"));
     }
@@ -53,7 +118,7 @@ public class AccountTypeControllerTest {
     @Test
     public void givenLoanGivenYmlUrlandPost_whenMockMVC_thenResponseOK() throws Exception {
 
-        AccountType accountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
         accountType.setClassName("LoanGiven_AccountTypeController");
         ObjectMapper objectMapper = ObjectMapperConfiguration.getYamlObjectMapper();
 

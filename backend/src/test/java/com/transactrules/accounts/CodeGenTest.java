@@ -46,7 +46,7 @@ public class CodeGenTest {
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache mustache = mf.compile("templates//account.mustache");
         try {
-            mustache.execute(writer, TestUtility.CreateLoanGivenAccountType()).flush();
+            mustache.execute(writer, TestConfiguration.createLoanGivenAccountType()).flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,9 +60,9 @@ public class CodeGenTest {
     @Test
     public void CodeGenService_test() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
 
-        AccountType loanGivenAcccountType = TestUtility.CreateLoanGivenAccountType();
+        AccountType loanGivenAcccountType = TestConfiguration.createLoanGivenAccountType();
 
-        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType, new PrintWriter(new ByteArrayOutputStream()));
+        Class aClass = codeGenService.getAccountClass(loanGivenAcccountType);
 
         Account account1 = (Account) aClass.newInstance();
 
@@ -74,7 +74,7 @@ public class CodeGenTest {
  
 
         //this shold get the value from cache
-        Class class2 = codeGenService.getAccountClass(loanGivenAcccountType,new PrintWriter(new ByteArrayOutputStream()));
+        Class class2 = codeGenService.getAccountClass(loanGivenAcccountType);
         Account account2 = (Account) class2.newInstance();
         String timestamp2 = account2.generatedAt();
 

@@ -32,7 +32,7 @@ public class ScheduleTest {
         LocalDate endDate = startDate.plusYears (25);
         Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account account = CreateLoanGivenAccount(TestUtility.CreateLoanGivenAccountType(), startDate, endDate,calendar);
+        Account account = CreateLoanGivenAccount(TestConfiguration.createLoanGivenAccountType(), startDate, endDate,calendar);
 
 
         Schedule accrualSchedule = new Schedule();
@@ -74,7 +74,7 @@ public class ScheduleTest {
     }
 
     private  Account CreateLoanGivenAccount(AccountType accountType, LocalDate startDate, LocalDate endDate, BusinessDayCalculator businessDayCalculator) {
-       Class accountClass = codeGenService.generateClass(accountType);
+       Class accountClass = codeGenService.getAccountClass(accountType);
 
        AccountBuilder builder = new AccountBuilder(accountType.getClassName(),"10010", accountClass);
 

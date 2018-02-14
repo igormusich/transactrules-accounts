@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.runtime.SystemProperties;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -25,7 +24,6 @@ public class SystemPropertiesDataConverter implements DynamoDBTypeConverter<Stri
         return yaml;
     }
 
-
     @Override
     public SystemProperties unconvert(String value) {
         ObjectMapper yamlMapper = getObjectMapper();
@@ -41,7 +39,6 @@ public class SystemPropertiesDataConverter implements DynamoDBTypeConverter<Stri
         return data;
     }
 
-    @NotNull
     private ObjectMapper getObjectMapper() {
         ObjectMapper yamlMapper = ObjectMapperConfiguration.getYamlObjectMapper();
 

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.runtime.TransactionSet;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,7 +42,6 @@ public class TransactionSetDataConverter implements DynamoDBTypeConverter<String
         return data;
     }
 
-    @NotNull
     private ObjectMapper getObjectMapper() {
         ObjectMapper yamlMapper = ObjectMapperConfiguration.getYamlObjectMapper();
 

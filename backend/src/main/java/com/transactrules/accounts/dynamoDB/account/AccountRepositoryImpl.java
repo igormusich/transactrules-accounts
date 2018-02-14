@@ -14,8 +14,14 @@ public class AccountRepositoryImpl implements AccountRepository {
     DynamoAccountRepository dynamoRepository;
 
     @Override
-    public void save(Account accountType) {
-        dynamoRepository.save(new AccountDataObject(accountType));
+    public void save(Account account) {
+        //since account might be generate class - convert to the base class
+
+        Account saveAccount = new Account(account);
+        saveAccount.setAccountNumber(account.getAccountNumber());
+        saveAccount.setAccountTypeName(account.getAccountTypeName());
+
+        dynamoRepository.save(new AccountDataObject(saveAccount));
     }
 
     @Override

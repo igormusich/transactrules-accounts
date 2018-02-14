@@ -7,137 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TestUtility {
-    public static AccountType CreateLoanGivenAccountType()
-    {
-        AccountType loanGiven = new AccountType("LoanGiven", "LoanGiven");
-
-        PositionType conversionInterestPosition = loanGiven.addPositionType("ConversionInterest");
-        PositionType earlyRedemptionFeePosition = loanGiven.addPositionType("EarlyRedemptionFee");
-        PositionType interestAccruedPosition = loanGiven.addPositionType("InterestAccrued");
-        PositionType interestCapitalizedPosition = loanGiven.addPositionType("InterestCapitalized");
-        PositionType principalPosition = loanGiven.addPositionType( "Principal" );
-
-        DateType startDate = loanGiven.addDateType( "StartDate", true, true );
-        DateType accrualStart = loanGiven.addDateType( "AccrualStart" , true, false);
-        DateType endDate = loanGiven.addDateType( "EndDate" , true, false);
-
-
-        ScheduleType accrualSchedule = loanGiven.addCalculatedScheduleType(
-            "AccrualSchedule",
-                ScheduleFrequency.Daily,
-                ScheduleEndType.NoEnd,
-                BusinessDayCalculation.AnyDay,
-                "this.StartDate()",
-                "",
-                "",
-                "1"
-        );
-
-       ScheduleType interestSchedule =loanGiven.addUserInputScheduleType(
-        "InterestSchedule",
-               ScheduleFrequency.Monthly,
-               ScheduleEndType.EndDate,
-               BusinessDayCalculation.AnyDay,
-               null,
-               null,
-               null,
-               "1");
-
-       ScheduleType redemptionSchedule = loanGiven.addUserInputScheduleType(
-            "RedemptionSchedule",
-            ScheduleFrequency.Monthly,
-            ScheduleEndType.EndDate,
-            BusinessDayCalculation.AnyDay,
-            null,
-            null,
-            null,
-            "1"
-        );
-
-        TransactionType interestAccrued=  loanGiven.addTransactionType("InterestAccrued", true)
-            .addRule(interestAccruedPosition, TransactionOperation.Add);
-
-        TransactionType interestCapitalized= loanGiven.addTransactionType("InterestCapitalized")
-            .addRule(principalPosition,  TransactionOperation.Add )
-            .addRule(interestAccruedPosition,  TransactionOperation.Subtract )
-            .addRule(interestCapitalizedPosition, TransactionOperation.Add );
-
-
-        loanGiven.addTransactionType("Redemption")
-            .addRule(principalPosition, TransactionOperation.Subtract );
-
-        TransactionType advanceTransactionType = loanGiven.addTransactionType("Advance")
-            .addRule( principalPosition,  TransactionOperation.Add );
-
-        loanGiven.addTransactionType("AdditionalAdvance")
-            .addRule(principalPosition, TransactionOperation.Add);
-
-        loanGiven.addTransactionType("ConversionInterest")
-            .addRule(conversionInterestPosition, TransactionOperation.Add);
-
-        loanGiven.addTransactionType("EarlyRedemptionFee")
-                .addRule(earlyRedemptionFeePosition, TransactionOperation.Add);
-
-        loanGiven.addTransactionType("FXResultInterest")
-                .addRule(interestAccruedPosition, TransactionOperation.Add);
-
-        loanGiven.addTransactionType("FXResultPrincipal")
-                .addRule(principalPosition, TransactionOperation.Add);
-
-        loanGiven.addTransactionType("InterestPayment")
-                .addRule(interestAccruedPosition, TransactionOperation.Subtract);
-
-        loanGiven.addAmountType("RedemptionAmount" , false,false);
-        loanGiven.addAmountType("AdditionalAdvanceAmount" , false,false);
-        loanGiven.addAmountType("ConversionInterestAmount" , false,false);
-        loanGiven.addAmountType("AdvanceAmount" , false,true);
-
-        loanGiven.addRateType("InterestRate", true);
-
-        loanGiven.addOptionType(
-                "AccrualOption",
-                "com.transactrules.accounts.calculations.AccrualCalculation.AccrualOptions()", true);
-
-
-        loanGiven.addDayScheduledTransaction(
-                "Advance",
-                ScheduledTransactionTiming.StartOfDay,
-                startDate,
-                advanceTransactionType,
-                "AdvanceAmount()",
-                1);
-
-        loanGiven.addScheduledTransaction(
-                "InterestAccrual",
-                ScheduledTransactionTiming.EndOfDay,
-                accrualSchedule,
-                interestAccrued,
-                "com.transactrules.accounts.calculations.AccrualCalculation.InterestAccrued(AccrualOption(), Principal(), InterestRate(), ValueDate())" ,
-                1 );
-
-        loanGiven.addScheduledTransaction(
-                "InterestCapitalized",
-                ScheduledTransactionTiming.EndOfDay,
-                interestSchedule,
-                interestCapitalized,
-                "InterestAccrued()",
-                2);
-
-        loanGiven.addInstalmentType(
-                "Redemptions",
-                ScheduledTransactionTiming.StartOfDay,
-                redemptionSchedule.propertyName,
-                "Redemption","Principal",
-                "InterestAccrued",
-                "InterestCapitalized" );
-
-        return loanGiven;
-    }
 
     public static Account CreateLoanGivenAccount(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
 
-        AccountType accountType = CreateLoanGivenAccountType();
-        Class accountClass = codeGenService.generateClass(accountType);
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
+        Class accountClass = codeGenService.getAccountClass(accountType);
 
         AccountBuilder builder = new AccountBuilder( accountType.getClassName(), accountNumber, accountClass );
 
@@ -163,8 +37,8 @@ public class TestUtility {
 
     public static Account CreateLoanGivenAccountWithSchedules(String accountNumber, LocalDate startDate, LocalDate endDate, CodeGenService codeGenService) {
 
-        AccountType accountType = CreateLoanGivenAccountType();
-        Class accountClass = codeGenService.generateClass(accountType);
+        AccountType accountType = TestConfiguration.createLoanGivenAccountType();
+        Class accountClass = codeGenService.getAccountClass(accountType);
 
         AccountBuilder builder = new AccountBuilder( accountType.getClassName(), accountNumber, accountClass );
         BusinessDayCalculator calendar = CreateEuroZoneCalendar();

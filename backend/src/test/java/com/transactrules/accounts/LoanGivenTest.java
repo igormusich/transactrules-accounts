@@ -43,7 +43,7 @@ public class LoanGivenTest {
 
     @Before
     public void Setup(){
-        loanGivenAccountType = TestUtility.CreateLoanGivenAccountType();
+        loanGivenAccountType = TestConfiguration.createLoanGivenAccountType();
         loanGivenAccountType.setClassName("LoanGivenTestAccount");
 
         accountTypeService.save(loanGivenAccountType);
@@ -127,9 +127,7 @@ public class LoanGivenTest {
         LocalDate endDate = startDate.plusYears(25);
         Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account prototype = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-0982397", startDate, endDate,codeGenService);
-
-        Account account = new localLoanGiven(prototype);
+        Account account = TestUtility.CreateLoanGivenAccountWithSchedules("ACC-002-0982397", startDate, endDate,codeGenService);
 
         account.valueDate = startDate;
 

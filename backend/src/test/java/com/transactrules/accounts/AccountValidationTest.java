@@ -46,7 +46,7 @@ public class AccountValidationTest {
     @Before
     public void setup() {
         beanFactory.autowireBean(accountValidator);
-        loanGivenAccountType = TestUtility.CreateLoanGivenAccountType();
+        loanGivenAccountType = TestConfiguration.createLoanGivenAccountType();
         loanGivenAccountType.setClassName("LoanGivenAccountValidationTest");
 
         accountTypeService.save(loanGivenAccountType);

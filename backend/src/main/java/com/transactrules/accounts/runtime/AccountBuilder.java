@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime;
 
-import org.jetbrains.annotations.Nullable;
+import com.sun.istack.internal.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,7 +132,6 @@ public class AccountBuilder {
             addCalendar(calendarName);
         }
 
-
         for(String key: prototype.getAmounts().keySet()){
             addAmountValue(key, prototype.getAmounts().get(key));
         }
@@ -157,7 +156,15 @@ public class AccountBuilder {
             addInstalmentSet(key, prototype.getInstalmentSets().get(key));
         }
 
+        for(String key: prototype.getPositions().keySet()){
+            addPosition(key, prototype.getPositions().get(key));
+        }
+
         return this;
+    }
+
+    private void addPosition(String key, Position position) {
+        this.positions.put(key, new Position(position));
     }
 
     private AccountBuilder addInstalmentSet(String key, InstalmentSet instalmentSet) {

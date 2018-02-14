@@ -1,5 +1,6 @@
 package com.transactrules.accounts.runtime;
 
+import com.transactrules.accounts.TestConfiguration;
 import com.transactrules.accounts.TestUtility;
 import com.transactrules.accounts.dynamoDB.transactionSet.TransactionSetDataConverter;
 import com.transactrules.accounts.metadata.AccountType;
@@ -52,13 +53,11 @@ public class TransactionSetTest {
     @Before
     public void setUp() throws Exception {
 
-         startDate = LocalDate.of(2013, 3, 8);
+        startDate = LocalDate.of(2013, 3, 8);
         endDate = startDate.plusYears(25);
         Calendar calendar = TestUtility.CreateEuroZoneCalendar();
 
-        Account prototype = TestUtility.CreateLoanGivenAccountWithSchedules(ACCOUNT_NUMBER, startDate, endDate,codeGenService);
-
-        account = new localLoanGiven(prototype);
+        account = TestUtility.CreateLoanGivenAccountWithSchedules(ACCOUNT_NUMBER, startDate, endDate,codeGenService);
 
         account.valueDate = startDate;
 
@@ -70,7 +69,7 @@ public class TransactionSetTest {
 
         account.setTransactions(new ArrayList<>());
 
-        accountType = TestUtility.CreateLoanGivenAccountType();
+        accountType = TestConfiguration.createLoanGivenAccountType();
     }
 
     @Test

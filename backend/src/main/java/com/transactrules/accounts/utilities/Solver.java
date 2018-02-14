@@ -1,5 +1,6 @@
 package com.transactrules.accounts.utilities;
 
+import com.transactrules.accounts.runtime.Calculation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ public class Solver
     //Machine floating-point precision.
     public  final  BigDecimal EPS = BigDecimal.valueOf(0.000000003);
 
-    public  BigDecimal FindFunctionZero(Function<BigDecimal, BigDecimal> func, BigDecimal lowerBound, BigDecimal upperBound, BigDecimal tolerance)
+    public  BigDecimal FindFunctionZero(Calculation func, BigDecimal lowerBound, BigDecimal upperBound, BigDecimal tolerance)
     {
         //Using Brent’s method, find the root of a function func known to lie between x1 and x2. The
         //root, returned as zbrent, will be refined until its accuracy is tol.
@@ -44,8 +45,8 @@ public class Solver
         BigDecimal xm = BigDecimal.ZERO;
 
 
-        fa = func.apply(a);
-        fb = func.apply(b);
+        fa = func.calculate(a);
+        fb = func.calculate(b);
 
         //if ((fa > 0 && fb > 0) || (fa < 0 && fb < 0))
         if ((fa.compareTo(BigDecimal.ZERO) > 0 && fb.compareTo(BigDecimal.ZERO) > 0)
@@ -171,7 +172,7 @@ public class Solver
                 b= b.add(MSIGN(tol1,xm)); //b = b + MSIGN(tol1, xm);
             }
 
-            fb = func.apply(b);
+            fb = func.calculate(b);
             logger.debug(String.format("Iteration %d:f(%s)={%s}", iter, b.setScale(10, RoundingMode.HALF_DOWN).toString(), fb.setScale(10, RoundingMode.HALF_DOWN).toString()));
 
         }
