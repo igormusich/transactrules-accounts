@@ -148,25 +148,25 @@
 				the cache is cleared.  The artifact is unpacked to the target
 				directory of the build.
 			  -->
-			<!--<plugin>-->
-				<!--<groupId>com.googlecode.maven-download-plugin</groupId>-->
-				<!--<artifactId>download-maven-plugin</artifactId>-->
-				<!--<version>1.2.1</version>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>install-dynamodb_local</id>-->
-						<!--<phase>initialize</phase>-->
-						<!--<goals>-->
-							<!--<goal>wget</goal>-->
-						<!--</goals>-->
-						<!--<configuration>-->
-							<!--<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>-->
-							<!--<unpack>true</unpack>-->
-							<!--<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>-->
-						<!--</configuration>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
+			<!--<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>install-dynamodb_local</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>-->
 			<!--
       Step 2: Reserve a local port for Dynamo to start on.
         DynamoDB_Local normally runs on port 8000.  Rather than hoping
@@ -252,6 +252,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>

@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -81,6 +82,40 @@ public class AccountControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.accountNumber").value(createAccount.getAccountNumber()))
                 .andExpect(jsonPath("$.accountTypeName").value(createAccount.getAccountTypeName()));
+    }
+
+    @Test
+    public void givenAccountTypeAndCalculateInstalments_whenMockMVC_thenResponseOK() throws Exception {
+
+        LocalDate startDate = LocalDate.of(2010,1,1);
+        LocalDate endDate = startDate.plusYears(1);
+        LocalDate firstInstalment = startDate.plusMonths(1);
+
+        Account createAccount = TestUtility.CreateLoanGivenAccount("AC-002-098398", startDate,endDate,codeGenService);
+
+        createAccount.getRates().get("InterestRate").setValue(BigDecimal.ZERO);
+        createAccount.getAmounts().get("AdvanceAmount").setAmount(BigDecimal.valueOf(12000));
+
+        String yaml = ObjectMapperConfiguration.getYamlObjectMapper().writeValueAsString(createAccount);
+
+        createAccount.setAccountTypeName(accountTypeName);
+
+        ObjectMapper mapper = ObjectMapperConfiguration.getObjectMapper();
+        String createAccountJson = mapper.writeValueAsString(createAccount);
+
+
+        String firstInstalmentDateString = ObjectMapperConfiguration.getObjectMapper().writeValueAsString(firstInstalment);
+
+        firstInstalmentDateString = firstInstalmentDateString.replace("\"","");
+
+        String firstInstalmentPath = String.format("$.instalmentSets.Redemptions.instalments['%s'].amount", firstInstalmentDateString);
+
+
+        this.mvc.perform(post("/accounts/solveInstalments").content(createAccountJson).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.accountNumber").value(createAccount.getAccountNumber()))
+                .andExpect(jsonPath("$.accountTypeName").value(createAccount.getAccountTypeName()))
+                .andExpect(jsonPath(firstInstalmentPath).value(1000.00));
     }
 
 

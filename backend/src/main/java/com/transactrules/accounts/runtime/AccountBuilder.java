@@ -1,6 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.sun.istack.internal.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -194,8 +193,6 @@ public class AccountBuilder {
 
     }
 
-    @Nullable
-    //
     public Account getNewAccount() {
         Account account = null;
 
