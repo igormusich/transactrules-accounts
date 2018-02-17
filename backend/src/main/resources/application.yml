@@ -44,3 +44,13 @@ logging:
 ---
 spring:
   profiles: container
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driverClassName: ${DATASOURCE_DRIVER}
+  jpa:
+    show-sql: ${JPA_SHOWSQL}
+    hibernate:
+      dialect:  ${HIBERNATE_DIALECT}
+      ddl-auto: ${HIBERNATE_DDL_AUTO}

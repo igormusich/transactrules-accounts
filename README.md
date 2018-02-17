@@ -21,22 +21,24 @@ mvn clean install -Dmaven.test.skip=true dockerfile:build
 
 To run docker image:
 ```bash
-docker run --className trules-accounts \
-           -p 8080:8080 \
-           -e ACCESS_KEY=your_key \
-           -e SECRET_KEY=your_secret \
-           -e DROP_DB=false \
-           transactrules/accounts
+docker run -d  --net="host" -p 8080:8080 -e DATASOURCE_URL="jdbc:sqlserver://localhost;databaseName=accounts" \
+           -e DATASOURCE_USERNAME=sa \
+           -e DATASOURCE_PASSWORD=TVMdev2018 \
+           -e DATASOURCE_DRIVER=com.microsoft.sqlserver.jdbc.SQLServerDriver \
+           -e JPA_SHOWSQL=true \
+           -e HIBERNATE_DIALECT=org.hibernate.dialect.SQLServer2012Dialect \
+           -e HIBERNATE_DDL_AUTO=none \
+           transactrules/api
 ```
 
 where your_key and your_secret refer to AWS account credentials with DynamoDB permissions to create and delete tables, and CRUD on table rows.
 
-To push ACS to repository:
+To push Google to repository:
 
 ```bash
-docker tag transactrules/accounts:latest 460415261843.dkr.ecr.ca-central-1.amazonaws.com/transactrules:latest
+docker tag transactrules/api:latest us.gcr.io/transact-rules-dev/transactrules-api:latest
 
-docker push 460415261843.dkr.ecr.ca-central-1.amazonaws.com/transactrules:latest
+gcloud docker -- push us.gcr.io/transact-rules-dev/transactrules-api
 ```
 
 To view APIs:
