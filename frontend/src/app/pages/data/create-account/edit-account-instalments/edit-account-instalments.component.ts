@@ -6,7 +6,7 @@ import { ApiClientService } from 'app/api-client-service';
 import { Router } from '@angular/router';
 import { InstalmentSet, Account, AccountType } from 'app/models';
 import { InstalmentValue } from 'app/models/instalmentvalue.model';
-import { MatTableDataSource, MatDialog,MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { EditInstalmentComponent } from 'app/pages/data/instalment/edit-instalment/edit-instalment.component';
 
 @Component({

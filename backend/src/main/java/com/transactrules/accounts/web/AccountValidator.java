@@ -70,6 +70,10 @@ public class AccountValidator implements Validator {
             }
         }
 
+        if(errors.hasErrors()){
+            //terminate validation not having account number or account type
+            return;
+        }
 
         validateDates(errors, request, accountType);
         validateAmounts(errors, request, accountType);
@@ -83,7 +87,6 @@ public class AccountValidator implements Validator {
             if(dateType.getRequired()){
                 if(!request.getDates().containsKey(dateType.getPropertyName())){
                     errors.rejectValue("dates", ApiErrorCode.REQUIRED.getCode(), dateType.getPropertyName() + " is required.");
-                    continue;
                 }
             }
         }
@@ -94,8 +97,7 @@ public class AccountValidator implements Validator {
             DateValue dateValue = request.getDates().get(key);
             
             if(dateValue.getDate() == null){
-                errors.rejectValue("dates[" + i + "].date", ApiErrorCode.REQUIRED.getCode(), key + " date is required.");
-                continue;
+                errors.rejectValue("dates['" + key + "'].date", ApiErrorCode.REQUIRED.getCode(), key + " date is required.");
             }
         
             i++;

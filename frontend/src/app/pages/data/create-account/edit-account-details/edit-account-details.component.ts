@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
 import { toDate }  from 'app/core/utils/format-date';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'vr-edit-account-details',
@@ -28,7 +29,8 @@ export class EditAccountDetailsComponent implements OnInit {
   constructor(public accountCreateService: AccountCreateService,
     private fb: FormBuilder,
     public apiClient: ApiClientService,
-    public router: Router ) { }
+    public router: Router,
+    private snackBar: MatSnackBar  ) { }
 
   ngOnInit() {
     this.accountType = this.accountCreateService.getAccountType();
@@ -72,6 +74,25 @@ export class EditAccountDetailsComponent implements OnInit {
       this.account= result.body;
       this.accountCreateService.setAccount(this.account);
       this.router.navigate(['/data/create-account/schedules']);
+    }, error =>{
+      var errorMessage:string= "Account properties can't be calculated";
+
+      if(error.status = 422){
+        if(error.error.globalErrors != null && error.error.globalErrors.length>0 ){
+          errorMessage = error.error.globalErrors[0].message;
+        }
+        else {
+          var fieldErrors = '';
+          error.error.fieldErrors.forEach(fieldError=> {
+              fieldErrors = fieldErrors + fieldError.message + "\n";
+          });
+
+          errorMessage = fieldErrors;
+        }
+      }
+
+      this.snackBar.open(errorMessage, null, {duration:3000});
+      
     });
   }
 
@@ -146,7 +167,7 @@ export class EditAccountDetailsComponent implements OnInit {
 
   setDate(key:string, value:string){
     var dateValue:DateValue = new DateValue();
-    dateValue.data = value;
+    dateValue.date = value;
 
     this.account.dates[key] = dateValue;
   }
