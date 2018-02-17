@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.transactionSet;
+package com.transactrules.accounts.persistence.transactionSet;
 
 import com.transactrules.accounts.repository.TransactionSetRepository;
 import com.transactrules.accounts.runtime.TransactionSet;
@@ -12,7 +12,7 @@ import java.util.List;
 public class TransactionSetRepositoryImpl implements TransactionSetRepository {
 
     @Autowired
-    DynamoTransactionSetRepository dynamoRepository;
+    JpaTransactionSetRepository dynamoRepository;
 
     @Override
     public void save(TransactionSet transactionSet) {

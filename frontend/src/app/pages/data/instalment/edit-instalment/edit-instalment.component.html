@@ -9,7 +9,7 @@
       <div class="content" mat-dialog-content fxLayout="column">
         <div fxLayout="column" fxLayoutGap="24px">
           <mat-form-field class="input-container" fxFlex>
-            <input formControlName="date" matInput placeholder="Date"  >
+            <input formControlName="data" matInput placeholder="Date"  >
           </mat-form-field>
           <mat-form-field class="input-container" fxFlex>
             <input formControlName="amount" matInput placeholder="Amount" required>
@@ -27,11 +27,11 @@
       </div>
     </form>
     <div mat-dialog-actions fxLayout="row">
-  
+
       <span fxFlex>
         <!-- fill space -->
       </span>
-  
+
       <button [disabled]="!form.valid" (click)="save()" class="save" fxFlexOffset="8px" mat-raised-button color="primary">
         Save
       </button>

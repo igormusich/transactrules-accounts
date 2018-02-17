@@ -22,7 +22,7 @@ export class EditInstalmentComponent implements OnInit {
     }
 
     this.form = this.fb.group({
-      date: new FormControl ( { value:this.instalmentValue.date,disabled: true }  ),
+      data: new FormControl ( { value:this.instalmentValue.data,disabled: true }  ),
       amount: new FormControl (this.instalmentValue.amount, Validators.required),
       hasFixedValue:  new FormControl (this.boolToString(this.instalmentValue.hasFixedValue), Validators.required)
     });

@@ -1,6 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
@@ -35,7 +34,6 @@ public class TransactionSetData {
         list.getItems().add(pack(transaction));
     }
 
-    @DynamoDBIgnore
     @JsonIgnore
     public List<Transaction> getTransactions(){
         List<Transaction> transactions = new ArrayList<>();

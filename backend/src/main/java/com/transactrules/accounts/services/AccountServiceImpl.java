@@ -1,6 +1,5 @@
 package com.transactrules.accounts.services;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.metadata.PositionType;
 import com.transactrules.accounts.repository.AccountRepository;
@@ -40,9 +39,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     TransactionService transactionService;
 
-
-    @Autowired
-    private AmazonDynamoDB amazonDynamoDB;
 
     private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 

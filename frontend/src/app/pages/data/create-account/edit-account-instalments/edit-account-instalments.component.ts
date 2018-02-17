@@ -19,7 +19,7 @@ export class EditAccountInstalmentsComponent implements OnInit {
   accountType: AccountType;
   account: Account;
   dataSource: MatTableDataSource<InstalmentValue> | null;
-  displayedColumns = ['date','amount','hasFixedValue','actions'];
+  displayedColumns = ['data','amount','hasFixedValue','actions'];
 
   constructor(public accountCreateService: AccountCreateService,
     private fb: FormBuilder,
@@ -43,11 +43,11 @@ export class EditAccountInstalmentsComponent implements OnInit {
 
     var instalments = new Array<InstalmentValue>();
 
-    dates.forEach((date: string) => {
-      var value:InstalmentValue = set[date];
+    dates.forEach((data: string) => {
+      var value:InstalmentValue = set[data];
       var instalmentValue = new InstalmentValue();
-      instalmentValue.from(value, date);
-      
+      instalmentValue.from(value, data);
+
       instalments.push(instalmentValue);
     });
 
@@ -59,7 +59,7 @@ export class EditAccountInstalmentsComponent implements OnInit {
   }
 
   update(instalmentValue:InstalmentValue ){
-      
+
       const dialogRef = this.composeDialog.open(EditInstalmentComponent);
 
       dialogRef.componentInstance.instalmentValue = instalmentValue;
@@ -67,11 +67,11 @@ export class EditAccountInstalmentsComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         this.onCalculate();
       });
-    
+
   }
 
   delete(instalmentValue:InstalmentValue ){
-    
+
   }
 
   mapFormToAccount(){
@@ -81,14 +81,14 @@ export class EditAccountInstalmentsComponent implements OnInit {
     var set:InstalmentSet  = this.account.instalmentSets[keys[0]].instalments;
 
     this.dataSource.data.forEach((value:InstalmentValue)=> {
-      set[value.date].amount = value.amount;
-      set[value.date].hasFixedValue = value.hasFixedValue;
+      set[value.data].amount = value.amount;
+      set[value.data].hasFixedValue = value.hasFixedValue;
     })
 
   }
 
   onPreviousStep(){
-    this.router.navigate(['/data/create-account/schedules']);  
+    this.router.navigate(['/data/create-account/schedules']);
   }
 
   onCalculate(){
@@ -103,7 +103,7 @@ export class EditAccountInstalmentsComponent implements OnInit {
 
       instalments.forEach(
         (instalment:InstalmentValue)=> this.dataSource.data.push(instalment));
-      
+
       this.dataSource.filter = "";
 
     }, error => {
@@ -114,7 +114,7 @@ export class EditAccountInstalmentsComponent implements OnInit {
           errorMessage = error.error.globalErrors[0].message;
         }
       }
-      
+
       this.snackBar.open(errorMessage, null, {duration:3000});
     });
   }
@@ -127,7 +127,7 @@ export class EditAccountInstalmentsComponent implements OnInit {
     this.apiClient.saveAccount (this.account).subscribe( result => {
       this.account= result.body;
       this.accountCreateService.setAccount(this.account);
-      this.router.navigate(['/']);  
+      this.router.navigate(['/']);
     },
   error => {
 
@@ -138,9 +138,9 @@ export class EditAccountInstalmentsComponent implements OnInit {
           errorMessage = error.error.globalErrors[0].message;
         }
       }
-      
+
       this.snackBar.open(errorMessage, null, {duration:3000});
-    
+
   });
   }
 

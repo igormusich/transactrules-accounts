@@ -1,9 +1,9 @@
-export function toIsoString(date:Date){
-    if(date==null){
+export function toIsoString(data:Date){
+    if(data==null){
         return null;
     }
 
-    return date.getFullYear()+"-"+ pad(date.getMonth()+1,2)+ "-" + pad(date.getDate(),2);
+    return data.getFullYear()+"-"+ pad(data.getMonth()+1,2)+ "-" + pad(data.getDate(),2);
 }
 
 export function toDate(isoDate:string):Date{
@@ -15,7 +15,7 @@ export function toDate(isoDate:string):Date{
     var parts:string[] =isoDate.split('-');
     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
     // January - 0, February - 1, etc.
-    var mydate = new Date( Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])); 
+    var mydate = new Date( Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
 
     return mydate;
 }

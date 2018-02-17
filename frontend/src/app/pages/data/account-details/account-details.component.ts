@@ -36,7 +36,7 @@ export class AccountDetailsComponent implements OnInit {
   positionTypes: string[] = [];
 
   transactionDisplayedColumns = ['image', 'actionDate', 'valueDate', 'transactionType', 'amount', 'balance', 'actions'];
-  instalmentDisplayedColumns = ['date', 'amount', 'hasFixedValue', 'actions'];
+  instalmentDisplayedColumns = ['data', 'amount', 'hasFixedValue', 'actions'];
 
   @ViewChild(MatPaginator) transactionPaginator: MatPaginator;
   @ViewChild('instalmentPaginator') instalmentPaginator: MatPaginator;
@@ -54,7 +54,7 @@ export class AccountDetailsComponent implements OnInit {
       params => {
         this.accountNumber = params['accountNumber'];
 
-        
+
       });
   }
 
@@ -67,10 +67,10 @@ export class AccountDetailsComponent implements OnInit {
 
     var instalments = new Array<InstalmentValue>();
 
-    dates.forEach((date: string) => {
-      var value: InstalmentValue = set[date];
+    dates.forEach((data: string) => {
+      var value: InstalmentValue = set[data];
       var instalmentValue = new InstalmentValue();
-      instalmentValue.from(value, date);
+      instalmentValue.from(value, data);
 
       instalments.push(instalmentValue);
     });
@@ -87,7 +87,7 @@ export class AccountDetailsComponent implements OnInit {
 
     if(this.form.valid){
 
-    };  
+    };
 
   }
 

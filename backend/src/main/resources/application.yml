@@ -1,12 +1,14 @@
-amazon:
-  dynamodb:
-    endpoint: http://localhost:8000/
-  aws:
-    accesskey: test1
-    secretkey: test2
-reset-tables: true
-read-capacity: 5
-write-capacity: 5
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost;databaseName=accounts
+    username: sa
+    password: TVMdev2018
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: create-drop
 endpoints:
   beans:
     enabled: true
@@ -42,16 +44,3 @@ logging:
 ---
 spring:
   profiles: container
-amazon:
-  dynamodb:
-    endpoint: https://dynamodb.ca-central-1.amazonaws.com
-  aws:
-    accesskey: ${ACCESS_KEY}
-    secretkey: ${SECRET_KEY}
-reset-tables: ${DROP_DB}
-read-capacity: ${READ_CAPACITY}
-write-capacity: ${WRITE_CAPACITY}
-endpoints:
-  health:
-    enabled: true
-    path: /health

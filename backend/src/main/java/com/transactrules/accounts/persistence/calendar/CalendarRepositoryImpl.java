@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.calendar;
+package com.transactrules.accounts.persistence.calendar;
 
 import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.Calendar;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class CalendarRepositoryImpl implements CalendarRepository {
     @Autowired
-    DynamoCalendarRepository dynamoRepository;
+    JpaCalendarRepository dynamoRepository;
 
     @Override
     public void save(Calendar calendar) {

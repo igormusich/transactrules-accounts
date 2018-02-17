@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, DoCheck, 
+import { Component, OnInit, Input, OnChanges, DoCheck,
   AfterContentChecked, AfterContentInit , AfterViewChecked , AfterViewInit, OnDestroy, forwardRef } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Schedule } from 'app/models';
@@ -13,7 +13,7 @@ import { toDate, toIsoString }  from 'app/core/utils/format-date';
   templateUrl: './select-schedule.component.html',
   styleUrls: ['./select-schedule.component.scss'],
   providers: [
-    { 
+    {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
       useExisting: forwardRef(() => SelectScheduleComponent),
@@ -22,7 +22,7 @@ import { toDate, toIsoString }  from 'app/core/utils/format-date';
 })
 export class SelectScheduleComponent implements OnChanges,
 OnInit, ControlValueAccessor {
-  
+
 
   @Input() schedule:Schedule;
   @Input() placeholder:String;
@@ -35,7 +35,7 @@ OnInit, ControlValueAccessor {
     this.schedule = schedule;
   };
 
-  // Function to call when the input is touched 
+  // Function to call when the input is touched
   onTouched = () => {};
 
   constructor(private apiService: ApiClientService,
@@ -43,11 +43,11 @@ OnInit, ControlValueAccessor {
 
     toFormGroup(schedule:Schedule): FormGroup{
       var form = this.fb.group({
-        startDate: new FormControl (toDate(schedule.startDate) , Validators.required ), 
+        startDate: new FormControl (toDate(schedule.startDate) , Validators.required ),
         endType: new FormControl (schedule.endType , Validators.required ),
         endDate: new FormControl (toDate(schedule.endDate)),
-        frequency: new FormControl (schedule.frequency, Validators.required ), 
-        interval: new FormControl (schedule.interval , Validators.required ), 
+        frequency: new FormControl (schedule.frequency, Validators.required ),
+        interval: new FormControl (schedule.interval , Validators.required ),
         numberOfRepeats: new FormControl (schedule.numberOfRepeats),
         businessDayCalculation: new FormControl(schedule.businessDayCalculation),
         includeDates: new FormControl(schedule.includeDates),
@@ -66,24 +66,24 @@ OnInit, ControlValueAccessor {
       }
       else{
         this.form.setValue(this.schedule);
-      } 
+      }
     }
-  
+
      // Save the function as a property to call later here.
      registerOnChange(fn: (schedule: Schedule) => void): void {
       this.onChange = fn;
     }
-  
+
     // Allows Angular to register a function to call when the input has been touched.
     // Save the function as a property to call later here.
     registerOnTouched(fn: () => void): void {
       this.onTouched = fn;
     }
-  
+
     setDisabledState?(isDisabled: boolean): void {
       //console.log("setDisabledState");
     }
-  
+
 
 
   ngOnInit() {
@@ -95,8 +95,8 @@ OnInit, ControlValueAccessor {
 
     // for (let key in changes) {
     //   if(key!="placeholder"){
-    //     console.log(`${key} changed. 
-    //     Current: ${changes[key].currentValue}. 
+    //     console.log(`${key} changed.
+    //     Current: ${changes[key].currentValue}.
     //     Previous: ${changes[key].previousValue}`);
     //   }
     // }
@@ -121,17 +121,17 @@ OnInit, ControlValueAccessor {
 
     if(this.form.valid){
       //this.selected.sub_organism_id = null;
-    };  
+    };
 
     console.log(`parseForm  ${JSON.stringify(this.schedule)}`);
   }
 
-  parseStartDate(date:Date){
-    this.schedule.startDate = toIsoString(date);
+  parseStartDate(data:Date){
+    this.schedule.startDate = toIsoString(data);
   }
 
-  parseEndDate(date:Date){
-    this.schedule.endDate = toIsoString(date);
+  parseEndDate(data:Date){
+    this.schedule.endDate = toIsoString(data);
   }
 
 }

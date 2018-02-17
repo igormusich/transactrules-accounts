@@ -3,9 +3,10 @@ package com.transactrules.accounts.metadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
-import org.joda.time.LocalDateTime;
+
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 

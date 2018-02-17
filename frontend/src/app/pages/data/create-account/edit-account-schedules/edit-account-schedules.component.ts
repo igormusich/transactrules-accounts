@@ -49,7 +49,7 @@ export class EditAccountSchedulesComponent implements OnInit {
 
   createScheduleControls(accountType:AccountType, account:Account):Array<ScheduleControl>{
     var controls = new Array<ScheduleControl>();
-    
+
     accountType.scheduleTypes.forEach(scheduleType=>{
       var schedule:Schedule = account.schedules[scheduleType.propertyName];
       var control = new ScheduleControl();
@@ -64,7 +64,7 @@ export class EditAccountSchedulesComponent implements OnInit {
 
   onPreviousStep(){
     this.mapFormToAccount();
-    this.router.navigate(['/data/create-account']);  
+    this.router.navigate(['/data/create-account']);
   }
 
   onNextStep(){
@@ -73,7 +73,7 @@ export class EditAccountSchedulesComponent implements OnInit {
     this.apiClient.getSolvedInstalments(this.account).subscribe( result => {
       this.account= result.body;
       this.accountCreateService.setAccount(this.account);
-      this.router.navigate(['/data/create-account/instalments']);  
+      this.router.navigate(['/data/create-account/instalments']);
     }, error => {
       var errorMessage:string= "Instalments can't be calculated";
 
@@ -82,7 +82,7 @@ export class EditAccountSchedulesComponent implements OnInit {
           errorMessage = error.error.globalErrors[0].message;
         }
       }
-      
+
       this.snackBar.open(errorMessage, null, {duration:3000});
     });
   }
@@ -96,7 +96,7 @@ export class EditAccountSchedulesComponent implements OnInit {
       var value:Schedule = formData[key];
 
       this.account.schedules[key] = this.getScheduleData(value);
-      
+
     });
   }
 

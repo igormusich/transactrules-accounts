@@ -1,8 +1,8 @@
 
 export class DateValue {
-  date: string;
+  data: string;
 
   from(value:DateValue){
-    this.date = value.date;
+    this.data = value.data;
   }
 }

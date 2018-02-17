@@ -167,8 +167,8 @@ public class {{className}} extends Account {
 
 {{#instalmentTypes}}
     public void Initialize{{propertyName}}(){
-        for(LocalDate date : _{{scheduleTypeName}}.GetAllDates()){
-            _{{propertyName}}.getInstalments().put(date, new InstalmentValue( BigDecimal.ZERO, false));
+        for(LocalDate data : _{{scheduleTypeName}}.GetAllDates()){
+            _{{propertyName}}.getInstalments().put(data, new InstalmentValue( BigDecimal.ZERO, false));
         }
     }
 {{/instalmentTypes}}

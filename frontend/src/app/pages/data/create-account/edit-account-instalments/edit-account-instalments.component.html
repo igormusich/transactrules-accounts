@@ -20,14 +20,14 @@
           <div class="actions" fxFlexAlign="center">
           </div>
 
-          <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="date" matSortDisableClear matSortDirection="asc">
+          <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="data" matSortDisableClear matSortDirection="asc">
 
             <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
 
-            <ng-container cdkColumnDef="date">
+            <ng-container cdkColumnDef="data">
               <mat-header-cell *cdkHeaderCellDef> Date </mat-header-cell>
-              <mat-cell *cdkCellDef="let row"> {{row.date}} </mat-cell>
+              <mat-cell *cdkCellDef="let row"> {{row.data}} </mat-cell>
             </ng-container>
 
             <ng-container cdkColumnDef="amount">
@@ -37,9 +37,9 @@
 
             <ng-container cdkColumnDef="hasFixedValue">
               <mat-header-cell *cdkHeaderCellDef> Fixed </mat-header-cell>
-              <mat-cell *cdkCellDef="let row"> 
-                  <mat-checkbox color="primary"  [checked]="row.hasFixedValue" disabled (click)="$event.stopPropagation()"></mat-checkbox>  
-              </mat-cell>           
+              <mat-cell *cdkCellDef="let row">
+                  <mat-checkbox color="primary"  [checked]="row.hasFixedValue" disabled (click)="$event.stopPropagation()"></mat-checkbox>
+              </mat-cell>
             </ng-container>
 
             <!-- actions Column -->

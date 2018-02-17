@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.systemProperties;
+package com.transactrules.accounts.persistence.systemProperties;
 
 import com.transactrules.accounts.repository.SystemPropertiesRepository;
 import com.transactrules.accounts.runtime.SystemProperties;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemPropertiesRepositoryImpl implements SystemPropertiesRepository {
     @Autowired
-    DynamoSystemPropertiesRepository dynamoRepository;
+    JpaSystemPropertiesRepository dynamoRepository;
 
     @Override
     public void save(SystemProperties properties) {
@@ -18,6 +18,6 @@ public class SystemPropertiesRepositoryImpl implements SystemPropertiesRepositor
     @Override
     public SystemProperties findOne() {
 
-        return dynamoRepository.findAll().iterator().next().getData();
+        return dynamoRepository.findAll().iterator().next().getProperties();
     }
 }

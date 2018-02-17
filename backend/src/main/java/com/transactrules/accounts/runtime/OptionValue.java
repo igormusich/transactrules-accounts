@@ -1,6 +1,5 @@
 package com.transactrules.accounts.runtime;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class OptionValue {
         values = list;
     }
 
-    @DynamoDBAttribute
     public String getValue() {
         return value;
     }

@@ -181,8 +181,8 @@ class {{className}} extends Account {
 {{#instalmentTypes}}
     void Initialize{{propertyName}}(){
         {{scheduleTypeName}}.GetAllDates().each {
-            LocalDate date ->
-                {{propertyName}}.instalments.put(date, new InstalmentValue( BigDecimal.ZERO, false))
+            LocalDate data ->
+                {{propertyName}}.instalments.put(data, new InstalmentValue( BigDecimal.ZERO, false))
         }
     }
 

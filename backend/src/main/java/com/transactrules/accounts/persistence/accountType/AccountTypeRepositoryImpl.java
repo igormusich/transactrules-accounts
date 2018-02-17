@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.accountType;
+package com.transactrules.accounts.persistence.accountType;
 
 import com.transactrules.accounts.metadata.AccountType;
 import com.transactrules.accounts.repository.AccountTypeRepository;
@@ -12,7 +12,7 @@ import java.util.List;
 public class AccountTypeRepositoryImpl implements AccountTypeRepository {
 
     @Autowired
-    DynamoAccountTypeRepository dynamoRepository;
+    JpaAccountTypeRepository dynamoRepository;
 
     @Override
     public void save(AccountType accountType) {

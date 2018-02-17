@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.account;
+package com.transactrules.accounts.persistence.account;
 
 import com.transactrules.accounts.runtime.Account;
 import com.transactrules.accounts.repository.AccountRepository;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class AccountRepositoryImpl implements AccountRepository {
     @Autowired
-    DynamoAccountRepository dynamoRepository;
+    JpaAccountRepository repository;
 
     @Override
     public void save(Account account) {
@@ -21,14 +21,14 @@ public class AccountRepositoryImpl implements AccountRepository {
         saveAccount.setAccountNumber(account.getAccountNumber());
         saveAccount.setAccountTypeName(account.getAccountTypeName());
 
-        dynamoRepository.save(new AccountDataObject(saveAccount));
+        repository.save(new AccountDataObject(saveAccount));
     }
 
     @Override
     public List<Account> findAll() {
         List<Account> list = new ArrayList<>();
 
-        for(AccountDataObject  dataObject: dynamoRepository.findAll()){
+        for(AccountDataObject  dataObject: repository.findAll()){
             list.add(dataObject.getAccount());
         }
 
@@ -37,7 +37,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Account findOne(String key) {
-        AccountDataObject dataObject=  dynamoRepository.findOne(key);
+        AccountDataObject dataObject=  repository.findOne(key);
 
         if(dataObject==null){
             return null;

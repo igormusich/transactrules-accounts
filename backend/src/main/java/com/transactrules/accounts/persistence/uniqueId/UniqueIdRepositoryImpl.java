@@ -1,4 +1,4 @@
-package com.transactrules.accounts.dynamoDB.uniqueId;
+package com.transactrules.accounts.persistence.uniqueId;
 
 import com.transactrules.accounts.repository.UniqueIdRepository;
 import com.transactrules.accounts.runtime.UniqueId;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UniqueIdRepositoryImpl implements UniqueIdRepository {
 
     @Autowired
-    DynamoUniqueIdRepository dynamoRepository;
+    JpaUniqueIdRepository dynamoRepository;
 
     @Override
     public void save(UniqueId uniqueId) {
@@ -18,6 +18,6 @@ public class UniqueIdRepositoryImpl implements UniqueIdRepository {
 
     @Override
     public UniqueId findOne(String className) {
-        return dynamoRepository.findOne(className).getObject();
+        return dynamoRepository.findOne(className).getUniqueId();
     }
 }

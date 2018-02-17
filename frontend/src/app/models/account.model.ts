@@ -39,9 +39,9 @@ export class Account {
     var keys = Object.keys(value.dates);
 
     keys.forEach((key:string)=>{
-      var date = new DateValue();
-      date.from(value.dates[key])
-      this.dates[key]= date;
+      var data = new DateValue();
+      data.from(value.dates[key])
+      this.dates[key]= data;
     });
 
     var keys = Object.keys(value.instalmentSets);

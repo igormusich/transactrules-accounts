@@ -16,7 +16,7 @@ import { toDate }  from 'app/core/utils/format-date';
 @Component({
   selector: 'vr-edit-account-details',
   templateUrl: './edit-account-details.component.html',
-  styleUrls: ['./edit-account-details.component.scss'] 
+  styleUrls: ['./edit-account-details.component.scss']
 })
 export class EditAccountDetailsComponent implements OnInit {
 
@@ -71,7 +71,7 @@ export class EditAccountDetailsComponent implements OnInit {
     this.apiClient.getCalculatedProperties(this.account).subscribe( result => {
       this.account= result.body;
       this.accountCreateService.setAccount(this.account);
-      this.router.navigate(['/data/create-account/schedules']);  
+      this.router.navigate(['/data/create-account/schedules']);
     });
   }
 
@@ -87,7 +87,7 @@ export class EditAccountDetailsComponent implements OnInit {
         var dateString = toIsoString(value);
         this.setDate(key,dateString);
       }
-      
+
       if(this.hasAmountType(key)){
         this.setAmount(key, value);
       }
@@ -146,7 +146,7 @@ export class EditAccountDetailsComponent implements OnInit {
 
   setDate(key:string, value:string){
     var dateValue:DateValue = new DateValue();
-    dateValue.date = value;
+    dateValue.data = value;
 
     this.account.dates[key] = dateValue;
   }
@@ -155,8 +155,8 @@ export class EditAccountDetailsComponent implements OnInit {
     var dateString:string = '';
 
     try {
-      dateString = this.account.dates[key].date;
-      
+      dateString = this.account.dates[key].data;
+
     }
     catch(e){}
 
@@ -198,5 +198,5 @@ export class EditAccountDetailsComponent implements OnInit {
 
     return value;
   }
-  
+
 }

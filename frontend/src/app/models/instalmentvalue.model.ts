@@ -2,11 +2,11 @@
 export class InstalmentValue {
   amount: number;
   hasFixedValue: boolean;
-  date: string;
+  data: string;
 
-  from(value:InstalmentValue, date:string){
+  from(value:InstalmentValue, data:string){
     this.amount = value.amount;
     this.hasFixedValue = value.hasFixedValue;
-    this.date = date;
+    this.data = data;
   }
 }
