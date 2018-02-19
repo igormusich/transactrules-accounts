@@ -22,14 +22,14 @@ docker tag transactrules/api:latest us.gcr.io/transact-rules-dev/transactrules-a
 gcloud docker -- push us.gcr.io/transact-rules-dev/transactrules-api
 ```
 
-#  Kubernetes deployment
+# Kubernetes deployment
 
 To create SQL Server password and store in Kubernetes (mikikube or GKE):
 ```bash
 kubectl create secret generic mssql --from-literal=SA_PASSWORD="***********"
 ```
 
-##To configure Minikube:
+## To deploy to Minikube:
 
 ```bash
 minikube ssh
@@ -51,7 +51,7 @@ kubectl create -f transactrules-api-deployment-mini-kube.yml
 
 ```
 
-##To configure GKC:
+## To deploy to GKC:
 
 To connect to GKC:
 
@@ -66,7 +66,16 @@ kubectl create -f mssql-deployment-gke.yml
 kubectl create -f transactrules-api-deployment-gke.yml
 ```
 
+## Run locally
+
+[http://localhost:8080](http://localhost:8080)
+
 To view APIs:
 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
   
+## Run in GKE
+
+Find node public IP
+
+[http://{node_ip}:8080](http://{node_ip}:8080)
