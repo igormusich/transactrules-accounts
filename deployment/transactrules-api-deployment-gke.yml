@@ -1,0 +1,48 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: transact-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transact-rules-api
+  template:
+    metadata:
+      labels:
+        app: transact-rules-api
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: transactrules-api
+        image: us.gcr.io/transact-rules-dev/transactrules-api:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATASOURCE_USERNAME
+          value: "sa"
+        - name: DATASOURCE_URL
+          value: "jdbc:sqlserver://mssql-service:1433;databaseName=accounts"
+        - name: DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql
+              key: SA_PASSWORD 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transact-api-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30010
+    protocol: TCP
+  selector:
+    app: transact-rules-api
+  # ports:
+  #   - protocol: TCP
+  #     port: 1433
+  #     targetPort: 1433
+  # type: LoadBalancer

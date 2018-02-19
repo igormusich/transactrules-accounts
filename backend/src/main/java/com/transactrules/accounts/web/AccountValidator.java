@@ -54,6 +54,11 @@ public class AccountValidator implements Validator {
             errors.rejectValue("accountTypeName", ApiErrorCode.NO_SUCH_TYPE.getCode(), null, String.format("AccountType  %s does not exists", request.getAccountTypeName()));
         }
 
+        if(errors.hasErrors()){
+            //terminate validation not having account number or account type
+            return;
+        }
+
         if(request.getCalendarNames().size()==0){
             errors.rejectValue("calendarNames", ApiErrorCode.REQUIRED.getCode(), "At least one calendar name is required.");
         }
@@ -68,11 +73,6 @@ public class AccountValidator implements Validator {
 
                 i++;
             }
-        }
-
-        if(errors.hasErrors()){
-            //terminate validation not having account number or account type
-            return;
         }
 
         validateDates(errors, request, accountType);

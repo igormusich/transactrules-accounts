@@ -1,17 +1,4 @@
-# transactrules-accounts
-
-This project depends on dynamodb-transactions, which does not exist on public Maven repo.
-
-In order to build you need to do following:
-
-```bash
-git clone https://github.com/awslabs/dynamodb-transactions
-
-cd dynamodb-transactions
-
-mvn clean package
-```
-
+# TransactRules API
 
 To build docker image:
 
@@ -21,17 +8,10 @@ mvn clean install -Dmaven.test.skip=true dockerfile:build
 
 To run docker image:
 ```bash
-docker run -d  --net="host" -p 8080:8080 -e DATASOURCE_URL="jdbc:sqlserver://localhost;databaseName=accounts" \
+docker run -d  --net="host" -p 8080:8080 -e DATASOURCE_URL="jdbc:sqlserver://192.168.99.101:30001;databaseName=accounts" \
            -e DATASOURCE_USERNAME=sa \
-           -e DATASOURCE_PASSWORD=TVMdev2018 \
-           -e DATASOURCE_DRIVER=com.microsoft.sqlserver.jdbc.SQLServerDriver \
-           -e JPA_SHOWSQL=true \
-           -e HIBERNATE_DIALECT=org.hibernate.dialect.SQLServer2012Dialect \
-           -e HIBERNATE_DDL_AUTO=none \
-           transactrules/api
+           -e DATASOURCE_PASSWORD=TVMdev2018 
 ```
-
-where your_key and your_secret refer to AWS account credentials with DynamoDB permissions to create and delete tables, and CRUD on table rows.
 
 To push Google to repository:
 
@@ -39,6 +19,50 @@ To push Google to repository:
 docker tag transactrules/api:latest us.gcr.io/transact-rules-dev/transactrules-api:latest
 
 gcloud docker -- push us.gcr.io/transact-rules-dev/transactrules-api
+```
+
+##  Kubernetes deployment
+
+To create SQL Server password and store in Kubernetes (mikikube or GKE):
+```bash
+kubectl create secret generic mssql --from-literal=SA_PASSWORD="***********"
+```
+
+###To configure Minikube:
+
+```bash
+minikube ssh
+```
+
+Then in node shell
+
+```
+mkdir data
+
+```
+
+In command prompt:
+```
+kubectl create -f pv-minikube.yml
+kubectl create -f mssql-data-claim-mini-kube.yml
+kubectl create -f mssql-deployment-mini-kube.yml
+kubectl create -f transactrules-api-deployment-mini-kube.yml
+
+```
+
+###To configure GKC:
+
+To connect to GKC:
+
+```
+gcloud container clusters get-credentials dev-cluster --zone northamerica-northeast1-a --project transact-rules-dev
+```
+
+In command prompt:
+```
+kubectl create -f mssql-data-claim-gke.yml
+kubectl create -f mssql-deployment-gke.yml
+kubectl create -f transactrules-api-deployment-gke.yml
 ```
 
 To view APIs:

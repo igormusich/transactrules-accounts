@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost;databaseName=accounts
+    url: jdbc:sqlserver://192.168.99.101:30001;databaseName=accounts
     username: sa
     password: TVMdev2018
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -48,9 +48,9 @@ spring:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
-    driverClassName: ${DATASOURCE_DRIVER}
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
-    show-sql: ${JPA_SHOWSQL}
+    show-sql: true
     hibernate:
-      dialect:  ${HIBERNATE_DIALECT}
-      ddl-auto: ${HIBERNATE_DDL_AUTO}
+      dialect:  org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: create

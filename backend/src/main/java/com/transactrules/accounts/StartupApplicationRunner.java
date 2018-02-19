@@ -21,8 +21,6 @@ public class StartupApplicationRunner implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(StartupApplicationRunner.class);
 
-    String JAVA_CLASS_PATH = "java.class.path";
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
