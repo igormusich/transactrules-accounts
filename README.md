@@ -1,4 +1,4 @@
-# TransactRules API
+# Build docker image
 
 To build docker image:
 
@@ -6,6 +6,7 @@ To build docker image:
 mvn clean install -Dmaven.test.skip=true dockerfile:build
 ```
 
+Prior to running local docker image you would need to deploy SQL server to local minikube
 To run docker image:
 ```bash
 docker run -d  --net="host" -p 8080:8080 -e DATASOURCE_URL="jdbc:sqlserver://192.168.99.101:30001;databaseName=accounts" \
@@ -21,14 +22,14 @@ docker tag transactrules/api:latest us.gcr.io/transact-rules-dev/transactrules-a
 gcloud docker -- push us.gcr.io/transact-rules-dev/transactrules-api
 ```
 
-##  Kubernetes deployment
+#  Kubernetes deployment
 
 To create SQL Server password and store in Kubernetes (mikikube or GKE):
 ```bash
 kubectl create secret generic mssql --from-literal=SA_PASSWORD="***********"
 ```
 
-###To configure Minikube:
+##To configure Minikube:
 
 ```bash
 minikube ssh
@@ -50,7 +51,7 @@ kubectl create -f transactrules-api-deployment-mini-kube.yml
 
 ```
 
-###To configure GKC:
+##To configure GKC:
 
 To connect to GKC:
 
