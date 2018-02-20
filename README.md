@@ -83,6 +83,11 @@ or, once cluster is created and registered
 kubectl config use-context gke_transact-rules-dev_northamerica-northeast1-a_dev-cluster
 ``` 
 
+to create static IP:
+```bash
+gcloud compute addresses create transactrules-static-ip --global
+```
+
 In command prompt:
 ```
 kubectl create -f mssql-data-claim-gke.yml

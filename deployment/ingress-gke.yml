@@ -1,0 +1,10 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: trasactrules-static-ip
+spec:
+  backend:
+    serviceName: transact-api-service
+    servicePort: 8080
