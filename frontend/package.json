@@ -10,19 +10,19 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-     "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
+    "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.1.1",
-    "@angular/cdk": "5.0.1",
+    "@angular/cdk": "5.1.1",
     "@angular/common": "^5.1.1",
     "@angular/compiler": "^5.1.1",
     "@angular/core": "^5.1.1",
     "@angular/flex-layout": "2.0.0-beta.12",
     "@angular/forms": "^5.1.1",
     "@angular/http": "^5.1.1",
-    "@angular/material": "5.0.1",
+    "@angular/material": "5.1.1",
     "@angular/platform-browser": "^5.1.1",
     "@angular/platform-browser-dynamic": "^5.1.1",
     "@angular/platform-server": "^5.1.1",
@@ -56,7 +56,7 @@
     "zone.js": "^0.8.16"
   },
   "devDependencies": {
-    "@angular/cli": "1.6.1",
+    "@angular/cli": "^1.7.0",
     "@angular/compiler-cli": "^5.1.1",
     "@angular/language-service": "^5.1.1",
     "@ngrx/store-devtools": "^4.1.1",
