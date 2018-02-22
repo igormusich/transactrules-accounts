@@ -37,52 +37,44 @@
           <yarnVersion>${yarn.version}</yarnVersion>
         </configuration>
         <executions>
+    <execution>
+      <id>install node and npm</id>
+      <goals>
+        <goal>install-node-and-npm</goal>
+      </goals>
+      <configuration>
+        <nodeVersion>${node.version}</nodeVersion>
+        <npmVersion>${npm.version}</npmVersion>
+      </configuration>
+    </execution>
+
           <execution>
-            <id>install node and yarn</id>
+            <id>npm install</id>
             <goals>
-              <goal>install-node-and-yarn</goal>
+              <goal>npm</goal>
             </goals>
+
+            <!-- optional: default phase is "generate-resources" -->
             <phase>generate-resources</phase>
-          </execution>
-          <execution>
-            <id>yarn install</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
+
             <configuration>
+              <!-- optional: The default argument is actually
+              "install", so unless you need to run some other npm command,
+              you can remove this whole <configuration> section.
+              -->
               <arguments>install</arguments>
             </configuration>
           </execution>
-<!--          <execution>
-            <id>yarn lint</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <configuration>
-              <arguments>lint</arguments>
-            </configuration>
-          </execution>-->
           <execution>
-            <id>yarn build</id>
+            <id>build</id>
             <goals>
-              <goal>yarn</goal>
+              <goal>npm</goal>
             </goals>
+            <configuration>
+              <arguments>run-script build</arguments>
+            </configuration>
             <phase>generate-resources</phase>
-            <configuration>
-              <arguments>build</arguments>
-            </configuration>
           </execution>
-<!--          <execution>
-            <id>yarn test</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <arguments>test</arguments>
-              <failOnError>true</failOnError>
-            </configuration>
-          </execution>-->
         </executions>
       </plugin>
     </plugins>
