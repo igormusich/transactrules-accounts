@@ -108,3 +108,12 @@ To view APIs:
 Find node public IP
 
 [http://{node_ip}:8080](http://{node_ip}:8080)
+
+Get Jankins docker:
+docker pull jenkins/jenkins
+
+Run Jenkins from docker
+
+docker run -p 8081:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins
+
+

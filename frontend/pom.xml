@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.transactrules</groupId>
-    <artifactId>frontend</artifactId>
-    <version>1.0.0</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.transactrules</groupId>
+  <artifactId>frontend</artifactId>
+  <version>1.0.0</version>
 
 
   <properties>
@@ -37,23 +38,21 @@
           <yarnVersion>${yarn.version}</yarnVersion>
         </configuration>
         <executions>
-    <execution>
-      <id>install node and npm</id>
-      <goals>
-        <goal>install-node-and-npm</goal>
-      </goals>
-      <configuration>
-        <nodeVersion>${node.version}</nodeVersion>
-        <npmVersion>${npm.version}</npmVersion>
-      </configuration>
-    </execution>
-
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+              <npmVersion>${npm.version}</npmVersion>
+            </configuration>
+          </execution>
           <execution>
             <id>npm install</id>
             <goals>
               <goal>npm</goal>
             </goals>
-
             <!-- optional: default phase is "generate-resources" -->
             <phase>generate-resources</phase>
 
