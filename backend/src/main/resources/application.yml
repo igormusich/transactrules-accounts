@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://192.168.99.101:30001;databaseName=accounts
+    url: jdbc:sqlserver://localhost:1433;databaseName=accounts
     username: sa
     password: TVMdev2018
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
