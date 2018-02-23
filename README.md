@@ -109,11 +109,15 @@ Find node public IP
 
 [http://{node_ip}:8080](http://{node_ip}:8080)
 
-Get Jankins docker:
-docker pull jenkins/jenkins
+To build new Jenkins docker image run command in this directory:
 
-Run Jenkins from docker
+```bash
+docker build https://github.com/igormusic/jenkins-with-maven-docker-gcloud.git -t trules_jenkins
+```
 
-docker run -p 8081:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins
+To run local instance of Jenkins docker:
 
+```bash
+docker run --name build-server  -p 8081:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock trules_jenkins
+```
 
