@@ -5,7 +5,7 @@ spring:
     password: TVMdev2018
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       dialect: org.hibernate.dialect.SQLServer2012Dialect
       ddl-auto: create-drop
@@ -35,8 +35,7 @@ endpoints:
     enabled: false
 logging:
   level:
-    org.springframework.web: ERROR
-    com.transactrules: INFO
+    root: INFO
   pattern:
     console: "${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -50,7 +49,7 @@ spring:
     password: ${DATASOURCE_PASSWORD}
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       dialect:  org.hibernate.dialect.SQLServer2012Dialect
       ddl-auto: create
@@ -66,7 +65,7 @@ spring:
     url: jdbc:h2:mem:bootexample;MODE=MySQL
     driverClassName: org.h2.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       dialect:  org.hibernate.dialect.H2Dialect
       ddl-auto: create
