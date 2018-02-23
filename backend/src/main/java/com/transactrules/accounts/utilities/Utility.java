@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.runtime.Account;
 
 import java.io.IOException;
 import java.math.BigInteger;

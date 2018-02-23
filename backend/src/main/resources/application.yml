@@ -54,3 +54,19 @@ spring:
     hibernate:
       dialect:  org.hibernate.dialect.SQLServer2012Dialect
       ddl-auto: create
+---
+
+spring.datasource:
+    driverClassName:
+    url:
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:mem:bootexample;MODE=MySQL
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect:  org.hibernate.dialect.H2Dialect
+      ddl-auto: create

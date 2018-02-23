@@ -2,9 +2,9 @@ package com.transactrules.accounts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.*;
-import com.transactrules.accounts.services.AccountTypeService;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.service.AccountTypeService;
+import com.transactrules.accounts.runtime.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +24,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class LoanGivenTest {
+
+public class LoanGivenTest extends BaseIntegrationTest {
 
     @Autowired
     CodeGenService codeGenService;

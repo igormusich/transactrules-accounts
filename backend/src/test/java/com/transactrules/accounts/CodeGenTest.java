@@ -5,19 +5,17 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.CodeGenService;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.runtime.domain.Account;
+import com.transactrules.accounts.runtime.domain.Calendar;
+import com.transactrules.accounts.runtime.domain.CodeGenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDate;
 
@@ -27,9 +25,8 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by 313798977 on 2017/08/11.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CodeGenTest {
+
+public class CodeGenTest extends BaseIntegrationTest {
 
     //private static final String parent = "~/code/accounts/";
 

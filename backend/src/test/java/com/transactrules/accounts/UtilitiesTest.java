@@ -1,6 +1,6 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.domain.AccountType;
 import com.transactrules.accounts.utilities.Utility;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 
-public class UtilitiesTest {
+public class UtilitiesTest extends BaseIntegrationTest {
 
     @Test
     public void checksumTest() throws IOException, NoSuchAlgorithmException {

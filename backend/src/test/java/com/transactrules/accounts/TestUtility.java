@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.runtime.*;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.runtime.domain.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -66,7 +66,7 @@ public class TestUtility {
 
         interestSchedule.setStartDate(interestStart);
         interestSchedule.setEndDate(endDate);
-        interestSchedule.getIncludeDates().add(new ScheduleDate (endDate) );
+        interestSchedule.getIncludeDates().add(new ScheduleDate(endDate) );
 
         redemptionSchedule.setStartDate(interestStart);
         redemptionSchedule.setEndDate(endDate);

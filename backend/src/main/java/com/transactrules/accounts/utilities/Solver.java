@@ -1,12 +1,11 @@
 package com.transactrules.accounts.utilities;
 
-import com.transactrules.accounts.runtime.Calculation;
+import com.transactrules.accounts.runtime.domain.Calculation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.function.Function;
 
 public class Solver
 {

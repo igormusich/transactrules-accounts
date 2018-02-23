@@ -1,11 +1,11 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.repository.AccountTypeRepository;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.AccountBuilder;
-import com.transactrules.accounts.runtime.CodeGenService;
-import com.transactrules.accounts.runtime.Position;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
+import com.transactrules.accounts.runtime.domain.Account;
+import com.transactrules.accounts.runtime.domain.AccountBuilder;
+import com.transactrules.accounts.runtime.domain.CodeGenService;
+import com.transactrules.accounts.runtime.domain.Position;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,8 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by Administrator on 11/26/2016.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AccountTest {
+
+public class AccountTest extends BaseIntegrationTest {
 
     @Autowired
     private AccountTypeRepository accountTypeRepository;

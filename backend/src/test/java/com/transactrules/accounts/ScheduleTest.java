@@ -1,10 +1,10 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.BusinessDayCalculation;
-import com.transactrules.accounts.metadata.ScheduleEndType;
-import com.transactrules.accounts.metadata.ScheduleFrequency;
-import com.transactrules.accounts.runtime.*;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.domain.BusinessDayCalculation;
+import com.transactrules.accounts.metadata.domain.ScheduleEndType;
+import com.transactrules.accounts.metadata.domain.ScheduleFrequency;
+import com.transactrules.accounts.runtime.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,8 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ScheduleTest {
+
+public class ScheduleTest extends BaseIntegrationTest {
 
     @Autowired
     CodeGenService codeGenService;

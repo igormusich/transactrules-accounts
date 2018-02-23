@@ -1,11 +1,11 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.repository.AccountTypeRepository;
-import com.transactrules.accounts.runtime.Account;
-import com.transactrules.accounts.runtime.CodeGenService;
-import com.transactrules.accounts.runtime.Transaction;
-import com.transactrules.accounts.services.AccountService;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
+import com.transactrules.accounts.runtime.domain.Account;
+import com.transactrules.accounts.runtime.domain.CodeGenService;
+import com.transactrules.accounts.runtime.domain.Transaction;
+import com.transactrules.accounts.runtime.service.AccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +20,7 @@ import java.time.LocalDate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AccountServiceTest {
+public class AccountServiceTest extends BaseIntegrationTest {
 
     @Autowired
     AccountService accountService;

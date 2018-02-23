@@ -1,6 +1,6 @@
 package com.transactrules.accounts.repository;
 
-import com.transactrules.accounts.runtime.TransactionSet;
+import com.transactrules.accounts.runtime.domain.TransactionSet;
 
 
 public interface TransactionSetRepository  {

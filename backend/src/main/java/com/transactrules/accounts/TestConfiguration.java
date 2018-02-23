@@ -1,13 +1,13 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.repository.AccountTypeRepository;
+import com.transactrules.accounts.metadata.domain.*;
+import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
 import com.transactrules.accounts.repository.CalendarRepository;
 import com.transactrules.accounts.repository.SystemPropertiesRepository;
 import com.transactrules.accounts.repository.UniqueIdRepository;
-import com.transactrules.accounts.runtime.Calendar;
-import com.transactrules.accounts.runtime.SystemProperties;
-import com.transactrules.accounts.runtime.UniqueId;
+import com.transactrules.accounts.runtime.domain.Calendar;
+import com.transactrules.accounts.runtime.domain.SystemProperties;
+import com.transactrules.accounts.runtime.domain.UniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

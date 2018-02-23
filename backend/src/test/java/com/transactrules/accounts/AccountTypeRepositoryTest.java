@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.repository.AccountTypeRepository;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,8 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by Administrator on 11/26/2016.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AccountTypeRepositoryTest {
+
+public class AccountTypeRepositoryTest extends BaseIntegrationTest {
 
     @Autowired
     AccountTypeRepository repository;

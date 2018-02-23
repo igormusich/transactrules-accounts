@@ -1,10 +1,10 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.runtime.*;
-import com.transactrules.accounts.services.AccountService;
-import com.transactrules.accounts.services.AccountTypeService;
-import com.transactrules.accounts.web.AccountValidator;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.runtime.domain.*;
+import com.transactrules.accounts.runtime.service.AccountService;
+import com.transactrules.accounts.metadata.service.AccountTypeService;
+import com.transactrules.accounts.runtime.web.AccountValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +21,8 @@ import java.time.LocalDate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AccountValidationTest {
+
+public class AccountValidationTest extends BaseIntegrationTest {
 
     private @Autowired
     AutowireCapableBeanFactory beanFactory;

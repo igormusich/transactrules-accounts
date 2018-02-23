@@ -1,6 +1,6 @@
 package com.transactrules.accounts.repository;
 
-import com.transactrules.accounts.runtime.Account;
+import com.transactrules.accounts.runtime.domain.Account;
 
 import java.util.List;
 

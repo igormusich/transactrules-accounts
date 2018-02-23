@@ -2,10 +2,10 @@ package com.transactrules.accounts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.metadata.AccountType;
-import com.transactrules.accounts.metadata.PositionType;
-import com.transactrules.accounts.metadata.TransactionOperation;
-import com.transactrules.accounts.metadata.TransactionType;
+import com.transactrules.accounts.metadata.domain.AccountType;
+import com.transactrules.accounts.metadata.domain.PositionType;
+import com.transactrules.accounts.metadata.domain.TransactionOperation;
+import com.transactrules.accounts.metadata.domain.TransactionType;
 
 import java.io.IOException;
 

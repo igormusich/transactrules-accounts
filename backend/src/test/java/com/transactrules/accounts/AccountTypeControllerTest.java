@@ -3,7 +3,7 @@ package com.transactrules.accounts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
-import com.transactrules.accounts.metadata.AccountType;
+import com.transactrules.accounts.metadata.domain.AccountType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@SpringBootTest
-public class AccountTypeControllerTest {
+public class AccountTypeControllerTest extends BaseIntegrationTest {
     @Autowired
     private WebApplicationContext context;
 

@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
-import com.transactrules.accounts.metadata.*;
-import com.transactrules.accounts.web.AccountTypeValidator;
+import com.transactrules.accounts.metadata.domain.*;
+import com.transactrules.accounts.metadata.web.AccountTypeValidator;
 import com.transactrules.accounts.web.ApiErrorCode;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +17,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AccountTypeValidationTest {
+
+public class AccountTypeValidationTest extends BaseIntegrationTest {
 
     private @Autowired
     AutowireCapableBeanFactory beanFactory;
