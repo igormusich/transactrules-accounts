@@ -2,9 +2,9 @@ package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.domain.*;
 import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
-import com.transactrules.accounts.repository.CalendarRepository;
-import com.transactrules.accounts.repository.SystemPropertiesRepository;
-import com.transactrules.accounts.repository.UniqueIdRepository;
+import com.transactrules.accounts.runtime.repository.CalendarRepository;
+import com.transactrules.accounts.runtime.repository.SystemPropertiesRepository;
+import com.transactrules.accounts.runtime.repository.UniqueIdRepository;
 import com.transactrules.accounts.runtime.domain.Calendar;
 import com.transactrules.accounts.runtime.domain.SystemProperties;
 import com.transactrules.accounts.runtime.domain.UniqueId;

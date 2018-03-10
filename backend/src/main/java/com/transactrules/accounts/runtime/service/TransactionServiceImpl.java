@@ -1,7 +1,7 @@
 package com.transactrules.accounts.runtime.service;
 
 import com.transactrules.accounts.metadata.domain.AccountType;
-import com.transactrules.accounts.repository.TransactionSetRepository;
+import com.transactrules.accounts.runtime.repository.TransactionSetRepository;
 import com.transactrules.accounts.runtime.domain.RepeatableTransactionList;
 import com.transactrules.accounts.runtime.domain.Transaction;
 import com.transactrules.accounts.runtime.domain.TransactionSet;

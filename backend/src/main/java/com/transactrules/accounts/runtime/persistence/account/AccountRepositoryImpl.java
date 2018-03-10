@@ -1,7 +1,7 @@
 package com.transactrules.accounts.runtime.persistence.account;
 
 import com.transactrules.accounts.runtime.domain.Account;
-import com.transactrules.accounts.repository.AccountRepository;
+import com.transactrules.accounts.runtime.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

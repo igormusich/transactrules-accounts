@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime.persistence.calendar;
 
-import com.transactrules.accounts.repository.CalendarRepository;
+import com.transactrules.accounts.runtime.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.domain.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

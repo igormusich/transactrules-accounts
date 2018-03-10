@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime.service;
 
-import com.transactrules.accounts.repository.UniqueIdRepository;
+import com.transactrules.accounts.runtime.repository.UniqueIdRepository;
 import com.transactrules.accounts.runtime.domain.UniqueId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.transactrules.accounts.runtime.service;
 import com.transactrules.accounts.metadata.domain.AccountType;
 import com.transactrules.accounts.metadata.domain.PositionType;
 import com.transactrules.accounts.metadata.service.AccountTypeService;
-import com.transactrules.accounts.repository.AccountRepository;
+import com.transactrules.accounts.runtime.repository.AccountRepository;
 import com.transactrules.accounts.runtime.domain.*;
 import com.transactrules.accounts.runtime.domain.Calendar;
 import org.slf4j.Logger;

@@ -6,6 +6,7 @@ import com.transactrules.accounts.runtime.domain.Account;
 import com.transactrules.accounts.runtime.domain.CodeGenService;
 import com.transactrules.accounts.runtime.domain.Transaction;
 import com.transactrules.accounts.runtime.service.AccountService;
+import com.transactrules.accounts.runtime.service.AccountServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,5 +65,18 @@ public class AccountServiceTest extends BaseIntegrationTest {
 
         assertThat(updatedAccount.getPositions().get("Principal").getAmount(), is(principal.add(BigDecimal.valueOf(100).setScale(2, RoundingMode.HALF_DOWN))));
 
+    }
+
+    @Test
+    public void startOfDay() {
+
+        AccountServiceImpl service = new AccountServiceImpl();
+
+        service.startOfDay();
+
+    }
+
+    @Test
+    public void endOfDay() {
     }
 }

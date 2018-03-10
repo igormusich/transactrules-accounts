@@ -1,9 +1,9 @@
 package com.transactrules.accounts.runtime.web;
 
 import com.transactrules.accounts.metadata.domain.*;
-import com.transactrules.accounts.repository.AccountRepository;
+import com.transactrules.accounts.runtime.repository.AccountRepository;
 import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
-import com.transactrules.accounts.repository.CalendarRepository;
+import com.transactrules.accounts.runtime.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.domain.*;
 import com.transactrules.accounts.web.ApiErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;

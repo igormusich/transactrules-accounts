@@ -1,4 +1,4 @@
-package com.transactrules.accounts.repository;
+package com.transactrules.accounts.runtime.repository;
 
 import com.transactrules.accounts.runtime.domain.Account;
 

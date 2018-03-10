@@ -1,6 +1,6 @@
 package com.transactrules.accounts.runtime.persistence.transactionSet;
 
-import com.transactrules.accounts.repository.TransactionSetRepository;
+import com.transactrules.accounts.runtime.repository.TransactionSetRepository;
 import com.transactrules.accounts.runtime.domain.TransactionSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
