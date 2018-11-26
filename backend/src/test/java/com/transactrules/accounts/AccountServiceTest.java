@@ -69,10 +69,9 @@ public class AccountServiceTest extends BaseIntegrationTest {
 
     @Test
     public void startOfDay() {
+        
 
-        AccountServiceImpl service = new AccountServiceImpl();
-
-        service.startOfDay();
+        accountService.startOfDay();
 
     }
 

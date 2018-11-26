@@ -7,5 +7,6 @@ export const scrollbarOptions: ScrollbarOptions = {
   alwaysShowTracks: false,
   continuousScrolling: true,
   wheelEventTarget: null,
-  plugins: null
+  plugins: null,
+  delegateTo: null
 };

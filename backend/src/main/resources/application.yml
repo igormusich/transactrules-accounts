@@ -2,14 +2,14 @@ server:
   port: 8090
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=accounts
+    url: jdbc:postgresql://localhost:5432/accounts
     username: sa
     password: TVMdev2018
-    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    driverClassName: org.postgresql.Driver
   jpa:
     show-sql: false
     hibernate:
-      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      dialect: org.hibernate.dialect.PostgreSQL95Dialect
       ddl-auto: create-drop
 endpoints:
   beans:

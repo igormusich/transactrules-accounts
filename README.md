@@ -1,17 +1,23 @@
 # Build docker image
 
-To build docker image:
+To build docker image run from backend folder:
 
 ```bash
 mvn clean install -Dmaven.test.skip=true dockerfile:build
 ```
 
-Prior to running local docker image you would need to deploy SQL server to local minikube
+Prior to running local docker image you would need to deploy SQL server to local minikube (See below) or local docker:
+
+```
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=TVMdev2018' -p 1433:1433 -d microsoft/mssql-server-linux:latest
+```
+
+
 To run docker image:
 ```bash
 docker run -d  --net="host" -p 8080:8080 -e DATASOURCE_URL="jdbc:sqlserver://192.168.99.101:30001;databaseName=accounts" \
            -e DATASOURCE_USERNAME=sa \
-           -e DATASOURCE_PASSWORD=TVMdev2018 transactrules/api 
+           -e DATASOURCE_PASSWORD=TVMdev2018 transactrules/api
 ```
 
 To push Google to repository:
@@ -25,13 +31,22 @@ gcloud docker -- push us.gcr.io/transact-rules-dev/transactrules-api
 # Kubernetes deployment
 
 
-
 To create SQL Server password and store in Kubernetes (mikikube or GKE):
 ```bash
 kubectl create secret generic mssql --from-literal=SA_PASSWORD="***********"
 ```
 
 ## To deploy to Minikube:
+
+To install minikube on OSX:
+```
+brew cask install minikube
+```
+
+To start minikube:
+```
+minikube start
+```
 
 To switch kubectl to local minikube
 
@@ -61,6 +76,11 @@ kubectl create -f pv-minikube.yml
 kubectl create -f mssql-data-claim-mini-kube.yml
 kubectl create -f mssql-deployment-mini-kube.yml
 kubectl create -f transactrules-api-deployment-mini-kube.yml
+```
+
+To deploy local admin dashboard:
+```
+kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 ```
 
 ## To deploy to GKC:

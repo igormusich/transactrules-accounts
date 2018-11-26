@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: mssql-deployment
@@ -44,7 +44,7 @@ spec:
   type: NodePort
   ports:
   - port: 1433
-    nodePort: 30001
+    nodePort: 30002
     protocol: TCP
   selector:
     app: mssql

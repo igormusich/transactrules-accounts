@@ -43,6 +43,8 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     var items = this.apiService.findAllCalendars();
+
+
     items.subscribe(calendars => {
       this.dataSource = new MatTableDataSource<Calendar>(calendars);
       this.dataSource.paginator = this.paginator;
