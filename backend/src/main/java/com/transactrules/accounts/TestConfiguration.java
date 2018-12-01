@@ -60,9 +60,61 @@ public class TestConfiguration {
 
         logger.info("Saved account type:" + loanAccountType.getClassName().toString());
 
-        logger.info("Default metadata saved (SavingsAccount,LoanGiven)");
+        AccountType serviceAccount = createServiceAccount();
+
+        accountTypeRepo.save(loanAccountType);
+
+        logger.info("Saved account type:" + serviceAccount.getClassName().toString());
+
+        logger.info("Default metadata saved (SavingsAccount,LoanGiven, ServiceAccount)");
 
         logger.info("press any key ...");
+    }
+
+    public static AccountType createServiceAccount() {
+        AccountType serviceAccount = new AccountType("ServiceAccount", "ServiceAccount");
+
+        PositionType utilization = serviceAccount.addPositionType( "Utilization");
+        PositionType paymentDue = serviceAccount.addPositionType( "PaymentDue");
+
+        TransactionType activityTransaction =
+                serviceAccount
+                        .addTransactionType("Activity", true)
+                        .addRule(utilization, TransactionOperation.Add);
+
+        TransactionType activityCharged =
+                serviceAccount
+                        .addTransactionType("ActivityCharged", true)
+                        .addRule(utilization, TransactionOperation.Subtract);
+
+        TransactionType paymentDueTransaction =
+                serviceAccount
+                        .addTransactionType("PaymentDue", true)
+                        .addRule(paymentDue, TransactionOperation.Add);
+
+        TransactionType paymentBilledTransaction =
+                serviceAccount
+                        .addTransactionType("PaymentBilled", true)
+                        .addRule(paymentDue, TransactionOperation.Subtract);
+
+        DateType startDate =
+                serviceAccount
+                        .addDateType( "StartDate" , true, true);
+
+        ScheduleType billingSchedule =
+                serviceAccount
+                        .addCalculatedScheduleType(
+                      "BillingSchedule",
+                            ScheduleFrequency.Monthly,
+                            ScheduleEndType.NoEnd,
+                            BusinessDayCalculation.AnyDay,
+                            "this.StartDate()",
+                            "",
+                            "",
+                            "1"
+                    );
+
+        return serviceAccount;
     }
 
     public static AccountType createSavingsAccountType()
