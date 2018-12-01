@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CalendarRepositoryImpl implements CalendarRepository {
@@ -34,12 +35,12 @@ public class CalendarRepositoryImpl implements CalendarRepository {
     @Override
     public Calendar findOne(String key) {
 
-        CalendarDataObject dataObject = dynamoRepository.findOne(key);
+        Optional<CalendarDataObject> dataObject = dynamoRepository.findById(key);
 
-        if (dataObject == null) {
+        if (!dataObject.isPresent()) {
             return null;
         }
 
-        return dataObject.getCalendar();
+        return dataObject.get().getCalendar();
     }
 }

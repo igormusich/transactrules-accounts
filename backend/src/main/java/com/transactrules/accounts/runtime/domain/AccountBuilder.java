@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class AccountBuilder {
 
-    //private CodeGenService codeGenService;
+    //private CodeGenService getCodeGenService;
 
     private Class accountClass;
 

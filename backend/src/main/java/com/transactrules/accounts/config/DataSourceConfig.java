@@ -4,7 +4,7 @@ package com.transactrules.accounts.config;
 import com.transactrules.accounts.DatabaseDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ public class DataSourceConfig {
     @Value("${spring.datasource.password}")
     public String password;
 
-    @Value("${spring.datasource.url}")
+    @Value("${spring.datasource.jdbcUrl}")
     public String url;
 
     @Bean

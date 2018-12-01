@@ -5,6 +5,8 @@ import com.transactrules.accounts.runtime.domain.UniqueId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UniqueIdRepositoryImpl implements UniqueIdRepository {
 
@@ -18,6 +20,12 @@ public class UniqueIdRepositoryImpl implements UniqueIdRepository {
 
     @Override
     public UniqueId findOne(String className) {
-        return dynamoRepository.findOne(className).getUniqueId();
+        Optional<UniqueIdDataObject> result= dynamoRepository.findById(className);
+
+        if(result.isPresent()){
+            return result.get().getUniqueId();
+        }
+
+        return null;
     }
 }

@@ -3,12 +3,13 @@ package com.transactrules.accounts.metadata.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.transactrules.accounts.NamedAbstractEntity;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotEmpty;
 
 
 public class ScheduledTransaction extends NamedAbstractEntity {
 
-    @NotBlank
+    @NotEmpty
     @ApiModelProperty(dataType = "string", allowableValues = "START_OF_DAY, END_OF_DAY", value = "Transaction timing", notes = "Controls if the scheduled transaction is applied in start of day or end of day operation")
     private String timing;
 
@@ -16,10 +17,10 @@ public class ScheduledTransaction extends NamedAbstractEntity {
 
     private String dateTypeName;
 
-    @NotBlank
+    @NotEmpty
     private String transactionTypeName;
 
-    @NotBlank
+    @NotEmpty
     private String amountExpression;
 
     private Integer sequence;

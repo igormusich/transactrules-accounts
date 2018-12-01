@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.transactrules.accounts.config.ObjectMapperConfiguration;
 import com.transactrules.accounts.metadata.domain.AccountType;
 import com.transactrules.accounts.utilities.Utility;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 
 /**
@@ -17,10 +17,10 @@ import java.io.IOException;
 @Table(name = "AccountType")
 public class AccountTypeDataObject {
 
-    @NotBlank
+    @NotEmpty
     private String className;
 
-    @NotBlank
+    @NotEmpty
     private String data;
 
     public AccountTypeDataObject(){

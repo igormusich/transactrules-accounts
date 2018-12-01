@@ -1,11 +1,9 @@
 package com.transactrules.accounts.metadata.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotBlank;
-
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -16,10 +14,10 @@ import java.util.function.Function;
 
 public class AccountType {
 
-    @NotBlank
+    @NotEmpty
     private String className;
 
-    @NotBlank
+    @NotEmpty
     private String labelName;
 
     @Valid

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AccountTypeRepositoryImpl implements AccountTypeRepository {
@@ -32,22 +33,23 @@ public class AccountTypeRepositoryImpl implements AccountTypeRepository {
 
     @Override
     public AccountType findOne(String key) {
-        AccountTypeDataObject dataObject=  dynamoRepository.findOne(key);
+        Optional<AccountTypeDataObject> dataObject=  dynamoRepository.findById(key);
 
-        if(dataObject==null){
+        if(!dataObject.isPresent()){
             return null;
         }
 
-        return dataObject.getAccountType();
+        return dataObject.get().getAccountType();
     }
 
     @Override
     public void delete(String key) {
-        dynamoRepository.delete(key);
+        dynamoRepository.deleteById(key);
     }
 
     @Override
     public boolean exists(String key) {
-        return dynamoRepository.exists(key);
+
+        return dynamoRepository.existsById(key);
     }
 }

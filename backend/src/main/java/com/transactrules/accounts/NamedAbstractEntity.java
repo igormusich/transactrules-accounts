@@ -1,7 +1,7 @@
 package com.transactrules.accounts;
 
 import com.transactrules.accounts.utilities.Utility;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Created by Igor Music on 2016/11/11.
@@ -9,10 +9,10 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public abstract class NamedAbstractEntity {
 
-    @NotBlank
+    @NotEmpty
     protected String propertyName;
 
-    @NotBlank
+    @NotEmpty
     protected String labelName;
 
 

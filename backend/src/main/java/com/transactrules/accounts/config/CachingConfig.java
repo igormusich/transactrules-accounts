@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class CachingConfig {
 
     @Bean
-    public CodeGenService codeGenService() {
+    public CodeGenService getCodeGenService() {
         return new CodeGenService();
     }
 

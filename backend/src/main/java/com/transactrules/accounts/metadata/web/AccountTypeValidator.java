@@ -70,7 +70,7 @@ public class AccountTypeValidator implements Validator {
 
         if(Utility.isEmpty(request.getClassName()))
         {
-            //this should be caught by @NotBlank validation, however we can't search by blank name
+            //this should be caught by @NotEmpty validation, however we can't search by blank name
             return;
         }
 

@@ -79,9 +79,9 @@ public class CodeGenTest extends BaseIntegrationTest {
 
 
         //this should regenerate the code
-        //codeGenService.evictAccountType(loanGivenAcccountType);
-        /*codeGenService.evictAllAccountTypes();
-        Class class3 = codeGenService.getAccountValuationClass(loanGivenAcccountType);
+        //getCodeGenService.evictAccountType(loanGivenAcccountType);
+        /*getCodeGenService.evictAllAccountTypes();
+        Class class3 = getCodeGenService.getAccountValuationClass(loanGivenAcccountType);
         AccountValuation valuation3 = (AccountValuation) class3.newInstance();
         String timestamp3 = valuation3.generatedAt();
 

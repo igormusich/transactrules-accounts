@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AccountRepositoryImpl implements AccountRepository {
@@ -37,13 +38,13 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Account findOne(String key) {
-        AccountDataObject dataObject=  repository.findOne(key);
+        Optional<AccountDataObject> dataObject=  repository.findById(key);
 
-        if(dataObject==null){
+        if(!dataObject.isPresent()){
             return null;
         }
 
-        return dataObject.getAccount();
+        return dataObject.get().getAccount();
     }
 
 }

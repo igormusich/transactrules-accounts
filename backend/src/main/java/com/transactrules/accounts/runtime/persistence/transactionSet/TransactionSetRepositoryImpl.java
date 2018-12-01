@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TransactionSetRepositoryImpl implements TransactionSetRepository {
@@ -26,17 +27,16 @@ public class TransactionSetRepositoryImpl implements TransactionSetRepository {
         for(TransactionSet set:transactionSet){
             items.add(new TransactionSetDataObject(set));
         }
-
-        dynamoRepository.save(items);
+        dynamoRepository.saveAll(items);
     }
 
     @Override
     public TransactionSet findOne(String id) {
-        TransactionSetDataObject data = dynamoRepository.findOne(id);
+        Optional<TransactionSetDataObject> data = dynamoRepository.findById(id);
 
-        if(data == null){
+        if(!data.isPresent()){
             return  null;
         }
-        return data.getTransactionSet();
+        return data.get().getTransactionSet();
     }
 }

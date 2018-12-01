@@ -5,8 +5,8 @@ import com.transactrules.accounts.metadata.domain.DateType;
 import com.transactrules.accounts.metadata.domain.PositionType;
 import com.transactrules.accounts.metadata.domain.ScheduleType;
 import com.transactrules.accounts.metadata.domain.ScheduledTransactionTiming;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.Map;
 
 public class Account {
 
-    @NotBlank
+    @NotEmpty
     private String accountNumber;
 
     private boolean isActive;
 
     private LocalDate dateActivated;
 
-    @NotBlank
+    @NotEmpty
     private String accountTypeName;
 
     private List<String> calendarNames = new ArrayList<>();
