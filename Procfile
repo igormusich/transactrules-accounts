@@ -1,1 +1,1 @@
-web: java -jar /backend/target/transactrules-app.jar
+web: java -jar backend/target/transactrules-app.jar
