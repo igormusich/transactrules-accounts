@@ -41,7 +41,7 @@ public class CodeGenTest extends BaseIntegrationTest {
     public void TestCodeGenerationTemplate() {
         StringWriter writer = new StringWriter();
         MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile("templates//account.mustache");
+        Mustache mustache = mf.compile("templates//groovyAccount.mustache");
         try {
             mustache.execute(writer, TestConfiguration.createLoanGivenAccountType()).flush();
         } catch (IOException e) {

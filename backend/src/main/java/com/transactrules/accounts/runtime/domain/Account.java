@@ -53,8 +53,12 @@ public class Account {
 
     public Account(Account prototype){
 
-        this.calendarNames = new ArrayList<>(prototype.calendarNames);
+        this.accountNumber = prototype.accountNumber;
+        this.isActive = prototype.isActive;
+        this.dateActivated = prototype.dateActivated;
+        this.accountTypeName = prototype.accountTypeName;
 
+        this.calendarNames = new ArrayList<>(prototype.calendarNames);
 
         for(String key: prototype.amounts.keySet()){
             AmountValue value = prototype.amounts.get(key);
@@ -411,4 +415,5 @@ public class Account {
         this.isActive = true;
         this.dateActivated = this.actionDate;
     }
+
 }

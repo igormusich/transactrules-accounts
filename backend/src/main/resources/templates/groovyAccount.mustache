@@ -43,13 +43,13 @@ class {{className}} extends Account {
 
 {{#scheduleTypes}}
     @JsonIgnore()
-    Schedule {{propertyName}}
+    Schedule _{{propertyName}}
 {{/scheduleTypes}}
 
 
 {{#instalmentTypes}}
     @JsonIgnore()
-    InstalmentSet {{propertyName}}
+    InstalmentSet _{{propertyName}}
 {{/instalmentTypes}}
 
 
@@ -157,10 +157,10 @@ class {{className}} extends Account {
                 Set{{propertyName}}DefaultProperties(schedule)
             {{/isCalculated}}
         }
-        {{propertyName}} = schedules.get('{{propertyName}}')
-        {{propertyName}}.setBusinessDayCalculator businessDayCalculator
+        _{{propertyName}} = schedules.get('{{propertyName}}')
+        _{{propertyName}}.setBusinessDayCalculator businessDayCalculator
     {{#isCalculated}}
-        Set{{propertyName}}CalculatedProperties({{propertyName}})
+        Set{{propertyName}}CalculatedProperties(_{{propertyName}})
     {{/isCalculated}}
 
     {{/scheduleTypes}}
@@ -168,20 +168,20 @@ class {{className}} extends Account {
     {{#instalmentTypes}}
         if(!this.instalmentSets.containsKey('{{propertyName}}'))
         {
-            {{propertyName}} = new InstalmentSet()
-            instalmentSets.put('{{propertyName}}', {{propertyName}})
+            _{{propertyName}} = new InstalmentSet()
+            instalmentSets.put('{{propertyName}}', _{{propertyName}})
         }
         else {
-            {{propertyName}} = instalmentSets.get('{{propertyName}}')
+            _{{propertyName}} = instalmentSets.get('{{propertyName}}')
         }
     {{/instalmentTypes}}
     }
 
 {{#instalmentTypes}}
     void Initialize{{propertyName}}(){
-        {{scheduleTypeName}}.GetAllDates().each {
+        _{{scheduleTypeName}}.GetAllDates().each {
             LocalDate data ->
-                {{propertyName}}.instalments.put(data, new InstalmentValue( BigDecimal.ZERO, false))
+                _{{propertyName}}.instalments.put(data, new InstalmentValue( BigDecimal.ZERO, false))
         }
     }
 
@@ -281,7 +281,7 @@ class {{className}} extends Account {
 {{#scheduledTransactions}}
 {{#isStartOfDay}}
     {{#hasSchedule}}
-        if ({{scheduleTypeName}}.isDue(valueDate)){
+        if (_{{scheduleTypeName}}.isDue(valueDate)){
             BigDecimal amount = {{amountExpression}}
             createTransaction('{{transactionTypeName}}', amount)
         }
@@ -296,8 +296,8 @@ class {{className}} extends Account {
 {{/scheduledTransactions}}
 {{#instalmentTypes}}
     {{#isStartOfDay}}
-        if({{propertyName}}.instalments.containsKey(valueDate)){
-            Map<LocalDate,InstalmentValue> instalments = {{propertyName}}.instalments
+        if(_{{propertyName}}.instalments.containsKey(valueDate)){
+            Map<LocalDate,InstalmentValue> instalments = _{{propertyName}}.instalments
             InstalmentValue instalmentValue=instalments.get(valueDate)
             createTransaction('{{transactionTypeName}}',instalmentValue.amount)
         }
@@ -310,7 +310,7 @@ class {{className}} extends Account {
 {{#scheduledTransactions}}
     {{#isEndOfDay}}
         {{#hasSchedule}}
-            if ({{scheduleTypeName}}.isDue(valueDate)){
+            if (_{{scheduleTypeName}}.isDue(valueDate)){
                 BigDecimal amount = {{amountExpression}}
                 createTransaction('{{transactionTypeName}}', amount)
             }
@@ -341,7 +341,7 @@ class {{className}} extends Account {
     @Override
     void calculateInstaments() {
     {{#instalmentTypes}}
-        if ({{propertyName}}.instalments.size()==0){
+        if (_{{propertyName}}.instalments.size()==0){
             Initialize{{propertyName}}()
         }
     {{/instalmentTypes}}
@@ -355,7 +355,7 @@ class {{className}} extends Account {
 
         this.setFutureInstalmentValue('{{propertyName}}', ScheduledTransactionTiming.{{timingEnum}}, value)
 
-        List<LocalDate> dates = {{scheduleTypeName}}.GetAllDates()
+        List<LocalDate> dates = _{{scheduleTypeName}}.GetAllDates()
 
         LocalDate lastDate = dates.get(dates.size()-1)
 

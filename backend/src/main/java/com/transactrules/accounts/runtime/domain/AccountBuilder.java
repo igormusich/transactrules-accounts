@@ -84,6 +84,10 @@ public class AccountBuilder {
     public AccountBuilder setBusinessDayCalculator(BusinessDayCalculator businessDayCalculator) {
         this.businessDayCalculator = businessDayCalculator;
 
+        Calendar calendar = (Calendar) businessDayCalculator;
+
+        addCalendar(calendar.getName());
+
         return this;
     }
 

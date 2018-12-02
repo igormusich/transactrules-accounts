@@ -2,17 +2,17 @@ package com.transactrules.accounts;
 
 import com.transactrules.accounts.metadata.domain.*;
 import com.transactrules.accounts.metadata.repository.AccountTypeRepository;
+import com.transactrules.accounts.runtime.domain.*;
 import com.transactrules.accounts.runtime.repository.CalendarRepository;
 import com.transactrules.accounts.runtime.repository.SystemPropertiesRepository;
 import com.transactrules.accounts.runtime.repository.UniqueIdRepository;
-import com.transactrules.accounts.runtime.domain.Calendar;
-import com.transactrules.accounts.runtime.domain.SystemProperties;
-import com.transactrules.accounts.runtime.domain.UniqueId;
+import com.transactrules.accounts.runtime.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -31,6 +31,12 @@ public class TestConfiguration {
     @Autowired
     UniqueIdRepository uniqueIdRepository;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    CodeGenService codeGenService;
+
 
     public void run() throws Exception {
 
@@ -43,8 +49,9 @@ public class TestConfiguration {
 
         systemPropertiesRepository.save(new SystemProperties("default", LocalDate.now()));
 
-        calendarRepository.save(CreateEuroZoneCalendar());
+        Calendar calendar = CreateEuroZoneCalendar();
 
+        calendarRepository.save(calendar);
 
         logger.info("Saving default metadata (SavingsAccount)");
 
@@ -62,11 +69,16 @@ public class TestConfiguration {
 
         AccountType serviceAccount = createServiceAccount();
 
-        accountTypeRepo.save(loanAccountType);
+        accountTypeRepo.save(serviceAccount);
 
         logger.info("Saved account type:" + serviceAccount.getClassName().toString());
 
         logger.info("Default metadata saved (SavingsAccount,LoanGiven, ServiceAccount)");
+
+        Account loanGivenAccount= createLoanGivenAccount(loanAccountType,calendar, LocalDate.of (2013, 3, 31), LocalDate.of (2023, 3, 31));
+
+
+        logger.info("LoanAccount saved");
 
         logger.info("press any key ...");
     }
@@ -275,6 +287,61 @@ public class TestConfiguration {
                 "InterestCapitalized" );
 
         return loanGiven;
+    }
+
+    public Account createLoanGivenAccount(AccountType accountType, Calendar calendar, LocalDate startDate, LocalDate endDate) {
+
+        Account account = accountService.create(accountType);
+
+        Account prototype= createPrototype(accountType, calendar, startDate, endDate, account);
+
+        account.initializeFromPrototype(prototype);
+
+        account.setCalculated();
+
+        accountService.calculateInstalments(account);
+
+        accountService.activate(account);
+
+        //accountService.save(account);
+
+        return  account;
+    }
+
+    private Account createPrototype(AccountType accountType, Calendar calendar, LocalDate startDate, LocalDate endDate, Account account) {
+        Class accountClass = codeGenService.getAccountClass(accountType);
+
+        AccountBuilder builder = new AccountBuilder( accountType.getClassName(), account.getAccountNumber(), accountClass );
+
+        builder.setBusinessDayCalculator(calendar)
+                .addDateValue("StartDate", startDate)
+                .addDateValue("AccrualStart",startDate)
+                .addDateValue("EndDate", endDate)
+                .addAmountValue("AdvanceAmount", BigDecimal.valueOf(624000), startDate)
+                .addRateValue("InterestRate", BigDecimal.valueOf(3.04/100), startDate)
+                .addOptionValue("AccrualOption", "365")
+        ;
+
+
+        Account prototype =  builder.getAccount();
+
+        prototype.setCalculated();
+
+        //Schedule accrualSchedule = account.getSchedules().get("AccrualSchedule");
+        Schedule interestSchedule = prototype.getSchedules().get("InterestSchedule");
+        Schedule redemptionSchedule = prototype.getSchedules().get("RedemptionSchedule");
+
+        LocalDate interestStart = startDate;
+
+        interestSchedule.setStartDate(interestStart);
+        interestSchedule.setEndDate(endDate);
+        interestSchedule.getIncludeDates().add(new ScheduleDate(endDate) );
+
+        redemptionSchedule.setStartDate(interestStart);
+        redemptionSchedule.setEndDate(endDate);
+        redemptionSchedule.getIncludeDates().add(new ScheduleDate (endDate) );
+
+        return prototype;
     }
 
     public static Calendar CreateEuroZoneCalendar()
